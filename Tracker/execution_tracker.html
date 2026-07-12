@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Execution Tracker — Interpretable DSS for Medical Microscopy</title>
+<style>
+  :root{
+    --navy:#14213d; --red:#C44E52; --green:#55A868; --amber:#c98a2b;
+    --ink:#1a1a1a; --muted:#5b6472; --line:#e2e6ee; --bg:#f4f6fa; --card:#ffffff;
+    --code-bg:#0f1729; --code-fg:#dbe4f4;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0; background:var(--bg); color:var(--ink);
+    font-family:"Georgia","Times New Roman",serif; line-height:1.5; font-size:15px;}
+  h1,h2,h3,h4,.ui{font-family:"Helvetica Neue",Arial,sans-serif;}
+  a{color:var(--navy);}
+  code{font-family:"SF Mono","Menlo","Consolas",monospace; font-size:.82em;
+    background:#eef0f5; color:var(--navy); padding:1px 5px; border-radius:4px;}
+
+  /* ---- sticky header ---- */
+  header{position:sticky; top:0; z-index:50; background:var(--navy); color:#fff;
+    padding:10px 20px; box-shadow:0 2px 10px rgba(0,0,0,.18);}
+  .hwrap{max-width:1000px; margin:0 auto; display:flex; align-items:center; gap:16px; flex-wrap:wrap;}
+  header h1{font-size:16px; margin:0; letter-spacing:.2px; font-weight:700;}
+  header .sub{font-family:"Helvetica Neue",Arial,sans-serif; font-size:11px; color:#aeb9d4; margin:0;}
+  .bar{flex:1; min-width:160px; height:10px; background:rgba(255,255,255,.16); border-radius:6px; overflow:hidden;}
+  .bar > i{display:block; height:100%; width:0; background:linear-gradient(90deg,var(--green),#7ec48f); transition:width .3s;}
+  .pct{font-family:"Helvetica Neue",Arial,sans-serif; font-size:13px; font-weight:700; min-width:42px; text-align:right;}
+  .btns{display:flex; gap:6px; flex-wrap:wrap;}
+  .btn{font-family:"Helvetica Neue",Arial,sans-serif; font-size:11.5px; font-weight:600; cursor:pointer;
+    background:rgba(255,255,255,.12); color:#fff; border:1px solid rgba(255,255,255,.25);
+    padding:5px 10px; border-radius:6px;}
+  .btn:hover{background:rgba(255,255,255,.22);}
+  .btn.danger{border-color:var(--red);}
+  .btn.go{background:var(--green); border-color:var(--green);}
+
+  main{max-width:1000px; margin:0 auto; padding:22px 18px 80px;}
+
+  .lede{font-family:"Helvetica Neue",Arial,sans-serif; font-size:13px; color:var(--muted); margin:2px 0 18px;}
+
+  /* ---- reference / collapsible cards ---- */
+  .ref{background:var(--card); border:1px solid var(--line); border-radius:10px; margin:0 0 14px; overflow:hidden;}
+  .ref > summary{list-style:none; cursor:pointer; padding:12px 16px; font-family:"Helvetica Neue",Arial,sans-serif;
+    font-weight:700; font-size:13.5px; color:var(--navy); display:flex; align-items:center; gap:8px; background:#fbfcfe;}
+  .ref > summary::-webkit-details-marker{display:none;}
+  .ref > summary::before{content:"▸"; color:var(--red); font-size:12px; transition:transform .2s;}
+  .ref[open] > summary::before{transform:rotate(90deg);}
+  .ref .body{padding:6px 16px 16px;}
+
+  table{border-collapse:collapse; width:100%; margin:8px 0; font-family:"Helvetica Neue",Arial,sans-serif; font-size:12.5px;}
+  th{background:var(--navy); color:#fff; text-align:left; padding:6px 9px; font-weight:600;}
+  td{border-bottom:1px solid var(--line); padding:6px 9px; vertical-align:top;}
+  tr:nth-child(even) td{background:#f8f9fc;}
+
+  /* ---- phase + week structure ---- */
+  .phase-h{font-size:12px; font-family:"Helvetica Neue",Arial,sans-serif; letter-spacing:1.4px;
+    text-transform:uppercase; color:var(--muted); margin:30px 0 6px; display:flex; align-items:center; gap:10px;}
+  .phase-h .pp{flex:1; height:1px; background:var(--line);}
+  .phase-h .pbadge{background:var(--navy); color:#fff; padding:2px 9px; border-radius:10px; font-size:10.5px; letter-spacing:.5px;}
+
+  .week{background:var(--card); border:1px solid var(--line); border-radius:12px; margin:0 0 16px; overflow:hidden;
+    box-shadow:0 1px 3px rgba(20,33,61,.05);}
+  .week > .wh{cursor:pointer; padding:13px 16px; display:flex; align-items:center; gap:12px; background:#fbfcfe; border-bottom:1px solid var(--line);}
+  .week > .wh:hover{background:#f4f7fc;}
+  .wh .caret{color:var(--red); font-size:12px; transition:transform .2s;}
+  .week.collapsed > .wh .caret{transform:rotate(-90deg);}
+  .wh .wtitle{font-family:"Helvetica Neue",Arial,sans-serif; font-weight:700; font-size:14.5px; color:var(--navy); flex:1;}
+  .wh .wdate{font-family:"Helvetica Neue",Arial,sans-serif; font-size:11.5px; color:var(--muted);}
+  .wh .wprog{font-family:"Helvetica Neue",Arial,sans-serif; font-size:11px; font-weight:700; color:var(--green);
+    background:#eef7f0; border:1px solid #cfe6d5; padding:2px 8px; border-radius:10px; white-space:nowrap;}
+  .wh .wprog.part{color:var(--amber); background:#fbf3e5; border-color:#eeddbf;}
+  .wh .wprog.zero{color:var(--muted); background:#f1f3f7; border-color:var(--line);}
+  .week.collapsed > .wbody{display:none;}
+  .wbody{padding:6px 14px 14px;}
+  .wnote{font-family:"Helvetica Neue",Arial,sans-serif; font-size:12px; color:var(--muted); font-style:italic; margin:8px 2px 4px;}
+
+  .tag{display:inline-block; font-family:"Helvetica Neue",Arial,sans-serif; font-size:9.5px; font-weight:700;
+    letter-spacing:.4px; padding:2px 7px; border-radius:9px; color:#fff; vertical-align:middle;}
+  .tag.build{background:var(--red);} .tag.gate{background:var(--navy);} .tag.decision{background:var(--amber);}
+  .tag.headline{background:#7a2e8f;} .tag.milestone{background:var(--green);}
+
+  /* ---- day ---- */
+  .day{border:1px solid var(--line); border-left:4px solid var(--navy); border-radius:8px; margin:11px 0; overflow:hidden;
+    transition:border-color .2s;}
+  .day.done{border-left-color:var(--green); background:#fcfefc;}
+  .dhead{display:flex; align-items:baseline; gap:10px; padding:9px 13px 4px;}
+  .dlabel{font-family:"Helvetica Neue",Arial,sans-serif; font-weight:700; font-size:13px; color:var(--navy);}
+  .ddate{font-family:"Helvetica Neue",Arial,sans-serif; font-size:11px; color:var(--muted);}
+  .dtitle{font-family:"Helvetica Neue",Arial,sans-serif; font-size:12.5px; color:var(--ink); font-weight:600;}
+  .dtick{margin-left:auto; font-family:"Helvetica Neue",Arial,sans-serif; font-size:11px; color:var(--green); font-weight:700;}
+  .dbody{padding:2px 13px 12px;}
+
+  /* ---- task ---- */
+  .task{display:flex; gap:9px; padding:8px 0; border-top:1px dashed var(--line);}
+  .task:first-child{border-top:none;}
+  .task input[type=checkbox]{margin-top:3px; width:16px; height:16px; accent-color:var(--green); cursor:pointer; flex-shrink:0;}
+  .task .tc{flex:1; min-width:0;}
+  .task .do{font-size:13.5px;}
+  .task.checked .do{color:var(--muted);}
+  .kv{font-family:"Helvetica Neue",Arial,sans-serif; font-size:11.5px; margin-top:3px;}
+  .kv b{color:var(--navy);}
+  .kv.expect b{color:var(--amber);} .kv.done b{color:var(--green);}
+  .cmd{position:relative; font-family:"SF Mono","Menlo","Consolas",monospace; font-size:11.5px;
+    background:var(--code-bg); color:var(--code-fg); padding:9px 40px 9px 12px; border-radius:6px; margin:6px 0;
+    white-space:pre-wrap; word-break:break-word; line-height:1.55;}
+  .copy{position:absolute; top:6px; right:6px; font-family:"Helvetica Neue",Arial,sans-serif; font-size:10px;
+    background:rgba(255,255,255,.12); color:#cdd7ee; border:1px solid rgba(255,255,255,.25); border-radius:5px;
+    padding:2px 7px; cursor:pointer;}
+  .copy:hover{background:rgba(255,255,255,.25);}
+
+  /* ---- reading ---- */
+  .read{display:flex; gap:9px; padding:9px 0; border-top:1px dashed var(--line);}
+  .read input[type=checkbox]{margin-top:3px; width:16px; height:16px; accent-color:var(--navy); cursor:pointer; flex-shrink:0;}
+  .read .rc{flex:1; min-width:0;}
+  .rtitle{font-family:"Helvetica Neue",Arial,sans-serif; font-size:12.5px;}
+  .rtitle .bk{display:inline-block; background:var(--navy); color:#fff; font-size:9.5px; font-weight:700;
+    padding:1px 6px; border-radius:8px; margin-right:6px; letter-spacing:.3px;}
+  .rmeta{font-family:"Helvetica Neue",Arial,sans-serif; font-size:11px; color:var(--muted); margin:2px 0;}
+  .rfocus{font-size:12.5px; margin:3px 0 2px;}
+  .rfocus b{font-family:"Helvetica Neue",Arial,sans-serif; color:var(--navy); font-size:11px; letter-spacing:.3px;}
+  .rfocus ul{margin:2px 0 4px; padding-left:18px;} .rfocus li{margin:1px 0;}
+  .rwhy{font-family:"Helvetica Neue",Arial,sans-serif; font-size:11.5px; color:#3a3a4a; background:#f6f4fb;
+    border-left:3px solid #7a2e8f; padding:4px 9px; border-radius:0 5px 5px 0; margin-top:3px;}
+  .rwhy b{color:#7a2e8f;}
+
+  .subhead{font-family:"Helvetica Neue",Arial,sans-serif; font-size:11px; font-weight:700; letter-spacing:.6px;
+    text-transform:uppercase; color:var(--muted); margin:12px 2px 2px;}
+
+  /* ---- notes ---- */
+  .notes{margin:10px 0 2px;}
+  .notes label{font-family:"Helvetica Neue",Arial,sans-serif; font-size:11px; font-weight:700; color:var(--muted); letter-spacing:.4px;}
+  textarea{width:100%; min-height:52px; font-family:"Helvetica Neue",Arial,sans-serif; font-size:12.5px; color:var(--ink);
+    border:1px solid var(--line); border-radius:7px; padding:8px 10px; margin-top:4px; resize:vertical; background:#fffdf7;}
+  textarea:focus{outline:none; border-color:var(--amber); background:#fff;}
+
+  .gate{background:#fff8f8; border:1px solid #f0cccd; border-radius:7px; padding:8px 12px; margin:8px 0;
+    font-family:"Helvetica Neue",Arial,sans-serif; font-size:12px;}
+  .gate b{color:var(--red);}
+  .deliver{background:#f2f8f4; border:1px solid #cde6d3; border-radius:7px; padding:8px 12px; margin:8px 0 2px;
+    font-family:"Helvetica Neue",Arial,sans-serif; font-size:12px;}
+  .deliver b{color:var(--green);}
+
+  .footer{font-family:"Helvetica Neue",Arial,sans-serif; font-size:11px; color:#9aa3b2; text-align:center;
+    margin-top:30px; padding-top:14px; border-top:1px solid var(--line);}
+  .toast{position:fixed; bottom:20px; left:50%; transform:translateX(-50%) translateY(80px);
+    background:var(--navy); color:#fff; font-family:"Helvetica Neue",Arial,sans-serif; font-size:12.5px;
+    padding:9px 16px; border-radius:8px; box-shadow:0 4px 16px rgba(0,0,0,.25); transition:transform .3s; z-index:99;}
+  .toast.show{transform:translateX(-50%) translateY(0);}
+  @media (max-width:640px){ header h1{font-size:14px;} .sub{display:none;} body{font-size:14px;} }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hwrap">
+    <div>
+      <h1>Execution Tracker</h1>
+      <p class="sub">Interpretable DSS for Medical Microscopy · 6-month plan → 2 papers + thesis</p>
+    </div>
+    <div class="bar"><i id="barfill"></i></div>
+    <span class="pct" id="pctlabel">0%</span>
+    <div class="btns">
+      <button class="btn go" id="jumpBtn" title="Scroll to the first unfinished task">▾ Today</button>
+      <button class="btn" id="expandBtn">Expand all</button>
+      <button class="btn" id="exportBtn" title="Download your progress + notes as a Markdown log">Export log</button>
+      <button class="btn" id="backupBtn" title="Save a JSON backup of all checks + notes">Backup</button>
+      <button class="btn" id="restoreBtn" title="Restore from a JSON backup">Restore</button>
+      <button class="btn danger" id="resetBtn">Reset</button>
+      <input type="file" id="restoreFile" accept="application/json" style="display:none">
+    </div>
+  </div>
+</header>
+
+<main>
+  <p class="lede">Open this each morning. Do the current day top-to-bottom, tick each box, jot a note. Everything saves to this browser automatically. <b>The one thing you are proving:</b> an interpretable-by-design, sub-10&nbsp;MB microscopy model whose explanations are <i>more faithful</i> than post-hoc SHAP/LIME/Grad-CAM on a heavy black box, at <i>≥100× lower inference cost</i>, with <i>calibrated abstention</i>.</p>
+
+  <!-- reference cards injected by JS at #refs -->
+  <div id="refs"></div>
+
+  <!-- schedule injected by JS at #plan -->
+  <div id="plan"></div>
+
+  <div class="footer">Interactive Execution Tracker · pairs with <code>daily_execution_playbook.html</code> (print version) · Week 0 anchored Mon 6 Jul 2026 · progress stored locally in this browser only</div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* =====================================================================
+   READING LIBRARY — every paper in the schedule, with what to focus on
+   ===================================================================== */
+const READINGS = {
+  rudin2019:{ t:"Stop Explaining Black Box ML Models for High-Stakes Decisions and Use Interpretable Models Instead",
+    a:"Cynthia Rudin", v:"Nature Machine Intelligence 1(5), 2019", find:"arXiv:1811.10154",
+    focus:["The accuracy–interpretability tradeoff is largely a myth — interpretable models can match black boxes in high-stakes domains.",
+      "The core distinction: <i>explainable</i> (post-hoc, explains a black box) vs <i>interpretable</i> (ante-hoc, transparent by design).",
+      "Why a post-hoc explanation is NOT the model's real computation, so it can mislead."],
+    why:"This is your thesis's thesis. Every framing sentence in the proposal traces back here." },
+
+  arun2021:{ t:"Assessing the Trustworthiness of Saliency Maps for Localizing Abnormalities in Medical Imaging",
+    a:"Arun, Gaw, Singh, et al.", v:"Radiology: Artificial Intelligence 3(6), 2021", find:"search title on Google Scholar / RSNA",
+    focus:["Saliency maps (Grad-CAM &amp; friends) fail <i>utility</i> (localizing the abnormality) and <i>sensitivity</i> (randomization/repeatability) tests.",
+      "The exact test battery they apply — you will reuse this logic in your own benchmark.",
+      "Medical-imaging specificity: results are worse than natural-image intuition suggests."],
+    why:"Your empirical 'post-hoc is unreliable in medicine' citation — directly motivates RQ1." },
+
+  saporta2022:{ t:"Benchmarking Saliency Methods for Chest X-ray Interpretation",
+    a:"Saporta, Gui, Agrawal, et al.", v:"Nature Machine Intelligence 4, 2022", find:"search title / Stanford AIMI",
+    focus:["Systematic comparison of saliency methods against expert segmentations across many pathologies.",
+      "Most methods localize <i>worse</i> than a human benchmark — quantifies the unreliability.",
+      "Their benchmark design is a template for your Paper 0."],
+    why:"Second pillar of the 'post-hoc fails' argument; model your own benchmark on their method." },
+
+  adebayo2018:{ t:"Sanity Checks for Saliency Maps",
+    a:"Adebayo, Gilmer, Muelly, Goodfellow, Hardt, Kim", v:"NeurIPS 2018", find:"arXiv:1810.03292",
+    focus:["The <b>model-parameter randomization test</b> and the <b>data randomization test</b> — the definitions.",
+      "Which methods pass and which behave like edge detectors independent of the trained model.",
+      "How to implement the test (progressively randomize layers, re-attribute, correlate)."],
+    why:"This defines your <code>sanity_check</code> metric (Week 2 · Thu) and the <code>sanity_pass</code> column in results_log.csv." },
+
+  slack2020:{ t:"Fooling LIME and SHAP: Adversarial Attacks on Post-hoc Explanation Methods",
+    a:"Slack, Hilgard, Jia, Singh, Lakkaraju", v:"AAAI/ACM AIES 2020", find:"arXiv:1911.02508",
+    focus:["How a biased model can hide its bias from LIME/SHAP by exploiting their out-of-distribution perturbation sampling.",
+      "The scaffolding attack construction — enough to explain the vulnerability in one paragraph.",
+      "Takeaway: post-hoc explanations are not robust, not just imprecise."],
+    why:"The robustness leg of your unreliability argument — cite alongside Arun &amp; Saporta." },
+
+  chen2019:{ t:"This Looks Like That: Deep Learning for Interpretable Image Recognition (ProtoPNet)",
+    a:"Chen, Li, Tao, Barnett, Su, Rudin", v:"NeurIPS 2019", find:"arXiv:1806.10574",
+    focus:["The prototype layer and <b>similarity maps</b> — how evidence per class is scored.",
+      "Prototype <b>push / projection</b> onto the nearest training patch (this is exactly <code>_push_prototypes</code> in train.py).",
+      "The 'this patch looks like that prototype' reasoning that makes the model self-explaining."],
+    why:"Maps 1:1 to <code>pxai/models/protopnet.py</code>; read it the night before you train the A2 protopnet head." },
+
+  nauta2023:{ t:"PIP-Net: Patch-Based Intuitive Prototypes for Interpretable Image Classification",
+    a:"Nauta, Schlötterer, van Keulen, Seifert", v:"CVPR 2023", find:"arXiv:2307.10404",
+    focus:["The <b>sparse additive scoring sheet</b> — few prototypes contribute per decision.",
+      "The model can <b>abstain</b> (near-zero score) when no prototype matches — a natural link to your trust layer.",
+      "How compactness is trained (the sparsity you enable with <code>pip_sparsity: true</code>)."],
+    why:"Explains the <code>pip_sparsity</code> flag and the abstaining behaviour that feeds RQ5." },
+
+  koh2020:{ t:"Concept Bottleneck Models",
+    a:"Koh, Nguyen, Tang, Mussmann, Pierson, Kim, Liang", v:"ICML 2020", find:"arXiv:2007.04612",
+    focus:["Predict human-named concepts first, then the label from concepts ONLY (the hard bottleneck).",
+      "Test-time <b>concept intervention</b> — flip a concept, watch the prediction change.",
+      "The three training regimes (independent / sequential / joint)."],
+    why:"Maps to <code>pxai/models/cbm.py</code> and the <code>concept_source: labels</code> path." },
+
+  oikarinen2023:{ t:"Label-Free Concept Bottleneck Models",
+    a:"Oikarinen, Das, Nguyen, Weng", v:"ICLR 2023", find:"arXiv:2304.06129",
+    focus:["Building a CBM with NO concept annotations: GPT proposes concepts, CLIP grounds them in images.",
+      "How concept activations are computed without labels (CLIP similarity).",
+      "The accuracy cost of going label-free vs labelled."],
+    why:"Your fallback if the Week-0 Friday concept-label gate is NO → <code>concept_source: labelfree</code>." },
+
+  bohle2024:{ t:"B-cos Alignment for Inherently Interpretable CNNs and Vision Transformers (B-cos v2)",
+    a:"Böhle, Singh, Fritz, Schiele", v:"IEEE TPAMI 2024", find:"arXiv:2306.10898",
+    focus:["Replace linear layers with <b>B-cos transforms</b> that force weight–input alignment.",
+      "The forward pass itself yields a faithful contribution map — no extra explanation step.",
+      "How the summarized contribution map is read out (this is the <code>contrib_map</code> used in evaluate.py)."],
+    why:"Maps to <code>pxai/models/bcos.py</code> and the ante-hoc attribution path for the bcos head." },
+
+  jethani2022:{ t:"FastSHAP: Real-Time Shapley Value Estimation",
+    a:"Jethani, Sudarshan, Covert, Lee, Ranganath", v:"ICLR 2022", find:"arXiv:2107.07436",
+    focus:["The amortization idea: train an explainer network to output Shapley values in ONE forward pass.",
+      "The Shapley-consistent training objective over sampled <b>coalitions</b> (subset masks) — this is the loss you build the driver around.",
+      "The efficiency/normalization constraint that keeps the estimates unbiased.",
+      "READ TWICE — this is the single most important paper for your headline result."],
+    why:"THE headline. <code>pxai/explainers/amortized.py</code> (<code>fastshap_step</code>) implements this; Weeks 13–16 build the driver loop. RQ2 &amp; RQ3 live here." },
+
+  dabkowski2017:{ t:"Real-Time Image Saliency for Black-Box Classifiers",
+    a:"Dabkowski & Gal", v:"NeurIPS 2017", find:"arXiv:1705.07857",
+    focus:["Train a <b>masking model</b> that outputs a saliency map in a single pass.",
+      "The earliest 'amortized explainer' precedent — the ancestor of FastSHAP.",
+      "The mask objectives (smallest sufficient / smallest destroying region)."],
+    why:"Cite as prior art for the single-pass claim; grounds why one-pass explanation is possible at all." },
+
+  hedstrom2023:{ t:"Quantus: An Explainable-AI Toolkit for Responsible Evaluation of Neural-Network Explanations",
+    a:"Hedström, Weber, Krakowczyk, et al.", v:"JMLR 24, 2023", find:"arXiv:2202.06861",
+    focus:["The metric families: faithfulness, robustness, localization, complexity, randomization.",
+      "Exact definitions of deletion, insertion, infidelity, sensitivity — and their knobs (baseline value, perturbation order).",
+      "SKIM — you need the API and the metric semantics, not every appendix."],
+    why:"<code>pxai/eval/faithfulness.py</code> wraps Quantus; all of Week 2 runs through it." },
+
+  angelopoulos2021:{ t:"A Gentle Introduction to Conformal Prediction and Distribution-Free Uncertainty Quantification",
+    a:"Angelopoulos & Bates", v:"Foundations & Trends in ML, 2021", find:"arXiv:2107.07511",
+    focus:["Split conformal: the calibration quantile <b>q̂</b> and the finite-sample coverage guarantee at level 1−α.",
+      "How to build a <b>prediction set</b> and read a risk–coverage curve.",
+      "SKIM the theory; focus on the recipe — it maps directly to the code."],
+    why:"<code>pxai/eval/conformal.py</code> (<code>fit_temperature, conformal_qhat, prediction_sets, risk_coverage</code>) and the whole trust layer + RQ5." },
+
+  chula2022:{ t:"Chula-ParasiteEgg-11 — Parasitic Egg Detection & Classification in Microscopic Images (ICIP 2022 Grand Challenge)",
+    a:"Palasuwan, Anantrasirichai, et al. (Chulalongkorn University)", v:"IEEE ICIP 2022 Challenge", find:"⚠ verify exact citation — this is an OPEN TODO in your notes",
+    focus:["The 11 species, ~11k images, and the imaging/staining conditions.",
+      "The official train/test split and the challenge's evaluation metric.",
+      "Class definitions &amp; any class imbalance (matters for your F1 target)."],
+    why:"Primary-testbed citation. Nail the exact BibTeX and paste it into <code>CITATIONS.md</code> — it is a standing open item." },
+
+  yacnet2024:{ t:"A Lightweight Deep-Learning Model for Parasite-Egg Detection (YAC-Net)",
+    a:"Xu, Zhai, Liu, Xu, Hua", v:"Parasites & Vectors, 2024", find:"DOI:10.1186/s13071-024-06503-2",
+    focus:["A lightweight YOLOv5n egg detector that bolts on Grad-CAM for explanation — the exact 'lightweight + post-hoc' combo you argue against.",
+      "Their accuracy, model size, and latency numbers — these are the bar you cite as prior art.",
+      "How they present the Grad-CAM maps (so you can contrast with your ante-hoc maps)."],
+    why:"The closest prior art and your direct baseline to beat; anchors the related-work of Papers 0 &amp; 1." },
+};
+
+/* =====================================================================
+   THE PLAN
+   task fields: {do, tag?, cmd?[], expect?, done?}   reading: [key,...]
+   ===================================================================== */
+const PLAN = [
+{ phase:"Phase 0 · Setup + spine reading", badge:"WEEK 0", weeks:[
+  { id:"w0", title:"Week 0 — Environment, data, configs, smoke test", date:"6–11 Jul", gran:"day",
+    note:"Get to a state where every experiment can be launched by name and one full train→eval loop provably runs. Nothing here is throwaway.",
+    days:[
+      { id:"w0d1", label:"D1 · Mon", date:"6 Jul", title:"Environment up",
+        tasks:[
+          { do:"Create + activate the virtualenv and install all dependencies.",
+            cmd:['cd "~/Desktop/MTP/Project/parasite_xai"',
+                 'python3 -m venv .venv',
+                 'source .venv/bin/activate',
+                 'pip install --upgrade pip',
+                 'pip install -r requirements.txt'],
+            expect:"pip ends with 'Successfully installed torch-… timm-… captum-… quantus-… shap-…'. Takes 5–15 min.",
+            done:"`pip list | grep -E \"torch|timm|captum|quantus\"` lists all four packages." },
+          { do:"Verify the package imports and check the real compute device on this machine (A400 GPU).",
+            cmd:['python -c "import pxai; print(\'pxai import OK\')"',
+                 'python -c "import torch; print(\'CUDA available:\', torch.cuda.is_available()); print(torch.cuda.get_device_name(0))"'],
+            expect:"`pxai import OK` and `CUDA available: True`, with your A400 listed as the device name.",
+            done:"Both lines print with no traceback and CUDA = True." },
+          { do:"Confirm the config is pointed at the right device. Open <code>configs/default.yaml</code> and check <code>device: cuda</code> (this is now the correct default for your workstation and the A100 server, so no change should be needed).", tag:"decision",
+            cmd:['grep \'device:\' configs/default.yaml'],
+            expect:"`grep 'device:' configs/default.yaml` shows `device: cuda`.",
+            done:"default.yaml says `cuda`.  (If you occasionally run something on your Mac, set `device: mps` and `export PYTORCH_ENABLE_MPS_FALLBACK=1` THERE only — see the 'Where to run heavy jobs' note at the top.)" },
+        ], reading:["rudin2019"] },
+
+      { id:"w0d2", label:"D2 · Tue", date:"7 Jul", title:"Get the data",
+        tasks:[
+          { do:"Download Chula-ParasiteEgg-11 and lay it out as ImageFolder under <code>parasite_xai/data/chula/</code>. The loader accepts either pre-split <code>root/{train,val,test}/&lt;class&gt;/*.jpg</code> or a flat <code>root/&lt;class&gt;/*.jpg</code> (it auto-splits).",
+            cmd:['# after download + unzip:',
+                 'ls data/chula          # (or data/chula/train)'],
+            expect:"11 species folders (e.g. Ascaris lumbricoides, Trichuris trichiura, Hookworm egg, …).",
+            done:"`find data/chula -name '*.jpg' | wc -l` is ≈ 11,000." },
+          { do:"Log per-class image counts — class imbalance drives your F1 target, so you must know it now.",
+            cmd:['for d in data/chula/*/; do echo "$(ls "$d" | wc -l)  $d"; done',
+                 '# paste the output into a new file data/DATASET_NOTES.md'],
+            done:"data/DATASET_NOTES.md exists with the 11 per-class counts." },
+          { do:"Nail the dataset citation — this is a standing open item in your notes. Create <code>CITATIONS.md</code> and add the Chula ICIP-2022 entry (see the reading card below for what to verify).",
+            done:"CITATIONS.md has a Chula entry (mark it ‘verify’ if you can’t confirm the exact BibTeX yet)." },
+        ], reading:["arun2021","saporta2022"] },
+
+      { id:"w0d3", label:"D3 · Wed", date:"8 Jul", title:"Generate every experiment",
+        tasks:[
+          { do:"With <code>device: cuda</code> already set (confirmed Mon), generate all experiment configs. Every generated YAML inherits your device + data settings, so you never hand-edit them.",
+            cmd:['python make_configs.py'],
+            expect:"Prints one line per file, ending with '23 configs written to configs/generated/'.",
+            done:"`ls configs/generated/*.yaml | wc -l` is 23." },
+          { do:"Note code-build TODO #1 (you can DEFER the fix to Week 1). The caveat: <code>evaluate.py</code> runs post-hoc explainers on whatever checkpoint you pass it. For the <i>real</i> comparison you want post-hoc attributions computed on the heavy black box and ante-hoc on your interpretable model. Today’s smoke test uses the default behaviour and is fine — the fix only matters once you have a black-box checkpoint (Week 1 · Wed).", tag:"build",
+            cmd:['# create TODO.md and record:',
+                 '# BUILD-1 (Week1-Wed): in evaluate.py, run the posthoc block against the',
+                 '#   blackbox ckpt, not the interpretable model, for the real faithfulness comparison.'],
+            done:"TODO.md lists BUILD-1 so you won’t forget it." },
+        ], reading:["adebayo2018","slack2020"] },
+
+      { id:"w0d4", label:"D4 · Thu", date:"9 Jul", title:"Smoke-test the whole pipeline",
+        tasks:[
+          { do:"Build a tiny throwaway dataset (~18 imgs/class) so a full train→save loop finishes in minutes on the GPU.",
+            cmd:['for d in data/chula/*/; do c=$(basename "$d"); mkdir -p "data/chula_tiny/$c"; \\',
+                 '  ls "$d"*.jpg | head -18 | xargs -I{} cp {} "data/chula_tiny/$c/"; done',
+                 'find data/chula_tiny -name "*.jpg" | wc -l   # ~198'],
+            done:"data/chula_tiny has 11 folders, ~200 images total." },
+          { do:"Temporarily make default.yaml fast — set <code>data.root: ./data/chula_tiny</code> and <code>train.epochs: 1</code> — then regenerate and run the ProtoPNet smoke train.",
+            cmd:['# edit default.yaml:  data.root: ./data/chula_tiny   AND   train.epochs: 1',
+                 'python make_configs.py',
+                 'python -m pxai.train --config configs/generated/A2_protopnet_mobilevit.yaml'],
+            expect:"An `ep0` tqdm bar, then `epoch 0: val_acc=0.xxxx`, then `best val acc: 0.xxxx -> ./runs/A2_protopnet_mobilevit/best.pt`.",
+            done:"`ls runs/A2_protopnet_mobilevit/best.pt` exists." },
+          { do:"Smoke-test evaluate on that checkpoint — this proves the faithfulness + cost + trust + plotting path all run.",
+            cmd:['python -m pxai.evaluate --config configs/generated/A2_protopnet_mobilevit.yaml \\',
+                 '  --ckpt runs/A2_protopnet_mobilevit/best.pt'],
+            expect:"A JSON dump to stdout, plus `results.json`, `faithfulness_vs_cost.png`, `risk_coverage.png` inside `runs/A2_protopnet_mobilevit/`.",
+            done:"Those three output files exist." },
+          { do:"Restore the real settings so you never train on the tiny set by accident.",
+            cmd:['# edit default.yaml back:  data.root: ./data/chula   AND   train.epochs: 60',
+                 'python make_configs.py   # regenerate at full settings'],
+            done:"default.yaml shows chula + 60 epochs again; configs regenerated." },
+        ], reading:["chen2019","nauta2023"] },
+
+      { id:"w0d5", label:"D5 · Fri", date:"10 Jul", title:"Concept-label decision gate", tag:"decision",
+        tasks:[
+          { do:"DECIDE: can you obtain morphology concept labels (operculum present, shell texture, size band, polar knob, …) for the 11 species? Class-level values from a parasitology atlas are enough to start — you do NOT need per-image labels on day one.",
+            done:"You have a yes/no answer with a one-line reason." },
+          { do:"Set the path in default.yaml accordingly. YES → keep <code>model.cbm.concept_source: labels</code>. NO → set <code>labelfree</code> and regenerate (the fallback grounds concepts with an LLM + CLIP — see Oikarinen).",
+            cmd:['# YES:  model.cbm.concept_source: labels   (default, no change)',
+                 '# NO :  model.cbm.concept_source: labelfree   then:',
+                 'python make_configs.py'],
+            done:"Decision + reasoning written into CITATIONS.md/TODO.md; default.yaml reflects it." },
+        ], reading:["koh2020","oikarinen2023","bohle2024"] },
+
+      { id:"w0d6", label:"D6 · Sat", date:"11 Jul", title:"Headline reading + weekly review", tag:"milestone",
+        tasks:[
+          { do:"Weekly review: env green, data laid out (~11k imgs), 23 configs present, smoke train+eval passed, concept decision made. Then make this a git repo (your parent Thesis dir isn’t one) and commit.",
+            cmd:['cd ..            # into Interpretable_DSS',
+                 'git init 2>/dev/null; git add -A',
+                 'git commit -m "phase0 complete: env + data + configs + smoke test"'],
+            done:"A commit exists; `git log --oneline` shows phase0." },
+        ], reading:["jethani2022","dabkowski2017","hedstrom2023","angelopoulos2021"] },
+    ]},
+]},
+
+{ phase:"Phase 1 · Benchmark substrate (Month 1)", badge:"WEEKS 1–3", weeks:[
+  { id:"w1", title:"Week 1 — Black box + post-hoc explainers", date:"13–18 Jul", gran:"day",
+    note:"Train the accuracy ceiling (which is also your SHAP teacher), then measure every post-hoc baseline on it. Heavy 60-epoch run — run it on your A400 workstation or offload to the central A100 server if you want it done faster.",
+    days:[
+      { id:"w1d1", label:"D1 · Mon", date:"13 Jul", title:"Launch black-box training",
+        tasks:[
+          { do:"Create the run dir and launch the convnext_tiny black box in the background so it trains while you read. This checkpoint is BOTH your accuracy ceiling AND the teacher whose SHAP the amortized explainer will mimic.",
+            cmd:['mkdir -p runs/ref_blackbox_convnext',
+                 'nohup python -m pxai.train --config configs/generated/ref_blackbox_convnext.yaml \\',
+                 '  > runs/ref_blackbox_convnext/train.log 2>&1 &',
+                 'sleep 90 && tail -5 runs/ref_blackbox_convnext/train.log'],
+            expect:"tqdm epoch bars in the log, then `epoch 0: val_acc=…`.",
+            done:"Log shows loss/val progressing and the process is alive (`jobs`). On the A400 this should take well under an hour; if you want it faster, offload to the central A100 server." },
+        ], reading:["chula2022","yacnet2024"] },
+      { id:"w1d2", label:"D2 · Tue", date:"14 Jul", title:"Monitor convergence",
+        tasks:[
+          { do:"Check the validation curve. If it’s diverging (val_acc stuck < 0.3 after ~10 epochs, or NaN loss), halve the LR in this one generated config and relaunch — a divergence hotfix on a single config is fine.",
+            cmd:['grep val_acc runs/ref_blackbox_convnext/train.log | tail -8',
+                 '# if diverging: set train.lr: 1.5e-4 in',
+                 '#   configs/generated/ref_blackbox_convnext.yaml  then relaunch (D1 command).'],
+            done:"val-acc climbing past ~0.8, OR a halved-LR relaunch is running." },
+        ], reading:[] },
+      { id:"w1d3", label:"D3 · Wed", date:"15 Jul", title:"Freeze the teacher + fill REF01",
+        tasks:[
+          { do:"When the log prints `best val acc: … -> …/best.pt`, the teacher is frozen at <code>runs/ref_blackbox_convnext/best.pt</code>. Run evaluate to get test accuracy + the full cost report (params/FLOPs/CPU-latency/size) and all 5 post-hoc baselines’ faithfulness in one shot.",
+            cmd:['python -m pxai.evaluate --config configs/generated/ref_blackbox_convnext.yaml \\',
+                 '  --ckpt runs/ref_blackbox_convnext/best.pt',
+                 'cat runs/ref_blackbox_convnext/results.json | python -m json.tool | head -40'],
+            expect:"results.json with `accuracy`, `cost_model` (params, flops, latency_cpu, model_size_mb), and a `methods` block for gradcam/hirescam/integrated_gradients/lime/kernelshap.",
+            done:"results.json exists and has non-null accuracy + cost_model." },
+          { do:"Fill row <b>REF01</b> in <code>../results_log.csv</code>: test_acc, test_f1, params_M, flops_G, latency_cpu_ms, size_mb (read them out of results.json).",
+            done:"REF01 has no blank cells for those columns = accuracy ceiling recorded." },
+          { do:"NOW is when BUILD-1 matters (from Week-0 Wed). If you want post-hoc measured on the black box specifically (you do), confirm evaluate ran the posthoc block on THIS blackbox ckpt — it did, because you passed the blackbox ckpt. Good: no code change needed for the black-box baselines. The interpretable-vs-posthoc contrast happens in Week 12.", tag:"build",
+            done:"You’ve confirmed the 5 post-hoc methods have faithfulness numbers in this run’s results.json." },
+        ], reading:[] },
+      { id:"w1d4", label:"D4 · Thu", date:"16 Jul", title:"Sanity-view the CAM maps",
+        tasks:[
+          { do:"Eyeball the CAM-family explanations on the black box — do they land on the egg, not the slide background? Write a ~15-line script that calls the post-hoc explainer on 20 test images and saves overlays.",
+            cmd:['# scripts/qual_maps.py — sketch:',
+                 '#   from pxai.explainers.posthoc import explain_posthoc',
+                 '#   for 20 test imgs: m,_ = explain_posthoc("gradcam", model, x, target)',
+                 '#   save overlay to runs/ref_blackbox_convnext/qual/gradcam_{i}.png',
+                 'python scripts/qual_maps.py'],
+            expect:"20 overlay PNGs under runs/ref_blackbox_convnext/qual/.",
+            done:"You’ve looked at 20 maps and noted (in the day’s notes) how often the CAM misses the egg — that miss-rate IS your motivating anecdote for Paper 0." },
+        ], reading:[] },
+      { id:"w1d5", label:"D5 · Fri", date:"17 Jul", title:"Confirm the slow baselines completed",
+        tasks:[
+          { do:"IG, LIME and especially KernelSHAP are the slow, many-pass baselines (the cost you will beat). Confirm all 5 post-hoc methods produced faithfulness numbers in the Wed evaluate run.",
+            cmd:['python - <<\'PY\'',
+                 'import json; r=json.load(open("runs/ref_blackbox_convnext/results.json"))',
+                 'print(list(r["methods"].keys()))',
+                 'PY'],
+            expect:"['gradcam','hirescam','integrated_gradients','lime','kernelshap'] (all present).",
+            done:"All 5 baselines have an `aggregate` faithfulness value; note which is currently strongest." },
+        ], reading:[] },
+      { id:"w1d6", label:"D6 · Sat", date:"18 Jul", title:"Record baseline cost + review", tag:"milestone",
+        tasks:[
+          { do:"Record each post-hoc method’s passes-per-explanation (its cost). These come from <code>costmod.EXPLAINER_PASSES</code> and are echoed in results.json under each method’s `passes`. Fill the cost columns for the baselines in results_log.csv. Weekly review + commit.",
+            cmd:['git add -A && git commit -m "week1: black-box teacher + post-hoc baselines"'],
+            done:"passes_per_explanation logged for all baselines; commit made." },
+        ], reading:[] },
+    ]},
+
+  { id:"w2", title:"Week 2 — Quantus faithfulness panel", date:"20–25 Jul", gran:"day",
+    note:"The whole panel already runs inside evaluate.py (cfg.eval.faithfulness). This week you dissect it metric-by-metric, verify each behaves, and build the disagreement table — one metric per day so nothing is rushed.",
+    days:[
+      { id:"w2d1", label:"D1 · Mon", date:"20 Jul", title:"Deletion",
+        tasks:[{ do:"Understand + verify the <b>Deletion</b> metric (progressively remove top-attributed pixels; a faithful map makes accuracy fall fast). Confirm it’s in the panel and log per-method values.",
+          cmd:['grep -n "deletion" pxai/eval/faithfulness.py','# values are in results.json -> methods[*].faithfulness.deletion'],
+          done:"deletion column logged per method in results_log.csv." }], reading:[] },
+      { id:"w2d2", label:"D2 · Tue", date:"21 Jul", title:"Insertion",
+        tasks:[{ do:"<b>Insertion</b> (progressively add top pixels onto a baseline; accuracy should rise fast). Log per method.",
+          done:"insertion column logged." }], reading:[] },
+      { id:"w2d3", label:"D3 · Wed", date:"22 Jul", title:"Infidelity + Sensitivity",
+        tasks:[{ do:"<b>Infidelity</b> (attribution vs actual output change under perturbation) and <b>Sensitivity-max</b> (robustness to tiny input changes). Log both.",
+          done:"infidelity + sensitivity columns logged." }], reading:[] },
+      { id:"w2d4", label:"D4 · Thu", date:"23 Jul", title:"Sanity check (Adebayo)",
+        tasks:[{ do:"The <b>model-parameter randomization</b> sanity check (Adebayo 2018 — re-read your Week-0 notes). A method that passes changes its map when the model is randomized; one that fails is an edge detector. Record True/False per method.",
+          done:"sanity_pass logged per method." }], reading:[] },
+      { id:"w2d5", label:"D5 · Fri", date:"24 Jul", title:"Aggregate + disagreement table",
+        tasks:[{ do:"Compute the <b>normalised aggregate</b> (<code>normalised_aggregate</code>) AND build a per-metric disagreement table. Never report a single cherry-picked number — the metrics disagree, and saying so is part of your contribution.",
+          done:"agg_faithfulness per method logged; a small disagreement table saved (which metric ranks which method top)." }], reading:[] },
+      { id:"w2d6", label:"D6 · Sat", date:"25 Jul", title:"Freeze the harness", tag:"milestone",
+        tasks:[{ do:"Lock the faithfulness harness so every later model is judged identically. Tag it and review.",
+          cmd:['git add -A && git commit -m "week2: quantus faithfulness panel"','git tag v0.1-harness'],
+          done:"Tag v0.1-harness exists; harness reproducible at seed 1337." }], reading:[] },
+    ]},
+
+  { id:"w3", title:"Week 3 — Cost axis + full-sweep automation", date:"27 Jul–1 Aug", gran:"day",
+    note:"Turn the benchmark into one reproducible command, then draw the first Pareto frontier of existing methods.",
+    days:[
+      { id:"w3d1", label:"D1 · Mon", date:"27 Jul", title:"Wire the cost report",
+        tasks:[{ do:"Confirm <code>pxai/eval/cost.py</code> reports params, FLOPs (fvcore), CPU latency, model size, and passes-per-explanation — one call per method. Verify the numbers look sane (convnext_tiny ≈ 28M params).",
+          cmd:['grep -n "def cost_report\\|EXPLAINER_PASSES" pxai/eval/cost.py'],
+          done:"cost measured for the black box + every post-hoc method." }], reading:[] },
+      { id:"w3d2", label:"D2 · Tue", date:"28 Jul", title:"One-shot benchmark driver",
+        tasks:[{ do:"You already have it: <code>python -m pxai.evaluate</code> emits results.json (faithfulness × cost) for a model. Make a tiny wrapper that runs it over the methods you care about and copies results into <code>runs/benchmark/results.json</code> for the paper.",
+          done:"runs/benchmark/results.json aggregates the baseline numbers." }], reading:[] },
+      { id:"w3d3", label:"D3 · Wed", date:"29 Jul", title:"Reproducibility check",
+        tasks:[{ do:"Re-run the sweep clean from the frozen ckpt at seed 1337; confirm numbers are stable across two runs (small metric noise OK, ranking must not flip).",
+          done:"Two runs agree on the method ranking." }], reading:[] },
+      { id:"w3d4", label:"D4 · Thu", date:"30 Jul", title:"First Pareto frontier",
+        tasks:[{ do:"Draw the faithfulness × cost frontier for existing methods only (this is the figure the whole thesis upgrades).",
+          cmd:['python -m pxai.plots.pareto   # or use evaluate.py\'s faithfulness_vs_cost.png'],
+          expect:"A scatter of methods with faithfulness (y) vs passes/cost (x).",
+          done:"pareto_v1.png exists." }], reading:[] },
+      { id:"w3d5", label:"D5 · Fri", date:"31 Jul", title:"Read the figure",
+        tasks:[{ do:"Write 5 bullets: which post-hoc method is the current front-runner, where do the metrics disagree, and what gap does an ante-hoc method need to fill?",
+          done:"5-bullet disagreement/opportunity story written into the notes." }], reading:[] },
+      { id:"w3d6", label:"D6 · Sat", date:"1 Aug", title:"Benchmark substrate done", tag:"milestone",
+        tasks:[{ do:"Weekly review + commit. This closes Month 1: you now have a reproducible faithfulness × cost benchmark and the baseline frontier.",
+          cmd:['git add -A && git commit -m "month1: benchmark substrate + pareto_v1"'],
+          done:"Month-1 milestone committed." }], reading:[] },
+    ]},
+]},
+
+{ phase:"Phase 2 · Paper 0 — de-risk the thesis (Month 2)", badge:"WEEKS 4–8", weeks:[
+  { id:"w4", title:"Week 4 — Draft Paper 0 (the benchmark)", date:"3–8 Aug", gran:"day",
+    note:"A submittable benchmark paper from Month-1 results alone. Once it’s out, your degree no longer depends on the harder Phase 3–5 results landing.",
+    days:[
+      { id:"w4d1", label:"D1 · Mon", date:"3 Aug", title:"Outline + figure list",
+        tasks:[{ do:"Outline Paper 0: every section, every figure and table slot. Target <b>Computers in Biology & Medicine</b> or <b>AI in Medicine</b> (Q1).",
+          done:"Skeleton + numbered figure/table list." }], reading:[] },
+      { id:"w4d2", label:"D2 · Tue", date:"4 Aug", title:"Methods + setup",
+        tasks:[{ do:"Draft Methods + Experimental setup — reuse the text from <code>protocol_interpretable.html</code>.",
+          done:"§Methods drafted." }], reading:[] },
+      { id:"w4d3", label:"D3 · Wed", date:"5 Aug", title:"Results + tables",
+        tasks:[{ do:"Draft Results: the faithfulness × cost table, the disagreement table, and the pareto_v1 caption.",
+          done:"§Results drafted with real numbers from results_log.csv." }], reading:[] },
+      { id:"w4d4", label:"D4 · Thu", date:"6 Aug", title:"Intro + related work",
+        tasks:[{ do:"Draft Intro + Related Work — pull citations from the 64-ref survey + the 34-ref addendum (YAC-Net, Proto-BagNets, HemaX, disagreement-problem, EU AI Act / FDA).",
+          done:"§Intro + §Related drafted." }], reading:[] },
+      { id:"w4d5", label:"D5 · Fri", date:"7 Aug", title:"Discussion",
+        tasks:[{ do:"Draft Discussion: the disagreement problem + clinical implications of post-hoc unreliability.",
+          done:"§Discussion drafted." }], reading:[] },
+      { id:"w4d6", label:"D6 · Sat", date:"8 Aug", title:"Full read-through", tag:"milestone",
+        tasks:[{ do:"Full read-through; fix gaps; weekly review + commit.",
+          done:"Complete rough draft of Paper 0." }], reading:[] },
+    ]},
+
+  { id:"w5", title:"Week 5 — Finish draft + format", date:"10–15 Aug", gran:"week",
+    tasks:[
+      { do:"Write the Abstract, Conclusion, and Limitations. Format the whole paper to the target journal’s template." },
+      { do:"Regenerate every figure at publication DPI.", cmd:['# in your figure scripts: plt.savefig(..., dpi=300, bbox_inches="tight")'] },
+    ], deliver:"Submission-formatted draft with 300-DPI figures." },
+
+  { id:"w6", title:"Week 6 — Advisor review", date:"17–22 Aug", gran:"week",
+    tasks:[
+      { do:"Send the draft to your advisor; collect comments; revise against them." },
+      { do:"Reference check: every citation in the paper exists in survey.html or the addendum and every DOI is correct." },
+    ], deliver:"Advisor sign-off; clean reference list." },
+
+  { id:"w7", title:"Week 7 — Submit Paper 0", date:"24–29 Aug", gran:"week", tag:"milestone",
+    tasks:[
+      { do:"Final proof; self-overlap / plagiarism check (Turnitin/iThenticate if the institute provides it); write the cover letter." },
+      { do:"Submit Paper 0.", cmd:['git tag paper0-submitted'] },
+    ], deliver:"Paper 0 submitted → the thesis is de-risked." },
+
+  { id:"w8", title:"Week 8 — Buffer + pre-stage the core", date:"31 Aug–5 Sep", gran:"week",
+    tasks:[
+      { do:"Read the three interpretable-head modules so Phase 3 needs no ramp-up: <code>pxai/models/protopnet.py</code>, <code>cbm.py</code>, <code>bcos.py</code>. Note where each hooks into <code>train.py:_compute_loss</code>.", cmd:['sed -n "1,80p" pxai/models/protopnet.py'] },
+      { do:"Confirm the A1/A2/A3 configs are all present in configs/generated/." },
+    ], deliver:"Ready for the interpretable core. End of Month 2." },
+]},
+
+{ phase:"Phase 3 · Interpretable core (Month 3)", badge:"WEEKS 9–12", weeks:[
+  { id:"w9", title:"Week 9 — A2: three interpretable heads", date:"7–12 Sep", gran:"week",
+    note:"Same daily rhythm: launch runs Mon–Tue, evaluate Wed–Thu, log + figure Fri, review Sat.",
+    tasks:[
+      { do:"Train all three inherently-interpretable heads on the light MobileViT backbone.",
+        cmd:['python -m pxai.train --config configs/generated/A2_protopnet_mobilevit.yaml',
+             'python -m pxai.train --config configs/generated/A2_cbm_mobilevit.yaml',
+             'python -m pxai.train --config configs/generated/A2_bcos_mobilevit.yaml'] },
+      { do:"Evaluate each; log test_acc / test_f1 / params_M / size_mb into results_log.csv (rows A2-proto / A2-cbm / A2-bcos).",
+        cmd:['python -m pxai.evaluate --config configs/generated/A2_protopnet_mobilevit.yaml --ckpt runs/A2_protopnet_mobilevit/best.pt'] },
+    ], deliver:"3 interpretable models logged. (Head winner is chosen in W12 once faithfulness is measured — pick best faithfulness at ≤1% accuracy drop.)" },
+
+  { id:"w10", title:"Week 10 — A1: backbone footprint sweep", date:"14–19 Sep", gran:"week", tag:"gate",
+    tasks:[
+      { do:"Train the backbone sweep (protopnet head as generated): mobilevit_xs → efficientnet_lite0 → ghostnet_100 → convnext_tiny.",
+        cmd:['for b in A1_mobilevit_xs A1_efficientnet_lite0 A1_ghostnet_100 A1_convnext_tiny; do',
+             '  python -m pxai.train --config configs/generated/$b.yaml; done'] },
+      { do:"Evaluate each; log acc / params / size / CPU-latency." },
+    ], gate:"RQ4: pick the smallest backbone within 2–3% test-F1 of the REF01 black box. Record which one — it’s your production backbone for the rest of the thesis.", deliver:"RQ4 answered; backbone chosen." },
+
+  { id:"w11", title:"Week 11 — A3 sparsity + BUILD concept loss + localisation", date:"21–26 Sep", gran:"week", tag:"build",
+    tasks:[
+      { do:"BUILD-2 (only if concept_source: labels): wire CBM concept supervision in <code>train.py:_compute_loss</code> — the line currently calls <code>concept_loss(c_logit, None)</code>; plug the real per-concept targets in place of <code>None</code>.", cmd:['grep -n "concept_loss" pxai/train.py pxai/models/cbm.py'] },
+      { do:"Train the sparsity sweep: A3_proto{1,3,5,10} and A3_concepts{8,16,32}.",
+        cmd:['for k in 1 3 5 10; do python -m pxai.train --config configs/generated/A3_proto$k.yaml; done',
+             'for n in 8 16 32; do python -m pxai.train --config configs/generated/A3_concepts$n.yaml; done'] },
+      { do:"If you have boxes/masks (<code>data.boxes_dir</code> set), add pointing-game / IoU localisation eval and log pointing_game + iou columns." },
+    ], deliver:"Sparsity knee chosen (accuracy vs #prototypes/#concepts); localisation numbers if boxes exist." },
+
+  { id:"w12", title:"Week 12 — Faithfulness on the interpretable winner", date:"28 Sep–3 Oct", gran:"week", tag:"gate",
+    tasks:[
+      { do:"Run the FROZEN Week-2 harness (v0.1-harness) on the winning interpretable model, then compare its ante-hoc aggregate faithfulness against the best post-hoc baseline from Week 1/2.",
+        cmd:['python -m pxai.evaluate --config configs/generated/<winner>.yaml --ckpt runs/<winner>/best.pt'] },
+      { do:"Update the Pareto with the ante-hoc point.", cmd:['python -m pxai.plots.pareto   # -> pareto_v2.png'] },
+    ], gate:"RQ1: ante-hoc aggregate faithfulness > best post-hoc on ≥3 of 5 Quantus metrics. If it FAILS → Paper 0 still stands; pivot the thesis story to ‘post-hoc unreliability quantified’ + push the amortized explainer (RQ2/RQ3) as the novelty (see stop-loss).", deliver:"RQ1 gate result recorded; pareto_v2.png. End of Month 3." },
+]},
+
+{ phase:"Phase 4 · Amortized explainer — THE HEADLINE (Month 4)", badge:"WEEKS 13–16", weeks:[
+  { id:"w13", title:"Week 13 — BUILD the FastSHAP driver loop", date:"5–10 Oct", gran:"week", tag:"headline",
+    note:"The single most important build of the thesis. Give it the whole week.",
+    tasks:[
+      { do:"BUILD-3: in <code>pxai/explainers/amortized.py</code> the <code>fastshap_step</code> already exists. Wrap it in a training driver: a dataloader over images, sample <b>coalitions</b> (random subset masks), forward the explainer network, apply the Shapley-consistency loss from <code>fastshap_step</code>, optimize for <code>explain.amortized.train_epochs</code>. Teacher = <code>runs/ref_blackbox_convnext/best.pt</code>.", cmd:['grep -n "def fastshap_step" pxai/explainers/amortized.py'] },
+      { do:"Smoke-run 1 epoch on chula_tiny to confirm it steps + saves a checkpoint before you commit a full run." },
+    ], deliver:"Amortized trainer runs end-to-end (smoke-verified)." },
+
+  { id:"w14", title:"Week 14 — Train the fidelity sweep (A4)", date:"12–17 Oct", gran:"week",
+    tasks:[
+      { do:"Train the amortized explainer at three budgets against the black-box teacher’s SHAP.",
+        cmd:['for e in 10 30 60; do python -m pxai.train --config configs/generated/A4_amortized_ep$e.yaml; done'] },
+      { do:"Measure the single-pass explainer output vs KernelSHAP on a test subset; plot fidelity-vs-budget." },
+    ], deliver:"Fidelity-vs-training-budget curve (does more training buy more agreement with KernelSHAP?)." },
+
+  { id:"w15", title:"Week 15 — Distillation + RQ3 gate (A5)", date:"19–24 Oct", gran:"week", tag:"gate",
+    tasks:[
+      { do:"Train the distilled amortized explainer (teacher_ckpt already points at REF).", cmd:['python -m pxai.train --config configs/generated/A5_distilled_amortized.yaml'] },
+      { do:"Compute the rank-correlation (Spearman / Kendall τ) between the single-pass explainer and KernelSHAP attributions across the test set; log rank_corr_kernelshap." },
+    ], gate:"RQ3: rank-correlation to KernelSHAP ≥ 0.70 (τ) in a SINGLE forward pass. If short → raise coalition count / A4 epochs ONCE; if still short, report as a fidelity–cost tradeoff (still a paper) — don’t over-tune.", deliver:"RQ3 gate result recorded." },
+
+  { id:"w16", title:"Week 16 — Cost win (RQ2) + Paper 1 skeleton", date:"26–31 Oct", gran:"week", tag:"gate",
+    tasks:[
+      { do:"Measure passes-per-explanation: amortized = 1 vs KernelSHAP = (num_coalitions). Confirm ≥100× fewer at matched latency." },
+      { do:"Outline Paper 1 (the amortized-explainer method paper)." },
+    ], gate:"RQ2: ≥100× fewer passes-per-explanation, within an on-device latency budget.", deliver:"RQ2 gate result recorded; Paper 1 outline. End of Month 4." },
+]},
+
+{ phase:"Phase 5 · Trust + edge + the money figure (Month 5)", badge:"WEEKS 17–20", weeks:[
+  { id:"w17", title:"Week 17 — Trust layer / RQ5 (A6)", date:"2–7 Nov", gran:"week", tag:"gate",
+    tasks:[
+      { do:"Evaluate conformal ON vs OFF; produce risk–coverage curves. evaluate.py already computes temperature, ECE, conformal q̂, empirical coverage and set size.",
+        cmd:['python -m pxai.evaluate --config configs/generated/A6_conformal_on.yaml  --ckpt runs/A6_conformal_on/best.pt',
+             'python -m pxai.evaluate --config configs/generated/A6_conformal_off.yaml --ckpt runs/A6_conformal_off/best.pt'] },
+      { do:"Confirm temperature scaling lowers ECE; log ece / coverage / risk." },
+    ], gate:"RQ5: conformal ON gives ≥90% coverage (α=0.10) at lower risk than no-abstention at equal coverage; ECE ↓ after temperature scaling.", deliver:"RQ5 gate result recorded." },
+
+  { id:"w18", title:"Week 18 — BUILD INT8 export + A7", date:"9–14 Nov", gran:"week", tag:"build",
+    tasks:[
+      { do:"BUILD-4: add the ONNX INT8 export path. Export the interpretable winner to ONNX, quantize INT8 via onnxruntime, then run A7 off vs on.",
+        cmd:['python -m pxai.train --config configs/generated/A7_int8_off.yaml',
+             'python -m pxai.train --config configs/generated/A7_int8_on.yaml'] },
+      { do:"Measure the faithfulness drop caused by quantization (does compression corrupt the explanations?)." },
+    ], deliver:"INT8 model + faithfulness drop < 5% relative; size ↓ ~4×." },
+
+  { id:"w19", title:"Week 19 — Edge latency + THE money figure", date:"16–21 Nov", gran:"week", tag:"headline",
+    tasks:[
+      { do:"Run the INT8 model on a Raspberry Pi / Android phone-microscope. No device? Report FLOPs + CPU-latency proxy (see stop-loss) — edge is a nice-to-have, not a gate." },
+      { do:"Generate the FINAL faithfulness × cost frontier with every method on it.", cmd:['python -m pxai.plots.pareto   # -> pareto_final.png'] },
+    ], deliver:"The money figure → pareto_final.png (your model on the top-left: most faithful, cheapest)." },
+
+  { id:"w20", title:"Week 20 — Paper 1 full draft", date:"23–28 Nov", gran:"week", tag:"milestone",
+    tasks:[
+      { do:"Write the full Paper 1 (method + fidelity + cost + edge). Target <b>A*</b> = MICCAI / ISBI / IPMI, or NeurIPS / ICML as a general single-pass explainer method." },
+      { do:"Advisor pass." },
+    ], deliver:"Paper 1 draft complete. End of Month 5." },
+]},
+
+{ phase:"Phase 6 · Clinician pilot + write-up (Month 6)", badge:"WEEKS 21–26", weeks:[
+  { id:"w21", title:"Week 21 — Clinician pilot instrument", date:"30 Nov–5 Dec", gran:"week",
+    tasks:[
+      { do:"Build a Streamlit or Google-Forms reader tool that shows image + explanation and collects clinician plausibility ratings." },
+      { do:"Pre-register a small, non-interventional readability pilot (IRB-light)." },
+    ], deliver:"Pilot instrument + pre-registration." },
+
+  { id:"w22", title:"Week 22 — Run pilot + second modality", date:"7–12 Dec", gran:"week",
+    tasks:[
+      { do:"Run the clinician pilot; collect plausibility ratings." },
+      { do:"Second-modality generalisation pass (derm7pt/SkinCon or VinDr-CXR): retrain the interpretable core there, re-run faithfulness." },
+    ], deliver:"Pilot data + generalisation numbers." },
+
+  { id:"w23", title:"Week 23 — Analyse + Paper 2 draft", date:"14–19 Dec", gran:"week",
+    tasks:[
+      { do:"Analyse the pilot. Report <b>plausibility (human)</b> and <b>faithfulness (Quantus)</b> SEPARATELY — never conflate ‘looks right to a clinician’ with ‘reflects the model’s computation’." },
+      { do:"Draft Paper 2 (trust) → <b>IEEE JBHI</b> (Q1)." },
+    ], deliver:"Paper 2 draft." },
+
+  { id:"w24", title:"Week 24 — Assemble the thesis", date:"21–26 Dec", gran:"week", tag:"milestone",
+    tasks:[
+      { do:"Compile Papers 0/1/2 + the survey as chapters; write the connective narrative that makes them one thesis." },
+      { do:"Buffer for Paper 0 reviewer replies." },
+    ], deliver:"Thesis assembled. End of Month 6." },
+
+  { id:"w25", title:"Week 25 — Submit Paper 2 + polish", date:"28 Dec–2 Jan", gran:"week", tag:"milestone",
+    tasks:[
+      { do:"Submit Paper 2." },
+      { do:"Thesis polish: consistency pass, figure QA, abstract." },
+    ], deliver:"Paper 2 submitted; thesis final draft." },
+
+  { id:"w26", title:"Week 26 — Submit + defend", date:"4–9 Jan", gran:"week", tag:"milestone",
+    tasks:[
+      { do:"Build the defense slides (12–15). Rehearse the money figure + the five RQ answers until they’re automatic." },
+      { do:"Buffer." },
+    ], deliver:"Defense-ready." },
+]},
+];
+
+/* =====================================================================
+   STATE
+   ===================================================================== */
+const LS_KEY = "parasite_xai_tracker_v2";
+let STATE = load();
+function load(){ try{ return JSON.parse(localStorage.getItem(LS_KEY)) || {checks:{},notes:{},collapsed:{}}; }
+  catch(e){ return {checks:{},notes:{},collapsed:{}}; } }
+function save(){ localStorage.setItem(LS_KEY, JSON.stringify(STATE)); }
+
+/* build tasks (checkable, referenced across weeks) */
+const BUILD_TASKS = [
+  {id:"build-1", w:"W0·Wed / W1·Wed", t:"<code>evaluate.py</code> — run post-hoc explainers against the black-box ckpt for the real faithfulness comparison."},
+  {id:"build-2", w:"W11", t:"<code>train.py:_compute_loss</code> — plug real concept targets into <code>concept_loss(c_logit, …)</code> + add pointing-game/IoU localisation eval."},
+  {id:"build-3", w:"W13", t:"<code>explainers/amortized.py</code> — the FastSHAP driver loop around <code>fastshap_step</code> (highest priority: the headline result)."},
+  {id:"build-4", w:"W18", t:"ONNX INT8 export path for A7 + on-device latency."},
+];
+
+/* =====================================================================
+   RENDER
+   ===================================================================== */
+const $ = s => document.querySelector(s);
+function esc(s){ return s; } // content is trusted (authored here)
+
+function chk(id, cls){ const c = !!STATE.checks[id];
+  return '<input type="checkbox" data-id="'+id+'" '+(c?'checked':'')+'>'; }
+
+function cmdBlock(lines){
+  const text = lines.join("\n");
+  return '<div class="cmd" data-cmd="'+encodeURIComponent(text)+'">'+
+    '<button class="copy">copy</button>'+ lines.map(l=>l.replace(/&/g,'&amp;').replace(/</g,'&lt;')).join("\n") +'</div>';
+}
+
+function taskHTML(t, id){
+  let h = '<div class="task'+(STATE.checks[id]?' checked':'')+'">'+ chk(id)+'<div class="tc">';
+  h += '<div class="do">'+ (t.tag?'<span class="tag '+t.tag+'">'+t.tag.toUpperCase()+'</span> ':'') + t.do +'</div>';
+  if(t.cmd) h += cmdBlock(t.cmd);
+  if(t.expect) h += '<div class="kv expect"><b>Expect:</b> '+t.expect+'</div>';
+  if(t.done)   h += '<div class="kv done"><b>Done when:</b> '+t.done+'</div>';
+  h += '</div></div>';
+  return h;
+}
+
+function readingHTML(key, id){
+  const r = READINGS[key]; if(!r) return '';
+  let h = '<div class="read">'+ chk(id) +'<div class="rc">';
+  h += '<div class="rtitle"><span class="bk">READ</span>'+r.t+'</div>';
+  h += '<div class="rmeta">'+r.a+' · '+r.v+' · <i>'+r.find+'</i></div>';
+  h += '<div class="rfocus"><b>READ FOR</b><ul>'+ r.focus.map(f=>'<li>'+f+'</li>').join('') +'</ul></div>';
+  h += '<div class="rwhy"><b>Why it matters:</b> '+r.why+'</div>';
+  h += '</div></div>';
+  return h;
+}
+
+function dayIds(day){
+  const ids=[];
+  (day.tasks||[]).forEach((_,i)=>ids.push(day.id+':t'+i));
+  (day.reading||[]).forEach(k=>ids.push(day.id+':r:'+k));
+  return ids;
+}
+function weekIds(w){
+  let ids=[];
+  if(w.gran==='day'){ (w.days||[]).forEach(d=>ids=ids.concat(dayIds(d))); }
+  else { (w.tasks||[]).forEach((_,i)=>ids.push(w.id+':t'+i)); }
+  return ids;
+}
+
+function dayHTML(day){
+  const ids = dayIds(day);
+  const done = ids.length && ids.every(i=>STATE.checks[i]);
+  let h = '<div class="day'+(done?' done':'')+'" id="'+day.id+'">';
+  h += '<div class="dhead"><span class="dlabel">'+day.label+'</span><span class="ddate">'+day.date+'</span>'+
+       '<span class="dtitle">'+day.title+'</span>'+(done?'<span class="dtick">✓ day complete</span>':'')+'</div>';
+  h += '<div class="dbody">';
+  (day.tasks||[]).forEach((t,i)=> h += taskHTML(t, day.id+':t'+i));
+  if(day.reading && day.reading.length){
+    h += '<div class="subhead">Reading — full title + what to focus on</div>';
+    day.reading.forEach(k=> h += readingHTML(k, day.id+':r:'+k));
+  }
+  h += noteHTML(day.id);
+  h += '</div></div>';
+  return h;
+}
+
+function noteHTML(id){
+  const v = (STATE.notes[id]||'').replace(/"/g,'&quot;');
+  return '<div class="notes"><label>Notes / blockers / results for the day</label>'+
+    '<textarea data-note="'+id+'" placeholder="What happened, numbers you got, what broke, what to pick up tomorrow…">'+
+    (STATE.notes[id]||'') +'</textarea></div>';
+}
+
+function weekHTML(w){
+  const ids = weekIds(w);
+  const n = ids.length, c = ids.filter(i=>STATE.checks[i]).length;
+  const cls = c===0?'zero':(c===n?'':'part');
+  const collapsed = STATE.collapsed[w.id];
+  let h = '<div class="week'+(collapsed?' collapsed':'')+'" id="wk-'+w.id+'">';
+  h += '<div class="wh" data-week="'+w.id+'"><span class="caret">▾</span>'+
+       '<span class="wtitle">'+w.title+'</span><span class="wdate">'+w.date+'</span>'+
+       '<span class="wprog '+cls+'">'+c+'/'+n+'</span></div>';
+  h += '<div class="wbody">';
+  if(w.note) h += '<div class="wnote">'+w.note+'</div>';
+  if(w.gran==='day'){ (w.days||[]).forEach(d=> h += dayHTML(d)); }
+  else {
+    (w.tasks||[]).forEach((t,i)=> h += taskHTML(t, w.id+':t'+i));
+    if(w.gate)    h += '<div class="gate"><b>⛳ Gate:</b> '+w.gate+'</div>';
+    if(w.deliver) h += '<div class="deliver"><b>Deliverable:</b> '+w.deliver+'</div>';
+    h += noteHTML(w.id);
+  }
+  h += '</div></div>';
+  return h;
+}
+
+function refsHTML(){
+  // RQ table
+  let rq = '<details class="ref" open><summary>The 5 research questions &amp; the pass bar (memorise these)</summary><div class="body">'+
+    '<table><tr><th>RQ</th><th>Question</th><th>Pass threshold</th></tr>'+
+    '<tr><td><b>RQ1</b></td><td>Is ante-hoc more faithful than post-hoc?</td><td>Interpretable model’s aggregate faithfulness &gt; best post-hoc on ≥3 of 5 Quantus metrics.</td></tr>'+
+    '<tr><td><b>RQ2</b></td><td>Is it dramatically cheaper?</td><td>≥100× fewer passes-per-explanation, within on-device latency.</td></tr>'+
+    '<tr><td><b>RQ3</b></td><td>Does one pass match KernelSHAP?</td><td>Rank-correlation to KernelSHAP ≥ 0.70 (τ).</td></tr>'+
+    '<tr><td><b>RQ4</b></td><td>What does interpretability cost in accuracy?</td><td>Within 2–3% test-F1 of the convnext_tiny black box.</td></tr>'+
+    '<tr><td><b>RQ5</b></td><td>Does abstention help?</td><td>Conformal ON: ≥90% coverage (α=0.10) at lower risk; ECE ↓ after temperature scaling.</td></tr>'+
+    '</table></div></details>';
+
+  // working day
+  let day = '<details class="ref"><summary>The standard working day (the rhythm for every day)</summary><div class="body">'+
+    '<table><tr><th>Block</th><th>Slot</th><th>What you do</th></tr>'+
+    '<tr><td><b>1 · Launch</b></td><td>~2h AM</td><td>Log yesterday’s finished run into results_log.csv. Kick off today’s training/sweep in the background so the GPU works while you do.</td></tr>'+
+    '<tr><td><b>2 · Build/Analyse</b></td><td>~2h midday</td><td>The day’s concrete code or analysis task.</td></tr>'+
+    '<tr><td><b>3 · Read/Write</b></td><td>~2h PM</td><td>Phases 0–1: the reading. Phases 2 &amp; 6: paper writing. Phases 3–5: make the figure + update the Pareto.</td></tr>'+
+    '<tr><td colspan="3"><b>Every Saturday:</b> fill blank results_log.csv cells, regenerate the Pareto, git commit, read next week’s block, send advisor a 3-line status (done / blocked / next).</td></tr>'+
+    '</table></div></details>';
+
+  // where to run
+  let run = '<details class="ref"><summary>Where to run heavy jobs (A400 workstation vs central A100 server)</summary><div class="body" style="font-family:Helvetica Neue,Arial,sans-serif;font-size:12.5px;">'+
+    '<p style="margin:6px 0;">Your Linux workstation has an A400 → <code>device: cuda</code> is the default in <code>configs/default.yaml</code> and needs no change. This is fine for smoke tests, the light MobileViT/EfficientNet-Lite/GhostNet heads, evaluation, and most of the 60-epoch runs (~90% of the project).</p>'+
+    '<p style="margin:6px 0;"><b>Offload the heaviest runs</b> to the central A100 server when you want them done faster: the 60-epoch convnext_tiny black box (Week 1) and the amortized-explainer training (Weeks 13–15). <code>device: cuda</code> stays the same on both machines — just copy the generated config over, run, and bring <code>best.pt</code> back.</p>'+
+    '<p style="margin:6px 0;">If you occasionally prototype on your Mac, set <code>device: mps</code> and <code>export PYTORCH_ENABLE_MPS_FALLBACK=1</code> THERE only, then switch back to <code>cuda</code> before syncing configs back to the workstation/server.</p>'+
+    '<p style="margin:6px 0;color:#8a2b2b;"><b>Never</b> leave the Week-0 smoke settings (chula_tiny / epochs:1) in default.yaml — always regenerate at chula / 60 before a real run.</p>'+
+    '</div></details>';
+
+  // build tasks tracker
+  let builds = '<details class="ref" open><summary>The only 4 pieces of new code you write (tick when done)</summary><div class="body">'+
+    BUILD_TASKS.map(b=>'<div class="task'+(STATE.checks[b.id]?' checked':'')+'">'+chk(b.id)+
+      '<div class="tc"><div class="do"><span class="tag build">'+b.w+'</span> '+b.t+'</div></div></div>').join('')+
+    '</div></details>';
+
+  // stop-loss
+  let stop = '<details class="ref"><summary>Decision gates &amp; stop-loss (so you never spiral)</summary><div class="body">'+
+    '<table><tr><th>If…</th><th>Then</th></tr>'+
+    '<tr><td>A run fails twice in a row</td><td>Log the error, switch to the next day’s independent task, debug only in the evening slot. Never lose a day.</td></tr>'+
+    '<tr><td>No concept labels by W0-Fri</td><td>Commit to label-free CBM; don’t block Phase 1 on annotation.</td></tr>'+
+    '<tr><td>RQ1 fails at W12</td><td>Paper 0 still stands — thesis de-risked. Reframe to ‘post-hoc unreliability quantified’ + push the amortized explainer (RQ2/RQ3) as the novelty.</td></tr>'+
+    '<tr><td>RQ3 rank-corr &lt; 0.70 at W15</td><td>Raise coalition count / A4 epochs ONCE; if still short, report as a fidelity–cost tradeoff (still a paper). Don’t over-tune.</td></tr>'+
+    '<tr><td>No edge device by W19</td><td>Report FLOPs + CPU-latency proxy; edge is nice-to-have, not a gate.</td></tr>'+
+    '<tr><td>Behind at a month boundary</td><td>Cut the second-modality pass + stretch items first; protect Papers 0 &amp; 1.</td></tr>'+
+    '</table></div></details>';
+
+  return rq+day+run+builds+stop;
+}
+
+function render(){
+  // reference cards
+  $('#refs').innerHTML = refsHTML();
+  // plan
+  let h='';
+  PLAN.forEach(p=>{
+    h += '<div class="phase-h"><span class="pbadge">'+p.badge+'</span> '+p.phase+' <span class="pp"></span></div>';
+    p.weeks.forEach(w=> h += weekHTML(w));
+  });
+  $('#plan').innerHTML = h;
+  updateProgress();
+  bind();
+}
+
+function allIds(){
+  let ids = BUILD_TASKS.map(b=>b.id);
+  PLAN.forEach(p=>p.weeks.forEach(w=> ids = ids.concat(weekIds(w))));
+  return ids;
+}
+function updateProgress(){
+  const ids = allIds(), n = ids.length, c = ids.filter(i=>STATE.checks[i]).length;
+  const pct = n? Math.round(100*c/n):0;
+  $('#barfill').style.width = pct+'%';
+  $('#pctlabel').textContent = pct+'%';
+}
+
+/* =====================================================================
+   EVENTS
+   ===================================================================== */
+function bind(){
+  document.querySelectorAll('input[type=checkbox][data-id]').forEach(cb=>{
+    cb.onchange = e=>{ const id=e.target.dataset.id;
+      if(e.target.checked) STATE.checks[id]=true; else delete STATE.checks[id];
+      save(); render(); };
+  });
+  document.querySelectorAll('textarea[data-note]').forEach(ta=>{
+    ta.oninput = e=>{ STATE.notes[e.target.dataset.note]=e.target.value; save(); updateProgress(); };
+  });
+  document.querySelectorAll('.wh[data-week]').forEach(w=>{
+    w.onclick = e=>{ const id=w.dataset.week; STATE.collapsed[id]=!STATE.collapsed[id]; save(); render(); };
+  });
+  document.querySelectorAll('.copy').forEach(b=>{
+    b.onclick = e=>{ e.stopPropagation();
+      const txt = decodeURIComponent(b.parentElement.dataset.cmd);
+      navigator.clipboard.writeText(txt).then(()=>toast('Copied to clipboard'));
+    };
+  });
+}
+
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('show');
+  clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),1800); }
+
+$('#jumpBtn').onclick = ()=>{
+  const ids = allIds();
+  const first = ids.find(i=>!STATE.checks[i]);
+  if(!first){ toast('Everything is done. 🎉'); return; }
+  // find the DOM node: build tasks live in refs; day/week tasks carry data-id
+  const cb = document.querySelector('input[data-id="'+CSS.escape(first)+'"]');
+  if(cb){ // expand its week if collapsed
+    const wk = cb.closest('.week'); if(wk && wk.classList.contains('collapsed')){
+      const id = wk.id.replace('wk-',''); STATE.collapsed[id]=false; save(); render();
+      setTimeout(()=>{ const c2=document.querySelector('input[data-id="'+CSS.escape(first)+'"]');
+        (c2||cb).scrollIntoView({block:'center'}); flash(c2||cb); },60);
+    } else { cb.scrollIntoView({block:'center'}); flash(cb); }
+  }
+};
+function flash(cb){ const box = cb.closest('.task,.day,.read'); if(!box) return;
+  box.style.transition='background .2s'; const old=box.style.background; box.style.background='#fff5cc';
+  setTimeout(()=>box.style.background=old,900); }
+
+let allExpanded=true;
+$('#expandBtn').onclick = ()=>{
+  allExpanded=!allExpanded;
+  PLAN.forEach(p=>p.weeks.forEach(w=> STATE.collapsed[w.id]=!allExpanded));
+  save(); render(); $('#expandBtn').textContent = allExpanded?'Collapse all':'Expand all';
+};
+
+$('#exportBtn').onclick = ()=>{
+  let md = '# Execution Log — Interpretable DSS for Medical Microscopy\n\n';
+  const ids=allIds(), n=ids.length, c=ids.filter(i=>STATE.checks[i]).length;
+  md += 'Progress: '+c+'/'+n+' ('+Math.round(100*c/n)+'%)\n\n';
+  md += '## Build tasks\n';
+  BUILD_TASKS.forEach(b=> md += '- ['+(STATE.checks[b.id]?'x':' ')+'] ('+b.w+') '+strip(b.t)+'\n');
+  md += '\n';
+  PLAN.forEach(p=>{
+    md += '\n# '+p.phase+'\n';
+    p.weeks.forEach(w=>{
+      md += '\n## '+w.title+'  ('+w.date+')\n';
+      if(w.gran==='day'){
+        (w.days||[]).forEach(d=>{
+          md += '\n### '+d.label+' '+d.date+' — '+d.title+'\n';
+          (d.tasks||[]).forEach((t,i)=> md += '- ['+(STATE.checks[d.id+':t'+i]?'x':' ')+'] '+strip(t.do)+'\n');
+          (d.reading||[]).forEach(k=> md += '- ['+(STATE.checks[d.id+':r:'+k]?'x':' ')+'] READ: '+READINGS[k].t+'\n');
+          if(STATE.notes[d.id]) md += '  - _notes:_ '+STATE.notes[d.id].replace(/\n/g,' ')+'\n';
+        });
+      } else {
+        (w.tasks||[]).forEach((t,i)=> md += '- ['+(STATE.checks[w.id+':t'+i]?'x':' ')+'] '+strip(t.do)+'\n');
+        if(w.deliver) md += '  - deliverable: '+strip(w.deliver)+'\n';
+        if(STATE.notes[w.id]) md += '  - _notes:_ '+STATE.notes[w.id].replace(/\n/g,' ')+'\n';
+      }
+    });
+  });
+  dl('execution_log.md', md, 'text/markdown');
+  toast('Exported execution_log.md');
+};
+function strip(s){ return s.replace(/<[^>]+>/g,''); }
+
+$('#backupBtn').onclick = ()=>{ dl('tracker_backup.json', JSON.stringify(STATE,null,2), 'application/json'); toast('Backup saved'); };
+$('#restoreBtn').onclick = ()=> $('#restoreFile').click();
+$('#restoreFile').onchange = e=>{ const f=e.target.files[0]; if(!f) return;
+  const r=new FileReader(); r.onload=()=>{ try{ STATE=JSON.parse(r.result); save(); render(); toast('Restored'); }
+    catch(err){ toast('Invalid backup file'); } }; r.readAsText(f); };
+
+let resetArmed=false;
+$('#resetBtn').onclick = ()=>{
+  if(!resetArmed){ resetArmed=true; $('#resetBtn').textContent='Really reset?';
+    setTimeout(()=>{ resetArmed=false; $('#resetBtn').textContent='Reset'; },3000); return; }
+  STATE={checks:{},notes:{},collapsed:{}}; save(); render(); resetArmed=false;
+  $('#resetBtn').textContent='Reset'; toast('All progress cleared');
+};
+
+function dl(name, content, type){
+  const blob=new Blob([content],{type}); const url=URL.createObjectURL(blob);
+  const a=document.createElement('a'); a.href=url; a.download=name; a.click(); URL.revokeObjectURL(url);
+}
+
+render();
+</script>
+</body>
+</html>

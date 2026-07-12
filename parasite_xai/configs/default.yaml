@@ -1,0 +1,62 @@
+# Default experiment config — Lightweight Interpretable DSS for parasite microscopy
+# Maps to protocol_interpretable: models under comparison, datasets, eval axes, ablation ladder.
+
+seed: 1337
+device: cuda            # cuda | mps | cpu
+
+data:
+  name: chula_parasite_egg_11   # primary testbed (11 species, ~11k imgs)
+  root: ../data/chula_tiny             # expects ImageFolder-style: root/<split>/<class>/*.jpg
+  img_size: 224
+  batch_size: 32
+  num_workers: 4
+  val_split: 0.15
+  test_split: 0.15
+  # localisation ground truth (boxes/masks) for pointing-game / IoU; null if unavailable
+  boxes_dir: null
+
+backbone:
+  name: mobilevit_xs       # A1 ablation: mobilevit_xs | efficientnet_lite0 | ghostnet_100 | convnext_tiny(heavy)
+  pretrained: true
+
+model:
+  kind: protopnet          # A2 ablation: protopnet | cbm | bcos | blackbox
+  num_classes: 11
+  # --- prototype head (protopnet / PIP-Net flavour) ---
+  protopnet:
+    num_prototypes_per_class: 5   # A3 ablation: sparsity vs accuracy
+    proto_dim: 128
+    pip_sparsity: true            # PIP-Net-style sparse, abstaining scoring head
+  # --- concept bottleneck ---
+  cbm:
+    num_concepts: 16              # morphology concepts: operculum, shell-texture, size, knob, ...
+    bottleneck: true              # hard bottleneck (label depends ONLY on concepts)
+    concept_source: labelfree        # labels | labelfree (LLM+CLIP grounded)
+
+train:
+  epochs: 1
+  lr: 3.0e-4
+  weight_decay: 1.0e-4
+  warmup_epochs: 3
+  proto_push_every: 10           # ProtoPNet prototype projection cadence
+  amp: true
+
+explain:
+  posthoc: [gradcam, hirescam, integrated_gradients, lime, kernelshap]   # baselines to beat
+  amortized:
+    enabled: true                # C2: single-pass FastSHAP-style explainer
+    teacher_ckpt: null           # heavy black box whose SHAP we amortize
+    train_epochs: 30
+
+eval:
+  faithfulness: [deletion, insertion, infidelity, sensitivity, sanity_check]
+  localisation: [pointing_game, energy_pointing_game, iou]
+  cost: [params, flops, latency_cpu, model_size_mb]
+  quantize_int8: false           # A7 ablation: does compression corrupt explanations?
+
+trust:
+  calibration: temperature        # temperature scaling for ECE
+  conformal: true                 # distribution-free abstention sets
+  alpha: 0.10                     # target miscoverage (90% coverage guarantee)
+
+output_dir: ./runs/exp001

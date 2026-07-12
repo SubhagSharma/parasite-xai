@@ -1,0 +1,8 @@
+Data/
+data/
+parasite_xai/.venv/
+parasite_xai/__pycache__/
+parasite_xai/*/__pycache__/
+runs/
+*.pt
+*.pth
