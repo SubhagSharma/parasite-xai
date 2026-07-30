@@ -1,0 +1,2 @@
+#To restore version
+rm -rf pxai && mv pxai_v1_20260726 pxai

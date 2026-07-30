@@ -1,0 +1,26 @@
+{
+  "accuracy": 0.9709267110841914,
+  "cost_model": {
+    "params_M": 27.827,
+    "size_MB": 111.31,
+    "flops_G": 4.47,
+    "latency_cpu_ms": 66.2
+  },
+  "methods": {
+    "gradcam": {
+      "faithfulness": {
+        "deletion": 0.21485914732329547,
+        "sanity_check": 0.6134806729328752
+      },
+      "aggregate": 0.19931076280478988,
+      "passes": 2
+    }
+  },
+  "trust": {
+    "temperature": 1.8108341693878174,
+    "ece": 0.011341988807544112,
+    "conformal_qhat": 0.0759316086769104,
+    "avg_set_size": 0.9085402488708496,
+    "empirical_coverage": 0.903694748878479
+  }
+}

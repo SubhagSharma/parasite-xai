@@ -1,0 +1,250 @@
+{
+  "methods": {
+    "gradcam": {
+      "faithfulness": {
+        "deletion": 0.2029552123666589,
+        "insertion": 259.8847524846824,
+        "infidelity": 759967230.8106079,
+        "infidelity_raw": 30472667.78727913,
+        "infidelity_scaled": 6.144019931205548,
+        "sensitivity": 0.3659791945829056,
+        "sanity_check": 0.04296634440482003
+      },
+      "n_samples": {
+        "deletion": 256,
+        "insertion": 256,
+        "infidelity": 256,
+        "infidelity_raw": 256,
+        "infidelity_scaled": 256,
+        "sensitivity": 64,
+        "sanity_check": 64
+      },
+      "failures": {
+        "deletion": 0,
+        "insertion": 0,
+        "infidelity": 0,
+        "infidelity_raw": 0,
+        "infidelity_scaled": 0,
+        "sensitivity": 0,
+        "sanity_check": 0
+      },
+      "batches_used": {
+        "deletion": 8,
+        "insertion": 8,
+        "infidelity": 8,
+        "infidelity_raw": 8,
+        "infidelity_scaled": 8,
+        "sensitivity": 2,
+        "sanity_check": 2
+      },
+      "explainer_determinism": 1.0,
+      "sanity_collapse_batches": 0,
+      "passes": 2,
+      "aggregate": 0.5212443187979129
+    },
+    "hirescam": {
+      "faithfulness": {
+        "deletion": 0.18369739849602715,
+        "insertion": 189.4399217975024,
+        "infidelity": 27160574.565101624,
+        "infidelity_raw": 325.5690248776227,
+        "infidelity_scaled": 5.6925564501434565,
+        "sensitivity": 0.9081782731227577,
+        "sanity_check": -0.012098142122428837
+      },
+      "n_samples": {
+        "deletion": 256,
+        "insertion": 256,
+        "infidelity": 256,
+        "infidelity_raw": 256,
+        "infidelity_scaled": 256,
+        "sensitivity": 64,
+        "sanity_check": 63
+      },
+      "failures": {
+        "deletion": 0,
+        "insertion": 0,
+        "infidelity": 0,
+        "infidelity_raw": 0,
+        "infidelity_scaled": 0,
+        "sensitivity": 0,
+        "sanity_check": 0
+      },
+      "batches_used": {
+        "deletion": 8,
+        "insertion": 8,
+        "infidelity": 8,
+        "infidelity_raw": 8,
+        "infidelity_scaled": 8,
+        "sensitivity": 2,
+        "sanity_check": 2
+      },
+      "explainer_determinism": 1.0,
+      "sanity_collapse_batches": 0,
+      "passes": 2,
+      "aggregate": 0.6621506964471104
+    },
+    "integrated_gradients": {
+      "faithfulness": {
+        "deletion": 0.4038219406601103,
+        "insertion": 120.5735011472716,
+        "infidelity": 1591431.7544136047,
+        "infidelity_raw": 130117573.12646484,
+        "infidelity_scaled": 3.376096651889384,
+        "sensitivity": 0.465355365537107,
+        "sanity_check": 0.19191328567360463
+      },
+      "n_samples": {
+        "deletion": 256,
+        "insertion": 256,
+        "infidelity": 256,
+        "infidelity_raw": 256,
+        "infidelity_scaled": 256,
+        "sensitivity": 64,
+        "sanity_check": 64
+      },
+      "failures": {
+        "deletion": 0,
+        "insertion": 0,
+        "infidelity": 0,
+        "infidelity_raw": 0,
+        "infidelity_scaled": 0,
+        "sensitivity": 0,
+        "sanity_check": 0
+      },
+      "batches_used": {
+        "deletion": 8,
+        "insertion": 8,
+        "infidelity": 8,
+        "infidelity_raw": 8,
+        "infidelity_scaled": 8,
+        "sensitivity": 2,
+        "sanity_check": 2
+      },
+      "explainer_determinism": 1.0,
+      "sanity_collapse_batches": 0,
+      "passes": 64,
+      "aggregate": 0.6981482891395335
+    },
+    "lime": {
+      "faithfulness": {
+        "deletion": 0.42055411323425085,
+        "insertion": 120.97356800752834,
+        "infidelity": 7170615.612365723,
+        "infidelity_raw": 9072662167.0,
+        "infidelity_scaled": 3.9301763821858913,
+        "sensitivity": 0.6113253717776388,
+        "sanity_check": 0.0
+      },
+      "n_samples": {
+        "deletion": 256,
+        "insertion": 256,
+        "infidelity": 256,
+        "infidelity_raw": 256,
+        "infidelity_scaled": 256,
+        "sensitivity": 64,
+        "sanity_check": 64
+      },
+      "failures": {
+        "deletion": 0,
+        "insertion": 0,
+        "infidelity": 0,
+        "infidelity_raw": 0,
+        "infidelity_scaled": 0,
+        "sensitivity": 0,
+        "sanity_check": 0
+      },
+      "batches_used": {
+        "deletion": 8,
+        "insertion": 8,
+        "infidelity": 8,
+        "infidelity_raw": 8,
+        "infidelity_scaled": 8,
+        "sensitivity": 2,
+        "sanity_check": 2
+      },
+      "explainer_determinism": null,
+      "sanity_collapse_batches": 2,
+      "passes": 1000,
+      "aggregate": 0.7507722200451032
+    },
+    "kernelshap": {
+      "faithfulness": {
+        "deletion": 0.3211966231339274,
+        "insertion": 135.49947934014813,
+        "infidelity": 376320651.3183594,
+        "infidelity_raw": 405323005158.0,
+        "infidelity_scaled": 5.287732458440587,
+        "sensitivity": 0.8593318071216345,
+        "sanity_check": 0.01049448171778439
+      },
+      "n_samples": {
+        "deletion": 256,
+        "insertion": 256,
+        "infidelity": 256,
+        "infidelity_raw": 256,
+        "infidelity_scaled": 256,
+        "sensitivity": 64,
+        "sanity_check": 64
+      },
+      "failures": {
+        "deletion": 0,
+        "insertion": 0,
+        "infidelity": 0,
+        "infidelity_raw": 0,
+        "infidelity_scaled": 0,
+        "sensitivity": 0,
+        "sanity_check": 0
+      },
+      "batches_used": {
+        "deletion": 8,
+        "insertion": 8,
+        "infidelity": 8,
+        "infidelity_raw": 8,
+        "infidelity_scaled": 8,
+        "sensitivity": 2,
+        "sanity_check": 2
+      },
+      "explainer_determinism": 0.025225722508726255,
+      "sanity_collapse_batches": 0,
+      "passes": 1000,
+      "aggregate": 0.44384716054993273
+    }
+  },
+  "accuracy": 0.9709267110841914,
+  "cost_model": {
+    "params_M": 27.827,
+    "size_MB": 111.31,
+    "flops_G": 4.47,
+    "latency_cpu_ms": 57.59
+  },
+  "eval_setup": {
+    "batch_size": 32,
+    "img_size": 224,
+    "faithfulness_batches": 8,
+    "images_scored": 256,
+    "metrics": [
+      "deletion",
+      "insertion",
+      "infidelity_raw",
+      "infidelity",
+      "infidelity_scaled",
+      "sensitivity",
+      "sanity_check"
+    ],
+    "params": {
+      "infidelity_patch_size": 28,
+      "sanity_skip_layers": true,
+      "sanity_layer_order": "top_down",
+      "infidelity_n_perturb_samples": 10,
+      "infidelity_normalise": true
+    }
+  },
+  "trust": {
+    "temperature": 1.887366771697998,
+    "ece": 0.010302941605914384,
+    "conformal_qhat": 0.05821925401687622,
+    "avg_set_size": 0.913385808467865,
+    "empirical_coverage": 0.9085402488708496
+  }
+}

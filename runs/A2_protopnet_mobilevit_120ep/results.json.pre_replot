@@ -1,0 +1,292 @@
+{
+  "methods": {
+    "ours:protopnet": {
+      "faithfulness": {
+        "deletion": 0.006035130846107172,
+        "insertion": 437.99424965307117,
+        "infidelity": 8993392948.5,
+        "infidelity_raw": 1957265556864.0,
+        "infidelity_scaled": 1.6102058152027894,
+        "sensitivity": 0.06227629745262675,
+        "sanity_check": 0.0
+      },
+      "n_samples": {
+        "deletion": 256,
+        "insertion": 256,
+        "infidelity": 256,
+        "infidelity_raw": 256,
+        "infidelity_scaled": 256,
+        "sensitivity": 64,
+        "sanity_check": 64
+      },
+      "failures": {
+        "deletion": 0,
+        "insertion": 0,
+        "infidelity": 0,
+        "infidelity_raw": 0,
+        "infidelity_scaled": 0,
+        "sensitivity": 0,
+        "sanity_check": 0
+      },
+      "batches_used": {
+        "deletion": 8,
+        "insertion": 8,
+        "infidelity": 8,
+        "infidelity_raw": 8,
+        "infidelity_scaled": 8,
+        "sensitivity": 2,
+        "sanity_check": 2
+      },
+      "explainer_determinism": 1.0,
+      "sanity_collapse_batches": 64,
+      "passes": 1,
+      "aggregate": 0.49189211736988536
+    },
+    "gradcam": {
+      "faithfulness": {
+        "deletion": 0.08616231908349113,
+        "insertion": 351.28130704909563,
+        "infidelity": 507227652.45166016,
+        "infidelity_raw": 6416756467.444092,
+        "infidelity_scaled": 1.6850290540023707,
+        "sensitivity": 1.6164204983506352,
+        "sanity_check": 0.0
+      },
+      "n_samples": {
+        "deletion": 256,
+        "insertion": 256,
+        "infidelity": 256,
+        "infidelity_raw": 256,
+        "infidelity_scaled": 256,
+        "sensitivity": 64,
+        "sanity_check": 64
+      },
+      "failures": {
+        "deletion": 0,
+        "insertion": 0,
+        "infidelity": 0,
+        "infidelity_raw": 0,
+        "infidelity_scaled": 0,
+        "sensitivity": 0,
+        "sanity_check": 0
+      },
+      "batches_used": {
+        "deletion": 8,
+        "insertion": 8,
+        "infidelity": 8,
+        "infidelity_raw": 8,
+        "infidelity_scaled": 8,
+        "sensitivity": 2,
+        "sanity_check": 2
+      },
+      "explainer_determinism": null,
+      "sanity_collapse_batches": 2,
+      "passes": 2,
+      "aggregate": 0.6836176226369755
+    },
+    "hirescam": {
+      "faithfulness": {
+        "deletion": 0.036162399454042315,
+        "insertion": 237.2029790505767,
+        "infidelity": 9291723.566659518,
+        "infidelity_raw": 3825171240.5583806,
+        "infidelity_scaled": 1.9121057563461363,
+        "sensitivity": 3.174796562393506,
+        "sanity_check": 0.006938735869590043
+      },
+      "n_samples": {
+        "deletion": 256,
+        "insertion": 256,
+        "infidelity": 256,
+        "infidelity_raw": 256,
+        "infidelity_scaled": 256,
+        "sensitivity": 60,
+        "sanity_check": 46
+      },
+      "failures": {
+        "deletion": 0,
+        "insertion": 0,
+        "infidelity": 0,
+        "infidelity_raw": 0,
+        "infidelity_scaled": 0,
+        "sensitivity": 0,
+        "sanity_check": 0
+      },
+      "batches_used": {
+        "deletion": 8,
+        "insertion": 8,
+        "infidelity": 8,
+        "infidelity_raw": 8,
+        "infidelity_scaled": 8,
+        "sensitivity": 2,
+        "sanity_check": 2
+      },
+      "explainer_determinism": 1.0,
+      "sanity_collapse_batches": 0,
+      "passes": 2,
+      "aggregate": 0.6367645485031304
+    },
+    "integrated_gradients": {
+      "faithfulness": {
+        "deletion": 0.3273717027493856,
+        "insertion": 113.30766571499407,
+        "infidelity": 6199116.757972717,
+        "infidelity_raw": 116055687.04370117,
+        "infidelity_scaled": 1.2731045896653086,
+        "sensitivity": 0.7767614601179957,
+        "sanity_check": 0.18925073349604427
+      },
+      "n_samples": {
+        "deletion": 256,
+        "insertion": 256,
+        "infidelity": 256,
+        "infidelity_raw": 256,
+        "infidelity_scaled": 256,
+        "sensitivity": 64,
+        "sanity_check": 64
+      },
+      "failures": {
+        "deletion": 0,
+        "insertion": 0,
+        "infidelity": 0,
+        "infidelity_raw": 0,
+        "infidelity_scaled": 0,
+        "sensitivity": 0,
+        "sanity_check": 0
+      },
+      "batches_used": {
+        "deletion": 8,
+        "insertion": 8,
+        "infidelity": 8,
+        "infidelity_raw": 8,
+        "infidelity_scaled": 8,
+        "sensitivity": 2,
+        "sanity_check": 2
+      },
+      "explainer_determinism": 0.9999999668325541,
+      "sanity_collapse_batches": 0,
+      "passes": 64,
+      "aggregate": 0.6814548470077806
+    },
+    "lime": {
+      "faithfulness": {
+        "deletion": 0.27858315815036705,
+        "insertion": 150.72928290255368,
+        "infidelity": 3824975.438427981,
+        "infidelity_raw": 1404188880.6873026,
+        "infidelity_scaled": 1.3199658268131316,
+        "sensitivity": 0.9257656148364467,
+        "sanity_check": 0.0
+      },
+      "n_samples": {
+        "deletion": 256,
+        "insertion": 256,
+        "infidelity": 256,
+        "infidelity_raw": 256,
+        "infidelity_scaled": 256,
+        "sensitivity": 62,
+        "sanity_check": 64
+      },
+      "failures": {
+        "deletion": 0,
+        "insertion": 0,
+        "infidelity": 0,
+        "infidelity_raw": 0,
+        "infidelity_scaled": 0,
+        "sensitivity": 0,
+        "sanity_check": 0
+      },
+      "batches_used": {
+        "deletion": 8,
+        "insertion": 8,
+        "infidelity": 8,
+        "infidelity_raw": 8,
+        "infidelity_scaled": 8,
+        "sensitivity": 2,
+        "sanity_check": 2
+      },
+      "explainer_determinism": null,
+      "sanity_collapse_batches": 2,
+      "passes": 1000,
+      "aggregate": 0.8079923549081612
+    },
+    "kernelshap": {
+      "faithfulness": {
+        "deletion": 0.22004481037017992,
+        "insertion": 132.76645261328667,
+        "infidelity": 211385211.70410156,
+        "infidelity_raw": 83309827728.0,
+        "infidelity_scaled": 1.4863400806789286,
+        "sensitivity": 0.9340241523459554,
+        "sanity_check": -0.0056945842691405344
+      },
+      "n_samples": {
+        "deletion": 256,
+        "insertion": 256,
+        "infidelity": 256,
+        "infidelity_raw": 256,
+        "infidelity_scaled": 256,
+        "sensitivity": 64,
+        "sanity_check": 64
+      },
+      "failures": {
+        "deletion": 0,
+        "insertion": 0,
+        "infidelity": 0,
+        "infidelity_raw": 0,
+        "infidelity_scaled": 0,
+        "sensitivity": 0,
+        "sanity_check": 0
+      },
+      "batches_used": {
+        "deletion": 8,
+        "insertion": 8,
+        "infidelity": 8,
+        "infidelity_raw": 8,
+        "infidelity_scaled": 8,
+        "sensitivity": 2,
+        "sanity_check": 2
+      },
+      "explainer_determinism": 0.02119076921563859,
+      "sanity_collapse_batches": 0,
+      "passes": 1000,
+      "aggregate": 0.7992421147661821
+    }
+  },
+  "accuracy": 0.9921259842519685,
+  "cost_model": {
+    "params_M": 2.006,
+    "size_MB": 8.06,
+    "flops_G": 0.727,
+    "latency_cpu_ms": 47.93
+  },
+  "eval_setup": {
+    "batch_size": 32,
+    "img_size": 224,
+    "faithfulness_batches": 8,
+    "images_scored": 256,
+    "metrics": [
+      "deletion",
+      "insertion",
+      "infidelity_raw",
+      "infidelity",
+      "infidelity_scaled",
+      "sensitivity",
+      "sanity_check"
+    ],
+    "params": {
+      "infidelity_patch_size": 28,
+      "sanity_skip_layers": true,
+      "sanity_layer_order": "top_down",
+      "infidelity_n_perturb_samples": 10,
+      "infidelity_normalise": true
+    }
+  },
+  "trust": {
+    "temperature": 0.9999954700469971,
+    "ece": 0.002745350507666444,
+    "conformal_qhat": 0.0013514161109924316,
+    "avg_set_size": 0.9018776416778564,
+    "empirical_coverage": 0.9012719392776489
+  }
+}

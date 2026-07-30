@@ -1,0 +1,240 @@
+{
+  "methods": {
+    "ours:protopnet": {
+      "faithfulness": {
+        "deletion": 0.14995370235333716,
+        "insertion": 240.50312035903335,
+        "infidelity": 3620947494080.0,
+        "sensitivity": 0.056110822581104,
+        "sanity_check": 0.0
+      },
+      "n_samples": {
+        "deletion": 256,
+        "insertion": 256,
+        "infidelity": 256,
+        "sensitivity": 64,
+        "sanity_check": 64
+      },
+      "failures": {
+        "deletion": 0,
+        "insertion": 0,
+        "infidelity": 0,
+        "sensitivity": 0,
+        "sanity_check": 0
+      },
+      "batches_used": {
+        "deletion": 8,
+        "insertion": 8,
+        "infidelity": 8,
+        "sensitivity": 2,
+        "sanity_check": 2
+      },
+      "explainer_determinism": 1.0,
+      "sanity_collapse_batches": 64,
+      "passes": 1,
+      "aggregate": 0.5757286531716177
+    },
+    "gradcam": {
+      "faithfulness": {
+        "deletion": 0.09174510690462512,
+        "insertion": 245.32356393244117,
+        "infidelity": 2353628765.7714844,
+        "sensitivity": 1.589356207055971,
+        "sanity_check": 0.0
+      },
+      "n_samples": {
+        "deletion": 256,
+        "insertion": 256,
+        "infidelity": 256,
+        "sensitivity": 64,
+        "sanity_check": 64
+      },
+      "failures": {
+        "deletion": 0,
+        "insertion": 0,
+        "infidelity": 0,
+        "sensitivity": 0,
+        "sanity_check": 0
+      },
+      "batches_used": {
+        "deletion": 8,
+        "insertion": 8,
+        "infidelity": 8,
+        "sensitivity": 2,
+        "sanity_check": 2
+      },
+      "explainer_determinism": 1.0,
+      "sanity_collapse_batches": 64,
+      "passes": 2,
+      "aggregate": 0.6613540540108439
+    },
+    "hirescam": {
+      "faithfulness": {
+        "deletion": 0.13625623032971942,
+        "insertion": 133.41003227699548,
+        "infidelity": 8183218564.019239,
+        "sensitivity": 2.2698990332465323,
+        "sanity_check": 0.3260374056044024
+      },
+      "n_samples": {
+        "deletion": 256,
+        "insertion": 256,
+        "infidelity": 256,
+        "sensitivity": 63,
+        "sanity_check": 63
+      },
+      "failures": {
+        "deletion": 0,
+        "insertion": 0,
+        "infidelity": 0,
+        "sensitivity": 0,
+        "sanity_check": 0
+      },
+      "batches_used": {
+        "deletion": 8,
+        "insertion": 8,
+        "infidelity": 8,
+        "sensitivity": 2,
+        "sanity_check": 2
+      },
+      "explainer_determinism": 1.0,
+      "sanity_collapse_batches": 0,
+      "passes": 2,
+      "aggregate": 0.5905500051845658
+    },
+    "integrated_gradients": {
+      "faithfulness": {
+        "deletion": 0.45452193232484384,
+        "insertion": 73.22278176329564,
+        "infidelity": 33635890.64111328,
+        "sensitivity": 0.7477052295580506,
+        "sanity_check": 0.5611074471755869
+      },
+      "n_samples": {
+        "deletion": 256,
+        "insertion": 256,
+        "infidelity": 256,
+        "sensitivity": 64,
+        "sanity_check": 64
+      },
+      "failures": {
+        "deletion": 0,
+        "insertion": 0,
+        "infidelity": 0,
+        "sensitivity": 0,
+        "sanity_check": 0
+      },
+      "batches_used": {
+        "deletion": 8,
+        "insertion": 8,
+        "infidelity": 8,
+        "sensitivity": 2,
+        "sanity_check": 2
+      },
+      "explainer_determinism": 0.999999962090524,
+      "sanity_collapse_batches": 0,
+      "passes": 64,
+      "aggregate": 0.5513386874574555
+    },
+    "lime": {
+      "faithfulness": {
+        "deletion": 0.4814491512292736,
+        "insertion": 92.53379203379154,
+        "infidelity": 686172765.9829102,
+        "sensitivity": 0.8440935802645981,
+        "sanity_check": 0.0
+      },
+      "n_samples": {
+        "deletion": 256,
+        "insertion": 256,
+        "infidelity": 256,
+        "sensitivity": 64,
+        "sanity_check": 64
+      },
+      "failures": {
+        "deletion": 0,
+        "insertion": 0,
+        "infidelity": 0,
+        "sensitivity": 0,
+        "sanity_check": 0
+      },
+      "batches_used": {
+        "deletion": 8,
+        "insertion": 8,
+        "infidelity": 8,
+        "sensitivity": 2,
+        "sanity_check": 2
+      },
+      "explainer_determinism": 0.1529143213440175,
+      "sanity_collapse_batches": 64,
+      "passes": 1000,
+      "aggregate": 0.7063338129047969
+    },
+    "kernelshap": {
+      "faithfulness": {
+        "deletion": 0.4553233505944326,
+        "insertion": 98.96565406571608,
+        "infidelity": 61621632341.5,
+        "sensitivity": 0.9381431872025132,
+        "sanity_check": 0.0023243707441634232
+      },
+      "n_samples": {
+        "deletion": 256,
+        "insertion": 256,
+        "infidelity": 256,
+        "sensitivity": 64,
+        "sanity_check": 64
+      },
+      "failures": {
+        "deletion": 0,
+        "insertion": 0,
+        "infidelity": 0,
+        "sensitivity": 0,
+        "sanity_check": 0
+      },
+      "batches_used": {
+        "deletion": 8,
+        "insertion": 8,
+        "infidelity": 8,
+        "sensitivity": 2,
+        "sanity_check": 2
+      },
+      "explainer_determinism": 0.016179063429846645,
+      "sanity_collapse_batches": 0,
+      "passes": 1000,
+      "aggregate": 0.6995763479769815
+    }
+  },
+  "accuracy": 0.9097516656571775,
+  "cost_model": {
+    "params_M": 2.006,
+    "size_MB": 8.06,
+    "flops_G": 0.727,
+    "latency_cpu_ms": 53.63
+  },
+  "eval_setup": {
+    "batch_size": 32,
+    "img_size": 224,
+    "faithfulness_batches": 8,
+    "images_scored": 256,
+    "metrics": [
+      "deletion",
+      "insertion",
+      "infidelity",
+      "sensitivity",
+      "sanity_check"
+    ],
+    "params": {
+      "infidelity_patch_size": 28,
+      "sanity_skip_layers": true,
+      "sanity_layer_order": "top_down"
+    }
+  },
+  "trust": {
+    "temperature": 1.0757545232772827,
+    "ece": 0.021580216867732815,
+    "conformal_qhat": 0.46893078088760376,
+    "avg_set_size": 0.9466989636421204,
+    "empirical_coverage": 0.8909751772880554
+  }
+}

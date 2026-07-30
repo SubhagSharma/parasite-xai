@@ -1,0 +1,57 @@
+
+# weights & checkpoints
+
+*.pt
+
+*.pth
+
+*.ckpt
+
+*.safetensors
+
+*.onnx
+
+# snapshots — duplicates of runs/ + configs/
+
+stable/
+
+# datasets
+
+Data/
+
+*.jpg
+
+*.jpeg
+
+*.tif
+
+*.tiff
+
+*.npy
+
+*.npz
+
+# python
+
+__pycache__/
+
+*.py[cod]
+
+.ipynb_checkpoints/
+
+.venv/
+
+venv/
+
+*.egg-info/
+
+# misc
+
+*.pkl
+
+nohup.out
+
+core.*
+
+*.log
+

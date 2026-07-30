@@ -1,0 +1,508 @@
+{
+  "methods": {
+    "ours:protopnet": {
+      "faithfulness": {
+        "deletion": 0.007299088229451122,
+        "insertion": 404.56316033005714,
+        "infidelity": 4458466039.125,
+        "infidelity_raw": 1525963489712.0,
+        "infidelity_scaled": 0.444903974654153,
+        "sensitivity": 0.06941935973009095,
+        "sanity_check": 0.0
+      },
+      "n_samples": {
+        "deletion": 256,
+        "insertion": 256,
+        "infidelity": 256,
+        "infidelity_raw": 256,
+        "infidelity_scaled": 256,
+        "sensitivity": 64,
+        "sanity_check": 64
+      },
+      "failures": {
+        "deletion": 0,
+        "insertion": 0,
+        "infidelity": 0,
+        "infidelity_raw": 0,
+        "infidelity_scaled": 0,
+        "sensitivity": 0,
+        "sanity_check": 0
+      },
+      "batches_used": {
+        "deletion": 8,
+        "insertion": 8,
+        "infidelity": 8,
+        "infidelity_raw": 8,
+        "infidelity_scaled": 8,
+        "sensitivity": 2,
+        "sanity_check": 2
+      },
+      "explainer_determinism": 1.0,
+      "passes": 1,
+      "aggregate": 0.6593391829852626
+    },
+    "gradcam": {
+      "faithfulness": {
+        "deletion": 0.002278459546182098,
+        "insertion": 388.16471906006336,
+        "infidelity": 155095189.1274414,
+        "infidelity_raw": 1754133914.595459,
+        "infidelity_scaled": 0.46912413495010696,
+        "sensitivity": 1.738394211512059,
+        "sanity_check": 0.0
+      },
+      "n_samples": {
+        "deletion": 256,
+        "insertion": 256,
+        "infidelity": 256,
+        "infidelity_raw": 256,
+        "infidelity_scaled": 256,
+        "sensitivity": 64,
+        "sanity_check": 64
+      },
+      "failures": {
+        "deletion": 0,
+        "insertion": 0,
+        "infidelity": 0,
+        "infidelity_raw": 0,
+        "infidelity_scaled": 0,
+        "sensitivity": 0,
+        "sanity_check": 0
+      },
+      "batches_used": {
+        "deletion": 8,
+        "insertion": 8,
+        "infidelity": 8,
+        "infidelity_raw": 8,
+        "infidelity_scaled": 8,
+        "sensitivity": 2,
+        "sanity_check": 2
+      },
+      "explainer_determinism": null,
+      "passes": 2,
+      "aggregate": 0.7615001779676939
+    },
+    "hirescam": {
+      "faithfulness": {
+        "deletion": 0.004386326182510756,
+        "insertion": 332.3508984670043,
+        "infidelity": 2164978.699739784,
+        "infidelity_raw": 2775721067.228552,
+        "infidelity_scaled": 0.47504840718465857,
+        "sensitivity": 163.90435863959212,
+        "sanity_check": -0.018333749897611978
+      },
+      "n_samples": {
+        "deletion": 256,
+        "insertion": 256,
+        "infidelity": 256,
+        "infidelity_raw": 256,
+        "infidelity_scaled": 256,
+        "sensitivity": 62,
+        "sanity_check": 52
+      },
+      "failures": {
+        "deletion": 0,
+        "insertion": 0,
+        "infidelity": 0,
+        "infidelity_raw": 0,
+        "infidelity_scaled": 0,
+        "sensitivity": 0,
+        "sanity_check": 0
+      },
+      "batches_used": {
+        "deletion": 8,
+        "insertion": 8,
+        "infidelity": 8,
+        "infidelity_raw": 8,
+        "infidelity_scaled": 8,
+        "sensitivity": 2,
+        "sanity_check": 2
+      },
+      "explainer_determinism": 1.0,
+      "passes": 2,
+      "aggregate": 0.5793341656673008
+    },
+    "integrated_gradients": {
+      "faithfulness": {
+        "deletion": 0.01104650601822262,
+        "insertion": 244.18126450292766,
+        "infidelity": 8996808.051086426,
+        "infidelity_raw": 26124013.21484375,
+        "infidelity_scaled": 0.422007833403768,
+        "sensitivity": 0.6708996477536857,
+        "sanity_check": 0.3797191960251126
+      },
+      "n_samples": {
+        "deletion": 256,
+        "insertion": 256,
+        "infidelity": 256,
+        "infidelity_raw": 256,
+        "infidelity_scaled": 256,
+        "sensitivity": 64,
+        "sanity_check": 64
+      },
+      "failures": {
+        "deletion": 0,
+        "insertion": 0,
+        "infidelity": 0,
+        "infidelity_raw": 0,
+        "infidelity_scaled": 0,
+        "sensitivity": 0,
+        "sanity_check": 0
+      },
+      "batches_used": {
+        "deletion": 8,
+        "insertion": 8,
+        "infidelity": 8,
+        "infidelity_raw": 8,
+        "infidelity_scaled": 8,
+        "sensitivity": 2,
+        "sanity_check": 2
+      },
+      "explainer_determinism": 0.9999999640144797,
+      "passes": 64,
+      "aggregate": 0.6108609830690609
+    },
+    "lime": {
+      "faithfulness": {
+        "deletion": 0.018137181496260583,
+        "insertion": 263.1587414816022,
+        "infidelity": 59078648.79347849,
+        "infidelity_raw": 1365342061.548706,
+        "infidelity_scaled": 0.4406926488445606,
+        "sensitivity": 0.7618821668438613,
+        "sanity_check": 0.0
+      },
+      "n_samples": {
+        "deletion": 256,
+        "insertion": 256,
+        "infidelity": 256,
+        "infidelity_raw": 256,
+        "infidelity_scaled": 256,
+        "sensitivity": 64,
+        "sanity_check": 64
+      },
+      "failures": {
+        "deletion": 0,
+        "insertion": 0,
+        "infidelity": 0,
+        "infidelity_raw": 0,
+        "infidelity_scaled": 0,
+        "sensitivity": 0,
+        "sanity_check": 0
+      },
+      "batches_used": {
+        "deletion": 8,
+        "insertion": 8,
+        "infidelity": 8,
+        "infidelity_raw": 8,
+        "infidelity_scaled": 8,
+        "sensitivity": 2,
+        "sanity_check": 2
+      },
+      "explainer_determinism": null,
+      "passes": 1000,
+      "aggregate": 0.7078470094762243
+    },
+    "kernelshap": {
+      "faithfulness": {
+        "deletion": 0.009068199352946572,
+        "insertion": 300.43520547868684,
+        "infidelity": 386140947.734375,
+        "infidelity_raw": 21127009749.5,
+        "infidelity_scaled": 0.4446967738622334,
+        "sensitivity": 0.9899408621713519,
+        "sanity_check": 0.002381949709601741
+      },
+      "n_samples": {
+        "deletion": 256,
+        "insertion": 256,
+        "infidelity": 256,
+        "infidelity_raw": 256,
+        "infidelity_scaled": 256,
+        "sensitivity": 64,
+        "sanity_check": 64
+      },
+      "failures": {
+        "deletion": 0,
+        "insertion": 0,
+        "infidelity": 0,
+        "infidelity_raw": 0,
+        "infidelity_scaled": 0,
+        "sensitivity": 0,
+        "sanity_check": 0
+      },
+      "batches_used": {
+        "deletion": 8,
+        "insertion": 8,
+        "infidelity": 8,
+        "infidelity_raw": 8,
+        "infidelity_scaled": 8,
+        "sensitivity": 2,
+        "sanity_check": 2
+      },
+      "explainer_determinism": 0.006905038964150835,
+      "passes": 1000,
+      "aggregate": 0.7908624343376084
+    }
+  },
+  "accuracy": 0.9867149758454107,
+  "classification": {
+    "accuracy": 0.9867149758454107,
+    "macro_f1": 0.9867607486423402,
+    "weighted_f1": 0.9867468355264526,
+    "macro_recall": 0.9867060636913318,
+    "macro_precision": 0.9869188914901801,
+    "auroc_macro_ovr": 0.9996647925042396,
+    "per_class": {
+      "Ascaris lumbricoides": {
+        "precision": 0.9493670886075949,
+        "recall": 0.9803921568627451,
+        "f1": 0.9646302250803858,
+        "support": 153
+      },
+      "Capillaria philippinensis": {
+        "precision": 0.9932432432432432,
+        "recall": 0.98,
+        "f1": 0.9865771812080537,
+        "support": 150
+      },
+      "Enterobius vermicularis": {
+        "precision": 0.9868421052631579,
+        "recall": 1.0,
+        "f1": 0.9933774834437086,
+        "support": 150
+      },
+      "Fasciolopsis buski": {
+        "precision": 0.9931972789115646,
+        "recall": 0.9733333333333334,
+        "f1": 0.9831649831649831,
+        "support": 150
+      },
+      "Hookworm egg": {
+        "precision": 1.0,
+        "recall": 0.993421052631579,
+        "f1": 0.9966996699669968,
+        "support": 152
+      },
+      "Hymenolepis diminuta": {
+        "precision": 0.9932432432432432,
+        "recall": 0.98,
+        "f1": 0.9865771812080537,
+        "support": 150
+      },
+      "Hymenolepis nana": {
+        "precision": 0.9933774834437086,
+        "recall": 1.0,
+        "f1": 0.9966777408637874,
+        "support": 150
+      },
+      "Opisthorchis viverrine": {
+        "precision": 0.9864864864864865,
+        "recall": 0.9798657718120806,
+        "f1": 0.9831649831649831,
+        "support": 149
+      },
+      "Paragonimus spp": {
+        "precision": 0.9736842105263158,
+        "recall": 0.9866666666666667,
+        "f1": 0.9801324503311258,
+        "support": 150
+      },
+      "Taenia spp. egg": {
+        "precision": 1.0,
+        "recall": 0.993421052631579,
+        "f1": 0.9966996699669968,
+        "support": 152
+      },
+      "Trichuris trichiura": {
+        "precision": 0.9866666666666667,
+        "recall": 0.9866666666666667,
+        "f1": 0.9866666666666668,
+        "support": 150
+      }
+    },
+    "confusion_matrix": [
+      [
+        150,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        2,
+        0,
+        0
+      ],
+      [
+        0,
+        147,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        1
+      ],
+      [
+        0,
+        0,
+        150,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        2,
+        0,
+        1,
+        146,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        151,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      [
+        3,
+        0,
+        0,
+        0,
+        0,
+        147,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        150,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        146,
+        0,
+        0,
+        1
+      ],
+      [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        148,
+        0,
+        0
+      ],
+      [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        151,
+        0
+      ],
+      [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        148
+      ]
+    ],
+    "n_samples": 1656
+  },
+  "cost_model": {
+    "params_M": 2.006,
+    "size_MB": 8.06,
+    "flops_G": 0.727,
+    "latency_cpu_ms": 53.68
+  },
+  "eval_setup": {
+    "batch_size": 32,
+    "img_size": 224,
+    "faithfulness_batches": 8,
+    "images_scored": 256,
+    "metrics": [
+      "deletion",
+      "insertion",
+      "infidelity_raw",
+      "infidelity",
+      "infidelity_scaled",
+      "sensitivity",
+      "sanity_check"
+    ],
+    "params": {
+      "infidelity_patch_size": 28,
+      "sanity_skip_layers": true,
+      "sanity_layer_order": "top_down",
+      "infidelity_n_perturb_samples": 10,
+      "infidelity_normalise": true
+    }
+  },
+  "trust": {
+    "temperature": 1.1005079746246338,
+    "ece": 0.005736597458962933,
+    "conformal_qhat": 0.004049181938171387,
+    "avg_set_size": 0.9051932096481323,
+    "empirical_coverage": 0.9045893549919128
+  }
+}

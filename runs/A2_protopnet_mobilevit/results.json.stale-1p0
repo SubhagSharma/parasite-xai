@@ -1,0 +1,240 @@
+{
+  "methods": {
+    "ours:protopnet": {
+      "faithfulness": {
+        "deletion": 0.14995370235333716,
+        "insertion": 240.50312035903335,
+        "infidelity": 3620947494080.0,
+        "sensitivity": 0.0561345029855147,
+        "sanity_check": 1.0
+      },
+      "n_samples": {
+        "deletion": 256,
+        "insertion": 256,
+        "infidelity": 256,
+        "sensitivity": 64,
+        "sanity_check": 64
+      },
+      "failures": {
+        "deletion": 0,
+        "insertion": 0,
+        "infidelity": 0,
+        "sensitivity": 0,
+        "sanity_check": 0
+      },
+      "batches_used": {
+        "deletion": 8,
+        "insertion": 8,
+        "infidelity": 8,
+        "sensitivity": 2,
+        "sanity_check": 2
+      },
+      "explainer_determinism": 1.0,
+      "sanity_collapse_batches": 0,
+      "passes": 1,
+      "aggregate": 0.37636630233461565
+    },
+    "gradcam": {
+      "faithfulness": {
+        "deletion": 0.09174510690462512,
+        "insertion": 245.32356393244117,
+        "infidelity": 2353628765.7714844,
+        "sensitivity": 1.648392353206873,
+        "sanity_check": 0.2247362420254211
+      },
+      "n_samples": {
+        "deletion": 256,
+        "insertion": 256,
+        "infidelity": 256,
+        "sensitivity": 64,
+        "sanity_check": 64
+      },
+      "failures": {
+        "deletion": 0,
+        "insertion": 0,
+        "infidelity": 0,
+        "sensitivity": 0,
+        "sanity_check": 0
+      },
+      "batches_used": {
+        "deletion": 8,
+        "insertion": 8,
+        "infidelity": 8,
+        "sensitivity": 2,
+        "sanity_check": 2
+      },
+      "explainer_determinism": 1.0,
+      "sanity_collapse_batches": 0,
+      "passes": 2,
+      "aggregate": 0.5929888150366216
+    },
+    "hirescam": {
+      "faithfulness": {
+        "deletion": 0.13625623032971942,
+        "insertion": 133.41003227699548,
+        "infidelity": 8183218564.019239,
+        "sensitivity": 2.0188963857908098,
+        "sanity_check": 0.3209430711418336
+      },
+      "n_samples": {
+        "deletion": 256,
+        "insertion": 256,
+        "infidelity": 256,
+        "sensitivity": 63,
+        "sanity_check": 64
+      },
+      "failures": {
+        "deletion": 0,
+        "insertion": 0,
+        "infidelity": 0,
+        "sensitivity": 0,
+        "sanity_check": 0
+      },
+      "batches_used": {
+        "deletion": 8,
+        "insertion": 8,
+        "infidelity": 8,
+        "sensitivity": 2,
+        "sanity_check": 2
+      },
+      "explainer_determinism": 1.0,
+      "sanity_collapse_batches": 1,
+      "passes": 2,
+      "aggregate": 0.6433332143373305
+    },
+    "integrated_gradients": {
+      "faithfulness": {
+        "deletion": 0.45449152795415176,
+        "insertion": 73.22253248444758,
+        "infidelity": 33635841.86340332,
+        "sensitivity": 0.7374961222521961,
+        "sanity_check": 0.561107073582866
+      },
+      "n_samples": {
+        "deletion": 256,
+        "insertion": 256,
+        "infidelity": 256,
+        "sensitivity": 64,
+        "sanity_check": 64
+      },
+      "failures": {
+        "deletion": 0,
+        "insertion": 0,
+        "infidelity": 0,
+        "sensitivity": 0,
+        "sanity_check": 0
+      },
+      "batches_used": {
+        "deletion": 8,
+        "insertion": 8,
+        "infidelity": 8,
+        "sensitivity": 2,
+        "sanity_check": 2
+      },
+      "explainer_determinism": 0.9999999630797218,
+      "sanity_collapse_batches": 0,
+      "passes": 64,
+      "aggregate": 0.6363344113450443
+    },
+    "lime": {
+      "faithfulness": {
+        "deletion": 0.48994898840663204,
+        "insertion": 89.848498666659,
+        "infidelity": 689009686.1171875,
+        "sensitivity": 0.8567333361133933,
+        "sanity_check": 0.08469238168608886
+      },
+      "n_samples": {
+        "deletion": 256,
+        "insertion": 256,
+        "infidelity": 256,
+        "sensitivity": 64,
+        "sanity_check": 64
+      },
+      "failures": {
+        "deletion": 0,
+        "insertion": 0,
+        "infidelity": 0,
+        "sensitivity": 0,
+        "sanity_check": 0
+      },
+      "batches_used": {
+        "deletion": 8,
+        "insertion": 8,
+        "infidelity": 8,
+        "sensitivity": 2,
+        "sanity_check": 2
+      },
+      "explainer_determinism": 0.15374471290341007,
+      "sanity_collapse_batches": 8,
+      "passes": 1000,
+      "aggregate": 0.6824923795597704
+    },
+    "kernelshap": {
+      "faithfulness": {
+        "deletion": 0.4402309964912345,
+        "insertion": 102.17523894447368,
+        "infidelity": 61597991699.5,
+        "sensitivity": 0.9250160306692123,
+        "sanity_check": 0.002000936105230031
+      },
+      "n_samples": {
+        "deletion": 256,
+        "insertion": 256,
+        "infidelity": 256,
+        "sensitivity": 64,
+        "sanity_check": 64
+      },
+      "failures": {
+        "deletion": 0,
+        "insertion": 0,
+        "infidelity": 0,
+        "sensitivity": 0,
+        "sanity_check": 0
+      },
+      "batches_used": {
+        "deletion": 8,
+        "insertion": 8,
+        "infidelity": 8,
+        "sensitivity": 2,
+        "sanity_check": 2
+      },
+      "explainer_determinism": 0.02527192426399062,
+      "sanity_collapse_batches": 0,
+      "passes": 1000,
+      "aggregate": 0.6993878409616068
+    }
+  },
+  "accuracy": 0.9097516656571775,
+  "cost_model": {
+    "params_M": 2.006,
+    "size_MB": 8.06,
+    "flops_G": 0.727,
+    "latency_cpu_ms": 47.64
+  },
+  "eval_setup": {
+    "batch_size": 32,
+    "img_size": 224,
+    "faithfulness_batches": 8,
+    "images_scored": 256,
+    "metrics": [
+      "deletion",
+      "insertion",
+      "infidelity",
+      "sensitivity",
+      "sanity_check"
+    ],
+    "params": {
+      "infidelity_patch_size": 28,
+      "sanity_skip_layers": true,
+      "sanity_layer_order": "top_down"
+    }
+  },
+  "trust": {
+    "temperature": 1.0757545232772827,
+    "ece": 0.021580216867732815,
+    "conformal_qhat": 0.46893078088760376,
+    "avg_set_size": 0.9466989636421204,
+    "empirical_coverage": 0.8909751772880554
+  }
+}

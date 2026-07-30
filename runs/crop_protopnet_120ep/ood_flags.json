@@ -1,0 +1,44 @@
+{
+  "tau": 0.7,
+  "k": 0.02,
+  "n_train": 7725,
+  "train_accuracy": 0.9998705501618123,
+  "n_high_conf_fp": 0,
+  "n_low_conf_tp": 4,
+  "topk_indices": [
+    7396,
+    3669,
+    3162,
+    5918
+  ],
+  "flagged": [
+    {
+      "path": "../Data/chula_crops/Hymenolepis diminuta/Hymenolepis diminuta_0461_0.jpg",
+      "true": "Hymenolepis diminuta",
+      "pred": "Hymenolepis diminuta",
+      "msp": 0.3623083531856537,
+      "type": "low_conf_tp"
+    },
+    {
+      "path": "../Data/chula_crops/Hymenolepis diminuta/Hymenolepis diminuta_0235_0.jpg",
+      "true": "Hymenolepis diminuta",
+      "pred": "Hymenolepis diminuta",
+      "msp": 0.4383013844490051,
+      "type": "low_conf_tp"
+    },
+    {
+      "path": "../Data/chula_crops/Hymenolepis diminuta/Hymenolepis diminuta_0083_0.jpg",
+      "true": "Hymenolepis diminuta",
+      "pred": "Hymenolepis diminuta",
+      "msp": 0.6829230189323425,
+      "type": "low_conf_tp"
+    },
+    {
+      "path": "../Data/chula_crops/Hymenolepis diminuta/Hymenolepis diminuta_0302_0.jpg",
+      "true": "Hymenolepis diminuta",
+      "pred": "Hymenolepis diminuta",
+      "msp": 0.6858136057853699,
+      "type": "low_conf_tp"
+    }
+  ]
+}

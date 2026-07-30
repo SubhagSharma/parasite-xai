@@ -1,0 +1,24 @@
+# Core
+timm>=1.0.7            # MobileViT / EfficientNet-Lite / GhostNet lightweight backbones
+numpy>=1.26
+scipy>=1.11
+pyyaml>=6.0
+pandas>=2.0
+scikit-learn>=1.4
+tqdm>=4.66
+
+# Explainability + faithfulness
+captum>=0.7            # Grad-CAM, Integrated Gradients, KernelSHAP, LIME baselines
+quantus>=0.5          # faithfulness metric harness (deletion/insertion, infidelity, sanity)
+shap>=0.45            # KernelSHAP reference (slow baseline)
+
+# Cost / profiling
+fvcore>=0.1.5         # FLOPs counting
+onnx>=1.16            # edge export
+onnxruntime>=1.18     # edge latency proxy
+
+# Plots
+matplotlib>=3.8
+
+# Optional (concept models / medical CLIP grounding for Label-free CBM)
+# open_clip_torch>=2.24

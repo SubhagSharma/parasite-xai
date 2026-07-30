@@ -1,0 +1,9 @@
+run	backbone	head	val_acc	test_acc	params_M	size_MB
+blackbox_mobilevit_120ep	mobilevit_xs	blackbox	0.9988	0.9927	1.937	7.78
+crop_protopnet_120ep	mobilevit_xs	protopnet	0.9927	0.9867	2.006	8.06
+crop_blackbox_120ep	mobilevit_xs	blackbox	0.9976	0.9964	1.937	7.78
+crop_bcos_120ep	mobilevit_xs	bcos	0.9964	0.9946	1.937	7.78
+crop_protopnet_aug0_current	mobilevit_xs	protopnet	0.9915	0.9903	2.006	8.06
+crop_protopnet_aug1_hue	mobilevit_xs	protopnet	0.9952	0.9946	2.006	8.06
+crop_protopnet_aug2_strong	mobilevit_xs	protopnet	0.9958	0.9891	2.006	8.06
+crop_protopnet_aug3_gray	mobilevit_xs	protopnet	0.9885	0.9855	2.006	8.06

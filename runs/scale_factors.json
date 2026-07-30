@@ -1,0 +1,58 @@
+{
+  "reference_group": "1344x1080",
+  "note": "multiply image dimensions by 'resample' to reach the reference scale; key 'other' covers all native sizes with fewer than 30 boxes",
+  "groups": {
+    "1280x672": {
+      "resample": 0.7095022303992083,
+      "boxes": 685
+    },
+    "1280x960": {
+      "resample": 0.7103156626296122,
+      "boxes": 1391
+    },
+    "1344x1080": {
+      "resample": 1.0,
+      "boxes": 716
+    },
+    "1714x3264": {
+      "resample": 0.7177631321355694,
+      "boxes": 559
+    },
+    "1920x1080": {
+      "resample": 0.9964839012613645,
+      "boxes": 1383
+    },
+    "1920x756": {
+      "resample": 0.9993640698764428,
+      "boxes": 658
+    },
+    "2117x4032": {
+      "resample": 0.5769149098451004,
+      "boxes": 798
+    },
+    "2448x2285": {
+      "resample": 0.7200176386694104,
+      "boxes": 528
+    },
+    "2448x3264": {
+      "resample": 0.715582797928012,
+      "boxes": 1084
+    },
+    "3024x2822": {
+      "resample": 0.5749609453170964,
+      "boxes": 837
+    },
+    "3024x4032": {
+      "resample": 0.5771878998341743,
+      "boxes": 1690
+    },
+    "896x960": {
+      "resample": 0.7146041338063258,
+      "boxes": 701
+    },
+    "other": {
+      "resample": 0.9822389349690878,
+      "boxes": 0
+    }
+  }
+}
