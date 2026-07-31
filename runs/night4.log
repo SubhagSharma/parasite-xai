@@ -1,0 +1,408 @@
+nohup: ignoring input
+########## NIGHT 4 STARTED Thu Jul 30 20:25:52 UTC 2026 ##########
+
+===== PHASE 0  snapshot + preflight :: Thu Jul 30 20:25:52 UTC 2026 =====
+copying runs/ and configs/ -> stable/pre_night4_20260730_2025
+
+391M	stable/pre_night4_20260730_2025
+SNAPSHOT COMPLETE: stable/pre_night4_20260730_2025
+UNSTICK: removing stale sentinel on A1_convnext_tiny_120ep (no best.pt)
+
+===== PHASE 1  extract both ROI windows (parallel) :: Thu Jul 30 20:25:52 UTC 2026 =====
+extract w477 exit 0
+extract w679 exit 0
+w477: 9897 images
+  Capillaria philippinensis     948       52    94.8%           97
+  Enterobius vermicularis       939       61    93.9%          130
+  Fasciolopsis buski            849      151    84.9%          296
+  Hookworm egg                  810      190    81.0%          151
+  Hymenolepis diminuta          992        8    99.2%          161
+  Hymenolepis nana              996        4    99.6%          109
+  Opisthorchis viverrine        931       69    93.1%           63
+  Paragonimus spp               937       63    93.7%          175
+  Taenia spp. egg               834      166    83.4%           93
+  Trichuris trichiura           808      192    80.8%          126
+
+'egg px @out' is the median egg long axis in the OUTPUT image. With scale
+normalisation working, this column is now pure morphology -- it should
+track textbook egg dimensions and nothing else.
+Verify with: python -u probe_bbox_geometry.py, and re-run
+diagnose_frame_geometry.py on the output.
+w679: 8163 images
+  Capillaria philippinensis     775      225    77.5%           67
+  Enterobius vermicularis       763      237    76.3%           92
+  Fasciolopsis buski            746      254    74.6%          208
+  Hookworm egg                  619      381    61.9%          106
+  Hymenolepis diminuta          829      171    82.9%          113
+  Hymenolepis nana              840      160    84.0%           76
+  Opisthorchis viverrine        771      229    77.1%           44
+  Paragonimus spp               767      233    76.7%          123
+  Taenia spp. egg               687      313    68.7%           65
+  Trichuris trichiura           660      340    66.0%           88
+
+'egg px @out' is the median egg long axis in the OUTPUT image. With scale
+normalisation working, this column is now pure morphology -- it should
+track textbook egg dimensions and nothing else.
+Verify with: python -u probe_bbox_geometry.py, and re-run
+diagnose_frame_geometry.py on the output.
+
+===== PHASE 1b  generate configs :: Thu Jul 30 21:24:36 UTC 2026 =====
+  roi477_blackbox_120ep        mobilevit_xs         blackbox   ../Data/chula_roi2_w477
+  roi477_protopnet_120ep       mobilevit_xs         protopnet  ../Data/chula_roi2_w477
+  roi477_bcos_120ep            mobilevit_xs         bcos       ../Data/chula_roi2_w477
+  roi477_cbm_120ep             mobilevit_xs         cbm        ../Data/chula_roi2_w477
+  roi679_blackbox_120ep        mobilevit_xs         blackbox   ../Data/chula_roi2_w679
+  roi477_effnetlite0_120ep     efficientnet_lite0   blackbox   ../Data/chula_roi2_w477
+  roi477_ghostnet_120ep        ghostnet_100         blackbox   ../Data/chula_roi2_w477
+  roi477_convnext_120ep        convnext_tiny        blackbox   ../Data/chula_roi2_w477
+  crop_cbm_120ep               mobilevit_xs         cbm        ../Data/chula_crops
+  whole_cbm_120ep              mobilevit_xs         cbm        ../Data/Chula-ParasiteEgg-11/data  nw=16
+
+10 configs written.
+roi477_blackbox is BOTH the head-sweep baseline and the mobilevit_xs
+entry in the backbone sweep, so RQ4 gets four backbones on identical data.
+
+===== PHASE 2  blackbox on both windows :: Thu Jul 30 21:24:36 UTC 2026 =====
+
+===== TRAIN roi477_blackbox_120ep :: Thu Jul 30 21:24:36 UTC 2026 =====
+===== roi477_blackbox_120ep done :: Thu Jul 30 21:53:45 UTC 2026 :: exit 0 =====
+
+===== TRAIN roi679_blackbox_120ep :: Thu Jul 30 21:53:45 UTC 2026 =====
+===== roi679_blackbox_120ep done :: Thu Jul 30 22:17:48 UTC 2026 :: exit 0 =====
+
+===== PHASE 3  THE ANSWER — did the unified ROI move the shortcut? :: Thu Jul 30 22:17:48 UTC 2026 =====
+reference points: whole 0.5700, crops 0.2494, chance 0.0909
+
+                         run         backbone       head      val     test  params M  size MB
+       roi477_blackbox_120ep     mobilevit_xs   blackbox   1.0000   1.0000     1.937     7.78
+
+appended to runs/accuracy_2x2.tsv
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+
+                         run         backbone       head      val     test  params M  size MB
+       roi679_blackbox_120ep     mobilevit_xs   blackbox   1.0000   0.9959     1.937     7.78
+
+appended to runs/accuracy_2x2.tsv
+--- occlusion: roi477_blackbox_120ep ---
+
+  chance level: 0.0909
+  drop when the egg is REMOVED     : +63.23 points
+  drop when only the egg is KEPT   : +19.19 points
+
+=== reading ===
+  Removing the egg hurts (0.3677 vs 1.0000) -- the egg matters.
+  The egg alone is NOT sufficient (0.8081 vs 1.0000); context is
+  doing part of the work.
+
+                   class   normal   no egg  egg only
+    Ascaris lumbricoides    1.000    0.000     0.977
+Capillaria philippinensi    1.000    0.902     0.916
+ Enterobius vermicularis    1.000    0.213     0.567
+      Fasciolopsis buski    1.000    0.984     0.992
+            Hookworm egg    1.000    1.000     0.579
+    Hymenolepis diminuta    1.000    0.000     0.685
+        Hymenolepis nana    1.000    0.074     1.000
+  Opisthorchis viverrine    1.000    0.664     1.000
+         Paragonimus spp    1.000    0.106     0.220
+         Taenia spp. egg    1.000    0.008     1.000
+     Trichuris trichiura    1.000    0.174     1.000
+--- occlusion: roi679_blackbox_120ep ---
+
+  chance level: 0.0909
+  drop when the egg is REMOVED     : +56.16 points
+  drop when only the egg is KEPT   : +22.12 points
+
+=== reading ===
+  Removing the egg hurts (0.4343 vs 0.9959) -- the egg matters.
+  The egg alone is NOT sufficient (0.7747 vs 0.9959); context is
+  doing part of the work.
+
+                   class   normal   no egg  egg only
+    Ascaris lumbricoides    1.000    0.283     0.925
+Capillaria philippinensi    1.000    0.888     0.560
+ Enterobius vermicularis    0.991    0.535     0.254
+      Fasciolopsis buski    1.000    0.902     1.000
+            Hookworm egg    1.000    0.989     0.118
+    Hymenolepis diminuta    1.000    0.104     0.784
+        Hymenolepis nana    0.984    0.294     0.992
+  Opisthorchis viverrine    0.991    0.629     0.983
+         Paragonimus spp    0.991    0.061     0.835
+         Taenia spp. egg    1.000    0.029     0.990
+     Trichuris trichiura    1.000    0.121     1.000
+
+===== PHASE 4  remaining heads on both windows :: Thu Jul 30 22:22:00 UTC 2026 =====
+
+===== TRAIN roi477_protopnet_120ep :: Thu Jul 30 22:22:00 UTC 2026 =====
+===== roi477_protopnet_120ep done :: Thu Jul 30 22:53:24 UTC 2026 :: exit 0 =====
+
+===== TRAIN roi477_bcos_120ep :: Thu Jul 30 22:53:24 UTC 2026 =====
+===== roi477_bcos_120ep done :: Thu Jul 30 23:22:34 UTC 2026 :: exit 0 =====
+
+===== TRAIN roi477_cbm_120ep :: Thu Jul 30 23:22:34 UTC 2026 =====
+===== roi477_cbm_120ep done :: Thu Jul 30 23:51:27 UTC 2026 :: exit 0 =====
+SKIP train roi679_protopnet_120ep - NO CONFIG configs/generated/roi679_protopnet_120ep.yaml
+SKIP train roi679_bcos_120ep - NO CONFIG configs/generated/roi679_bcos_120ep.yaml
+SKIP train roi679_cbm_120ep - NO CONFIG configs/generated/roi679_cbm_120ep.yaml
+
+===== PHASE 5  crop CBM :: Thu Jul 30 23:51:27 UTC 2026 =====
+
+===== TRAIN crop_cbm_120ep :: Thu Jul 30 23:51:27 UTC 2026 =====
+===== crop_cbm_120ep done :: Fri Jul 31 00:22:05 UTC 2026 :: exit 0 =====
+
+===== PHASE 6  ConvNeXt x ProtoPNet on whole images (completes the 2x2) :: Fri Jul 31 00:22:05 UTC 2026 =====
+
+===== TRAIN A1_convnext_tiny_120ep :: Fri Jul 31 00:22:05 UTC 2026 =====
+===== A1_convnext_tiny_120ep done :: Fri Jul 31 05:52:08 UTC 2026 :: exit 0 =====
+
+===== PHASE 7  accuracy, remaining :: Fri Jul 31 05:52:08 UTC 2026 =====
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+
+                         run         backbone       head      val     test  params M  size MB
+      roi477_protopnet_120ep     mobilevit_xs  protopnet   0.9987   0.9980     2.006     8.06
+
+appended to runs/accuracy_2x2.tsv
+
+                         run         backbone       head      val     test  params M  size MB
+           roi477_bcos_120ep     mobilevit_xs       bcos   0.9993   0.9973     1.937     7.78
+
+appended to runs/accuracy_2x2.tsv
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+
+                         run         backbone       head      val     test  params M  size MB
+            roi477_cbm_120ep     mobilevit_xs        cbm   0.9987   0.9980     1.939     7.79
+
+appended to runs/accuracy_2x2.tsv
+SKIP acc roi679_protopnet_120ep - no checkpoint
+SKIP acc roi679_bcos_120ep - no checkpoint
+SKIP acc roi679_cbm_120ep - no checkpoint
+
+                         run         backbone       head      val     test  params M  size MB
+              crop_cbm_120ep     mobilevit_xs        cbm   0.9976   0.9964     1.939     7.79
+
+appended to runs/accuracy_2x2.tsv
+
+                         run         backbone       head      val     test  params M  size MB
+      A1_convnext_tiny_120ep    convnext_tiny  protopnet   0.0914   0.0920    27.941   111.77
+
+appended to runs/accuracy_2x2.tsv
+
+===== PHASE 8  occlusion, remaining :: Fri Jul 31 05:53:56 UTC 2026 =====
+--- occlusion: roi477_protopnet_120ep ---
+
+  chance level: 0.0909
+  drop when the egg is REMOVED     : +74.95 points
+  drop when only the egg is KEPT   : +26.80 points
+
+=== reading ===
+  Removing the egg hurts (0.2485 vs 0.9980) -- the egg matters.
+  The egg alone is NOT sufficient (0.7300 vs 0.9980); context is
+  doing part of the work.
+
+                   class   normal   no egg  egg only
+    Ascaris lumbricoides    0.992    0.000     0.984
+Capillaria philippinensi    1.000    0.497     0.944
+ Enterobius vermicularis    1.000    0.723     0.135
+      Fasciolopsis buski    1.000    0.205     1.000
+            Hookworm egg    1.000    1.000     0.579
+    Hymenolepis diminuta    0.993    0.007     0.483
+        Hymenolepis nana    0.993    0.195     0.966
+  Opisthorchis viverrine    1.000    0.114     0.950
+         Paragonimus spp    1.000    0.007     0.085
+         Taenia spp. egg    1.000    0.000     1.000
+     Trichuris trichiura    1.000    0.017     1.000
+--- occlusion: roi477_bcos_120ep ---
+
+  chance level: 0.0909
+  drop when the egg is REMOVED     : +58.45 points
+  drop when only the egg is KEPT   : +28.96 points
+
+=== reading ===
+  Removing the egg hurts (0.4128 vs 0.9973) -- the egg matters.
+  The egg alone is NOT sufficient (0.7077 vs 0.9973); context is
+  doing part of the work.
+
+                   class   normal   no egg  egg only
+    Ascaris lumbricoides    0.984    0.039     0.984
+Capillaria philippinensi    1.000    0.783     0.958
+ Enterobius vermicularis    0.993    0.532     0.035
+      Fasciolopsis buski    1.000    0.614     0.937
+            Hookworm egg    1.000    1.000     0.198
+    Hymenolepis diminuta    1.000    0.000     0.490
+        Hymenolepis nana    1.000    0.060     1.000
+  Opisthorchis viverrine    1.000    0.536     1.000
+         Paragonimus spp    1.000    0.660     0.234
+         Taenia spp. egg    0.992    0.000     0.992
+     Trichuris trichiura    1.000    0.372     1.000
+--- occlusion: roi477_cbm_120ep ---
+
+  chance level: 0.0909
+  drop when the egg is REMOVED     : +68.96 points
+  drop when only the egg is KEPT   : +22.63 points
+
+=== reading ===
+  Removing the egg hurts (0.3084 vs 0.9980) -- the egg matters.
+  The egg alone is NOT sufficient (0.7717 vs 0.9980); context is
+  doing part of the work.
+
+                   class   normal   no egg  egg only
+    Ascaris lumbricoides    0.992    0.000     0.992
+Capillaria philippinensi    0.993    0.727     1.000
+ Enterobius vermicularis    1.000    0.319     0.383
+      Fasciolopsis buski    1.000    0.024     0.992
+            Hookworm egg    1.000    0.818     0.413
+    Hymenolepis diminuta    1.000    0.315     0.671
+        Hymenolepis nana    1.000    0.134     1.000
+  Opisthorchis viverrine    1.000    0.879     1.000
+         Paragonimus spp    0.993    0.043     0.085
+         Taenia spp. egg    1.000    0.000     0.992
+     Trichuris trichiura    1.000    0.091     1.000
+SKIP occlusion roi679_protopnet_120ep - no checkpoint
+SKIP occlusion roi679_bcos_120ep - no checkpoint
+SKIP occlusion roi679_cbm_120ep - no checkpoint
+--- occlusion: crop_cbm_120ep ---
+
+  chance level: 0.0909
+  drop when the egg is REMOVED     : +74.94 points
+  drop when only the egg is KEPT   : +8.82 points
+
+=== reading ===
+  Removing the egg hurts (0.2470 vs 0.9964) -- the egg matters.
+  The egg alone is NOT sufficient (0.9082 vs 0.9964); context is
+  doing part of the work.
+
+                   class   normal   no egg  egg only
+    Ascaris lumbricoides    0.993    0.000     0.980
+Capillaria philippinensi    0.980    0.073     0.993
+ Enterobius vermicularis    0.993    0.873     0.580
+      Fasciolopsis buski    1.000    0.253     0.927
+            Hookworm egg    1.000    0.842     0.961
+    Hymenolepis diminuta    1.000    0.453     0.987
+        Hymenolepis nana    1.000    0.007     1.000
+  Opisthorchis viverrine    0.993    0.114     0.893
+         Paragonimus spp    1.000    0.027     0.673
+         Taenia spp. egg    1.000    0.000     0.993
+     Trichuris trichiura    1.000    0.073     1.000
+--- occlusion: A1_convnext_tiny_120ep ---
+  chance level: 0.0909
+  drop when the egg is REMOVED     : +0.00 points
+  drop when only the egg is KEPT   : +0.00 points
+
+=== reading ===
+  Removing the egg costs almost nothing (0.0920 vs 0.0920).
+  The parasite is NOT needed for the prediction -- the model is reading
+  context/acquisition, not morphology. This is a confound.
+  The egg alone is sufficient (0.0920) -- morphology carries the signal.
+
+                   class   normal   no egg  egg only
+    Ascaris lumbricoides    0.000    0.000     0.000
+Capillaria philippinensi    1.000    1.000     1.000
+ Enterobius vermicularis    0.000    0.000     0.000
+      Fasciolopsis buski    0.000    0.000     0.000
+            Hookworm egg    0.000    0.000     0.000
+    Hymenolepis diminuta    0.000    0.000     0.000
+        Hymenolepis nana    0.000    0.000     0.000
+  Opisthorchis viverrine    0.000    0.000     0.000
+         Paragonimus spp    0.000    0.000     0.000
+         Taenia spp. egg    0.000    0.000     0.000
+     Trichuris trichiura    0.000    0.000     0.000
+
+===== PHASE 9  frame-geometry diagnostic on the ROI sets :: Fri Jul 31 06:05:44 UTC 2026 =====
+--- w477 ---
+              Hookworm egg     0.2    0.2  0.998   -11.7  136.9  125.2                384x384
+      Hymenolepis diminuta     0.0    0.1  1.000   -13.1  138.4  125.3                384x384
+          Hymenolepis nana     0.3    0.3  0.997   -14.5  138.4  123.9                384x384
+    Opisthorchis viverrine     0.4    0.3  0.996   -14.8  138.3  123.5                384x384
+           Paragonimus spp     0.0    0.1  1.000   -14.2  138.6  124.4                384x384
+           Taenia spp. egg     0.8    0.6  0.992   -13.7  137.0  123.3                384x384
+       Trichuris trichiura     0.5    0.5  0.995   -13.8  137.2  123.4                384x384
+
+=== spread ACROSS classes ===
+     black_frac:     0.02 (Hymenolepis diminuta)  ->      0.78 (Taenia spp. egg)   range 0.76
+     fill_ratio:     0.99 (Taenia spp. egg)  ->      1.00 (Hymenolepis diminuta)   range 0.01
+   content_frac:    99.22 (Taenia spp. egg)  ->     99.98 (Hymenolepis diminuta)   range 0.76
+           cast:   -15.19 (Enterobius vermicula)  ->    -11.69 (Hookworm egg)   range 3.50
+         mean_r:   136.89 (Hookworm egg)  ->    138.85 (Enterobius vermicula)   range 1.96
+         mean_g:   138.01 (Taenia spp. egg)  ->    139.63 (Fasciolopsis buski)   range 1.62
+         mean_b:   123.31 (Taenia spp. egg)  ->    125.32 (Fasciolopsis buski)   range 2.01
+
+  nearest-centroid on these 7 stats ONLY: 0.2491  (chance 0.0909)
+  NOTE: features are standardised, so this amplifies even tiny residual
+  differences. The RANGES above are the meaningful measure.
+--- w679 ---
+              Hookworm egg     0.2    0.3  0.998   -11.6  136.8  125.2                384x384
+      Hymenolepis diminuta     0.1    0.2  0.999   -13.4  138.2  124.9                384x384
+          Hymenolepis nana     0.3    0.4  0.998   -14.2  138.1  123.9                384x384
+    Opisthorchis viverrine     0.4    0.3  0.996   -14.6  138.1  123.5                384x384
+           Paragonimus spp     0.1    0.2  0.999   -14.8  138.7  123.9                384x384
+           Taenia spp. egg     0.7    0.5  0.993   -13.6  136.8  123.2                384x384
+       Trichuris trichiura     0.5    0.5  0.995   -14.2  137.4  123.2                384x384
+
+=== spread ACROSS classes ===
+     black_frac:     0.08 (Hymenolepis diminuta)  ->      0.73 (Taenia spp. egg)   range 0.65
+     fill_ratio:     0.99 (Taenia spp. egg)  ->      1.00 (Hymenolepis diminuta)   range 0.01
+   content_frac:    99.27 (Taenia spp. egg)  ->     99.92 (Hymenolepis diminuta)   range 0.65
+           cast:   -14.93 (Enterobius vermicula)  ->    -11.56 (Hookworm egg)   range 3.37
+         mean_r:   136.75 (Hookworm egg)  ->    138.69 (Paragonimus spp)   range 1.94
+         mean_g:   137.90 (Taenia spp. egg)  ->    139.26 (Hymenolepis diminuta)   range 1.35
+         mean_b:   123.18 (Trichuris trichiura)  ->    125.19 (Hookworm egg)   range 2.01
+
+  nearest-centroid on these 7 stats ONLY: 0.2321  (chance 0.0909)
+  NOTE: features are standardised, so this amplifies even tiny residual
+  differences. The RANGES above are the meaningful measure.
+
+########## GUARANTEED SCOPE COMPLETE Fri Jul 31 06:06:27 UTC 2026 ##########
+
+===== PHASE 10  OVERFLOW: whole-image CBM :: Fri Jul 31 06:06:27 UTC 2026 =====
+
+===== TRAIN whole_cbm_120ep :: Fri Jul 31 06:06:27 UTC 2026 =====
+===== whole_cbm_120ep done :: Fri Jul 31 07:34:07 UTC 2026 :: exit 0 =====
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+
+                         run         backbone       head      val     test  params M  size MB
+             whole_cbm_120ep     mobilevit_xs        cbm   0.9970   0.9964     1.939     7.79
+
+appended to runs/accuracy_2x2.tsv
+--- occlusion: whole_cbm_120ep ---
+
+  chance level: 0.0909
+  drop when the egg is REMOVED     : +32.49 points
+  drop when only the egg is KEPT   : +79.92 points
+
+=== reading ===
+  Removing the egg hurts (0.6715 vs 0.9964) -- the egg matters.
+  The egg alone is NOT sufficient (0.1972 vs 0.9964); context is
+  doing part of the work.
+
+                   class   normal   no egg  egg only
+    Ascaris lumbricoides    1.000    0.447     0.127
+Capillaria philippinensi    1.000    0.987     0.013
+ Enterobius vermicularis    1.000    0.953     0.007
+      Fasciolopsis buski    0.980    0.873     0.260
+            Hookworm egg    1.000    1.000     0.000
+    Hymenolepis diminuta    1.000    0.407     0.013
+        Hymenolepis nana    1.000    0.673     0.500
+  Opisthorchis viverrine    1.000    0.953     0.000
+         Paragonimus spp    0.980    0.353     0.000
+         Taenia spp. egg    1.000    0.147     0.253
+     Trichuris trichiura    1.000    0.587     1.000
+
+===== ACCURACY TABLE :: Fri Jul 31 07:37:16 UTC 2026 =====
+run	backbone	head	val_acc	test_acc	params_M	size_MB
+blackbox_mobilevit_120ep	mobilevit_xs	blackbox	0.9988	0.9927	1.937	7.78
+crop_protopnet_120ep	mobilevit_xs	protopnet	0.9927	0.9867	2.006	8.06
+crop_blackbox_120ep	mobilevit_xs	blackbox	0.9976	0.9964	1.937	7.78
+crop_bcos_120ep	mobilevit_xs	bcos	0.9964	0.9946	1.937	7.78
+crop_protopnet_aug0_current	mobilevit_xs	protopnet	0.9915	0.9903	2.006	8.06
+crop_protopnet_aug1_hue	mobilevit_xs	protopnet	0.9952	0.9946	2.006	8.06
+crop_protopnet_aug2_strong	mobilevit_xs	protopnet	0.9958	0.9891	2.006	8.06
+crop_protopnet_aug3_gray	mobilevit_xs	protopnet	0.9885	0.9855	2.006	8.06
+roi477_blackbox_120ep	mobilevit_xs	blackbox	1.0000	1.0000	1.937	7.78
+roi679_blackbox_120ep	mobilevit_xs	blackbox	1.0000	0.9959	1.937	7.78
+roi477_protopnet_120ep	mobilevit_xs	protopnet	0.9987	0.9980	2.006	8.06
+roi477_bcos_120ep	mobilevit_xs	bcos	0.9993	0.9973	1.937	7.78
+roi477_cbm_120ep	mobilevit_xs	cbm	0.9987	0.9980	1.939	7.79
+crop_cbm_120ep	mobilevit_xs	cbm	0.9976	0.9964	1.939	7.79
+A1_convnext_tiny_120ep	convnext_tiny	protopnet	0.0914	0.0920	27.941	111.77
+whole_cbm_120ep	mobilevit_xs	cbm	0.9970	0.9964	1.939	7.79
+
+########## ALL DONE Fri Jul 31 07:37:16 UTC 2026 ##########

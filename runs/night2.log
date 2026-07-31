@@ -1,0 +1,27 @@
+nohup: ignoring input
+########## NIGHT 2 STARTED Wed Jul 29 11:04:09 UTC 2026 ##########
+
+===== SNAPSHOT :: Wed Jul 29 11:04:09 UTC 2026 =====
+copying runs/ and configs/ -> stable/pre_night2_20260729
+
+261M	stable/pre_night2_20260729
+SNAPSHOT COMPLETE: stable/pre_night2_20260729
+
+===== TRAIN blackbox_mobilevit_120ep started :: Wed Jul 29 11:04:09 UTC 2026 =====
+===== TRAIN blackbox_mobilevit_120ep finished :: Wed Jul 29 16:15:08 UTC 2026 :: exit 0 =====
+
+===== ACCURACY blackbox_mobilevit_120ep :: Wed Jul 29 16:15:08 UTC 2026 =====
+
+                         run         backbone       head      val     test  params M  size MB
+    blackbox_mobilevit_120ep     mobilevit_xs   blackbox   0.9988   0.9927     1.937     7.78
+
+appended to runs/accuracy_2x2.tsv
+SKIP train A1_convnext_tiny_120ep - already completed
+SKIP acc A1_convnext_tiny_120ep - no checkpoint
+
+
+===== 2x2 TABLE SO FAR :: Wed Jul 29 16:16:11 UTC 2026 =====
+run	backbone	head	val_acc	test_acc	params_M	size_MB
+blackbox_mobilevit_120ep	mobilevit_xs	blackbox	0.9988	0.9927	1.937	7.78
+
+########## ALL DONE Wed Jul 29 16:16:11 UTC 2026 ##########

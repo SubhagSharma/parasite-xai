@@ -1,0 +1,31 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+
+=== shuffle control  (32 images) ===
+A metric with spatial information scores REAL below SHUFFLED.
+
+                method    variant          real      shuffled      verdict
+        ours:protopnet     legacy    8.3278e+09    9.4428e+09    real wins
+        ours:protopnet     scaled    1.6285e+00    1.5993e+00 SHUFFLE WINS
+               gradcam     legacy    7.1628e+08    4.9795e+08 SHUFFLE WINS
+               gradcam     scaled    1.6359e+00    1.6162e+00 SHUFFLE WINS
+              hirescam     legacy    7.0795e+06    7.0449e+06 SHUFFLE WINS
+              hirescam     scaled    1.8408e+00    1.6012e+00 SHUFFLE WINS
+/usr/local/lib/python3.12/dist-packages/captum/attr/_utils/batching.py:51: UserWarning: Internal batch size cannot be less than the number of input examples. Defaulting to internal batch size of 32 equal to the number of examples.
+  warnings.warn(
+  integrated_gradients     legacy    5.5448e+06    4.5311e+06 SHUFFLE WINS
+  integrated_gradients     scaled    1.4401e+00    1.6014e+00    real wins
+/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+                  lime     legacy    2.0635e+06    1.8557e+06 SHUFFLE WINS
+                  lime     scaled    1.2941e+00    1.6289e+00    real wins
+/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+            kernelshap     legacy    1.4817e+08    1.4380e+08 SHUFFLE WINS
+            kernelshap     scaled    1.5611e+00    1.6008e+00    real wins
+
+=== verdict ===
+            legacy: real beat shuffle 1/6
+      -> inconsistent; treat as unreliable and report per-method.
+    optimal-scaled: real beat shuffle 3/6
+      -> inconsistent; treat as unreliable and report per-method.
+

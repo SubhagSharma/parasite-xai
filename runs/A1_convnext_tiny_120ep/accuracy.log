@@ -1,0 +1,5 @@
+
+                         run         backbone       head      val     test  params M  size MB
+      A1_convnext_tiny_120ep    convnext_tiny  protopnet   0.0914   0.0920    27.941   111.77
+
+appended to runs/accuracy_2x2.tsv

@@ -1,0 +1,6 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+
+                         run         backbone       head      val     test  params M  size MB
+      roi477_protopnet_120ep     mobilevit_xs  protopnet   0.9987   0.9980     2.006     8.06
+
+appended to runs/accuracy_2x2.tsv

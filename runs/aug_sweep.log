@@ -1,0 +1,75 @@
+nohup: ignoring input
+########## AUG SWEEP STARTED Thu Jul 30 10:55:38 UTC 2026  (PAR=4) ##########
+host CPUs: 256
+memory.used [MiB], memory.total [MiB]
+[Insufficient Permissions], [Insufficient Permissions]
+copying runs/ and configs/ -> stable/pre_augsweep_20260730_1055
+
+318M	stable/pre_augsweep_20260730_1055
+SNAPSHOT COMPLETE: stable/pre_augsweep_20260730_1055
+
+===== PHASE 1: training (4 concurrent) :: Thu Jul 30 10:55:39 UTC 2026 =====
+  launched crop_protopnet_aug0_current (pid 164098)
+  launched crop_protopnet_aug1_hue (pid 164101)
+  launched crop_protopnet_aug2_strong (pid 164104)
+  launched crop_protopnet_aug3_gray (pid 164107)
+  [crop_protopnet_aug3_gray] train exit 0 :: Thu Jul 30 12:57:45 UTC 2026
+  [crop_protopnet_aug2_strong] train exit 0 :: Thu Jul 30 12:57:46 UTC 2026
+  [crop_protopnet_aug1_hue] train exit 0 :: Thu Jul 30 12:57:46 UTC 2026
+  [crop_protopnet_aug0_current] train exit 0 :: Thu Jul 30 12:57:51 UTC 2026
+
+===== PHASE 1 complete :: Thu Jul 30 12:57:51 UTC 2026 =====
+memory.used [MiB]
+[Insufficient Permissions]
+
+===== PHASE 2: accuracy + shortcut per level :: Thu Jul 30 12:57:51 UTC 2026 =====
+
+--- crop_protopnet_aug0_current ---
+                         run         backbone       head      val     test  params M  size MB
+ crop_protopnet_aug0_current     mobilevit_xs  protopnet   0.9915   0.9903     2.006     8.06
+
+appended to runs/accuracy_2x2.tsv
+                unmodified: accuracy 0.9891
+            EGG masked out: accuracy 0.1878
+     BACKGROUND masked out: accuracy 0.8170
+  chance level: 0.0909
+
+--- crop_protopnet_aug1_hue ---
+                         run         backbone       head      val     test  params M  size MB
+     crop_protopnet_aug1_hue     mobilevit_xs  protopnet   0.9952   0.9946     2.006     8.06
+
+appended to runs/accuracy_2x2.tsv
+                unmodified: accuracy 0.9946
+            EGG masked out: accuracy 0.2095
+     BACKGROUND masked out: accuracy 0.8774
+  chance level: 0.0909
+
+--- crop_protopnet_aug2_strong ---
+                         run         backbone       head      val     test  params M  size MB
+  crop_protopnet_aug2_strong     mobilevit_xs  protopnet   0.9958   0.9891     2.006     8.06
+
+appended to runs/accuracy_2x2.tsv
+                unmodified: accuracy 0.9885
+            EGG masked out: accuracy 0.2343
+     BACKGROUND masked out: accuracy 0.9094
+  chance level: 0.0909
+
+--- crop_protopnet_aug3_gray ---
+                         run         backbone       head      val     test  params M  size MB
+    crop_protopnet_aug3_gray     mobilevit_xs  protopnet   0.9885   0.9855     2.006     8.06
+
+appended to runs/accuracy_2x2.tsv
+                unmodified: accuracy 0.9855
+            EGG masked out: accuracy 0.2518
+     BACKGROUND masked out: accuracy 0.8255
+  chance level: 0.0909
+
+===== SUMMARY :: Thu Jul 30 13:08:34 UTC 2026 =====
+chance = 0.0909   current crop model egg-masked = 0.2494   lower is better
+level                            accuracy   egg-masked
+aug0_current                       0.9891       0.1878
+aug1_hue                           0.9946       0.2095
+aug2_strong                        0.9885       0.2343
+aug3_gray                          0.9855       0.2518
+
+########## ALL DONE Thu Jul 30 13:18:23 UTC 2026 ##########

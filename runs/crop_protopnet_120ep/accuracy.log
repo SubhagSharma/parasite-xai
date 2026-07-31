@@ -1,0 +1,5 @@
+
+                         run         backbone       head      val     test  params M  size MB
+        crop_protopnet_120ep     mobilevit_xs  protopnet   0.9927   0.9867     2.006     8.06
+
+appended to runs/accuracy_2x2.tsv

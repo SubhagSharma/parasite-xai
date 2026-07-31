@@ -1,0 +1,5 @@
+
+                         run         backbone       head      val     test  params M  size MB
+       roi477_blackbox_120ep     mobilevit_xs   blackbox   1.0000   1.0000     1.937     7.78
+
+appended to runs/accuracy_2x2.tsv

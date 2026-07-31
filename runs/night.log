@@ -1,0 +1,30 @@
+nohup: ignoring input
+########## NIGHT RUN STARTED Tue Jul 28 15:14:01 UTC 2026 ##########
+memory.used [MiB], memory.total [MiB]
+[Insufficient Permissions], [Insufficient Permissions]
+
+===== SNAPSHOT current state :: Tue Jul 28 15:14:01 UTC 2026 =====
+copying runs/ and configs/ -> stable/pre_night_20260728
+
+134M	stable/pre_night_20260728
+SNAPSHOT COMPLETE: stable/pre_night_20260728
+
+===== SHUFFLE CONTROL started :: Tue Jul 28 15:14:01 UTC 2026 =====
+===== SHUFFLE CONTROL finished :: Tue Jul 28 15:28:44 UTC 2026 :: exit 0 =====
+
+===== EVAL A2_protopnet_mobilevit_120ep started :: Tue Jul 28 15:28:44 UTC 2026 =====
+===== EVAL A2_protopnet_mobilevit_120ep finished :: Tue Jul 28 18:27:55 UTC 2026 :: exit 0 =====
+
+===== TRAIN ref_blackbox_convnext_120ep started :: Tue Jul 28 18:27:55 UTC 2026 =====
+===== TRAIN ref_blackbox_convnext_120ep finished :: Tue Jul 28 23:37:58 UTC 2026 :: exit 0 =====
+
+===== EVAL ref_blackbox_convnext_120ep started :: Tue Jul 28 23:37:58 UTC 2026 =====
+===== EVAL ref_blackbox_convnext_120ep finished :: Wed Jul 29 01:59:44 UTC 2026 :: exit 0 =====
+
+===== TRAIN A2_bcos_mobilevit_120ep started :: Wed Jul 29 01:59:44 UTC 2026 =====
+===== TRAIN A2_bcos_mobilevit_120ep finished :: Wed Jul 29 07:06:18 UTC 2026 :: exit 0 =====
+
+===== EVAL A2_bcos_mobilevit_120ep started :: Wed Jul 29 07:06:18 UTC 2026 =====
+===== EVAL A2_bcos_mobilevit_120ep finished :: Wed Jul 29 10:01:23 UTC 2026 :: exit 0 =====
+
+########## ALL DONE Wed Jul 29 10:01:23 UTC 2026 ##########

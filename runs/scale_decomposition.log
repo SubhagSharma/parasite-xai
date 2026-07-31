@@ -1,0 +1,70 @@
+
+11031 boxes | 11 classes | 13 native sizes -> 13 groups (min 30 boxes)
+design crossing: every group holds >= 1 classes (worst: other); every class spans >= 9 groups (worst: Hymenolepis nana)
+  ** WARNING: design is close to nested. Species size and acquisition
+     scale are then partly the same parameter and the split below is
+     not trustworthy. Pool groups harder with --min-group.
+
+variance of log(apparent egg size) explained
+----------------------------------------------------------
+  species only                       R^2 = 0.7593
+  native image size only             R^2 = 0.2474
+  both                               R^2 = 0.9582
+  unique to acquisition (both-species) = 0.1989
+  unique to species (both-size)        = 0.7108
+
+acquisition scale by native image size   (reference = 1344x1080)
+native size      boxes  rel scale  resample
+----------------------------------------------------------
+  3024x4032       1690     1.733x    0.577x
+  1280x960        1391     1.408x    0.710x
+  1920x1080       1383     1.004x    0.996x
+  2448x3264       1084     1.397x    0.716x
+  3024x2822        837     1.739x    0.575x
+  2117x4032        798     1.733x    0.577x
+  1344x1080        716     1.000x    1.000x
+  896x960          701     1.399x    0.715x
+  1280x672         685     1.409x    0.710x
+  1920x756         658     1.001x    0.999x
+  1714x3264        559     1.393x    0.718x
+  2448x2285        528     1.389x    0.720x
+  other              1     1.018x    0.982x
+
+  scale spread across sources: 1.74x
+
+  wrote resample factors -> runs/scale_factors.json
+
+implied relative egg size, acquisition removed  (smallest = 1.00)
+----------------------------------------------------------
+  Opisthorchis viverrine           1.00x
+  Taenia spp. egg                  1.46x
+  Capillaria philippinensis        1.51x
+  Hymenolepis nana                 1.71x
+  Trichuris trichiura              1.97x
+  Enterobius vermicularis          2.04x
+  Hookworm egg                     2.38x
+  Ascaris lumbricoides             2.43x
+  Hymenolepis diminuta             2.55x
+  Paragonimus spp                  2.77x
+  Fasciolopsis buski               4.62x
+  (sanity check: this ordering should match textbook egg dimensions)
+
+residual class information after scale correction
+feature set                         accuracy  x chance
+----------------------------------------------------------
+  box size, raw pixels               0.5458     6.00x
+  box size, scale-corrected          0.7338     8.07x
+  + position + image size, raw       0.8259     9.09x
+  + position, scale-corrected        0.7821     8.60x
+
+ROI recipe implied by the above
+----------------------------------------------------------
+    1th pct of short side at common scale:      477 px
+    5th pct of short side at common scale:      477 px
+   10th pct of short side at common scale:      640 px
+   25th pct of short side at common scale:      682 px
+   50th pct of short side at common scale:     1080 px
+
+  a window of 477 px at the 1344x1080 scale fits 95% of images
+  99th pct egg long axis at common scale: 407 px
+

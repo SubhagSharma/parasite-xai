@@ -1,0 +1,5 @@
+
+                         run         backbone       head      val     test  params M  size MB
+              crop_cbm_120ep     mobilevit_xs        cbm   0.9976   0.9964     1.939     7.79
+
+appended to runs/accuracy_2x2.tsv

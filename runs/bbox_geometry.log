@@ -1,0 +1,51 @@
+
+11031 boxes  |  11000 images  |  11 classes  |  chance = 0.0909
+classifier: gbm
+
+feature set                    accuracy   x chance
+----------------------------------------------------
+box size (pixels)        0.5428 +/- 0.0067    5.97x
+box position             0.1587 +/- 0.0029    1.75x
+image size only          0.1344 +/- 0.0035    1.48x
+box size (relative)      0.4531 +/- 0.0057    4.98x
+everything               0.8069 +/- 0.0080    8.88x
+
+per-class recall, 'everything' (split 0)
+----------------------------------------------------
+  Ascaris lumbricoides         0.6579   n=304
+  Capillaria philippinensis    0.8800   n=300
+  Enterobius vermicularis      0.8133   n=300
+  Fasciolopsis buski           0.9733   n=300
+  Hookworm egg                 0.6885   n=305
+  Hymenolepis diminuta         0.8733   n=300
+  Hymenolepis nana             0.7741   n=301
+  Opisthorchis viverrine       0.9900   n=300
+  Paragonimus spp              0.7133   n=300
+  Taenia spp. egg              0.8870   n=301
+  Trichuris trichiura          0.6167   n=300
+
+apparent egg scale per class  (PART G item 4)
+class                               area frac %   median box px  img sizes
+----------------------------------------------------------------------------
+  Ascaris lumbricoides          1.33 [0.91-3.98]     245x244          12
+  Capillaria philippinensis     0.40 [0.27-0.99]     130x126           9
+  Enterobius vermicularis       0.68 [0.46-1.55]     168x167           9
+  Fasciolopsis buski            3.84 [2.59-9.54]     407x406          12
+  Hookworm egg                  1.10 [0.77-3.37]     221x227          12
+  Hymenolepis diminuta          1.60 [1.10-3.26]     299x299           9
+  Hymenolepis nana              0.70 [0.45-1.64]     196x193           9
+  Opisthorchis viverrine        0.18 [0.12-0.49]      88x91           12
+  Paragonimus spp               1.49 [1.02-4.10]     277x264           9
+  Taenia spp. egg               0.50 [0.36-1.70]     154x156          12
+  Trichuris trichiura           0.63 [0.43-1.78]     165x164          13
+
+  1st-99th pct of egg area fraction: 0.10% - 17.77%
+  a square of side 0.536 x min(W,H) covers 99% of boxes -> use --fixed-frac 0.54 if a fixed-size mask is needed
+
+====================================================
+VERDICT   geometry alone -> 0.8069  (8.88x chance)
+  LEAK SEVERE. A per-box mask would make B4.1 uninterpretable.
+  Fixed-size mask is mandatory; re-run this probe on the fixed mask
+  geometry (position + image size only) to confirm it drops to chance.
+====================================================
+

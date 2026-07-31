@@ -1,0 +1,590 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Unsupported operator aten::gelu encountered 18 time(s)
+Unsupported operator aten::mul encountered 18 time(s)
+Unsupported operator aten::add encountered 18 time(s)
+[evaluate] === gradcam ===
+ModelParameterRandomisation metric has been renamed to MPRT and will be removed in future releases. Please call quantus.MPRT() instead.
+This change is effective from Quantus version 0.5.0. Note: MPRT is functionally identical to ModelParameterRandomisation and can be used in the same way.
+faithfulness batches:   0%|                                                                                                                                                  | 0/8 [00:00<?, ?it/s]
+batch 0 metrics:   0%|                                                                                                                                                       | 0/5 [00:00<?, ?it/s][A
+batch 0 metrics:  20%|████████████████████████████▌                                                                                                                  | 1/5 [00:01<00:04,  1.12s/it][A
+batch 0 metrics:  40%|█████████████████████████████████████████████████████████▏                                                                                     | 2/5 [00:29<00:52, 17.36s/it][A
+batch 0 metrics:  60%|█████████████████████████████████████████████████████████████████████████████████████▊                                                         | 3/5 [01:01<00:48, 24.08s/it][A
+batch 0 metrics:  80%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████▍                            | 4/5 [01:08<00:17, 17.29s/it][A
+batch 0 metrics: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 5/5 [01:11<00:00, 11.89s/it][A
+                                                                                                                                                                                                   [Afaithfulness batches:  12%|█████████████████▎                                                                                                                        | 1/8 [01:13<08:34, 73.48s/it]
+batch 1 metrics:   0%|                                                                                                                                                       | 0/5 [00:00<?, ?it/s][A
+batch 1 metrics:  20%|████████████████████████████▌                                                                                                                  | 1/5 [00:01<00:04,  1.06s/it][A
+batch 1 metrics:  40%|█████████████████████████████████████████████████████████▏                                                                                     | 2/5 [00:29<00:51, 17.23s/it][A
+batch 1 metrics:  60%|█████████████████████████████████████████████████████████████████████████████████████▊                                                         | 3/5 [01:01<00:47, 23.91s/it][A
+batch 1 metrics:  80%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████▍                            | 4/5 [01:07<00:17, 17.04s/it][A
+batch 1 metrics: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 5/5 [01:10<00:00, 11.73s/it][A
+                                                                                                                                                                                                   [Afaithfulness batches:  25%|██████████████████████████████████▌                                                                                                       | 2/8 [02:23<07:09, 71.63s/it]
+batch 2 metrics:   0%|                                                                                                                                                       | 0/3 [00:00<?, ?it/s][A
+batch 2 metrics:  33%|███████████████████████████████████████████████▋                                                                                               | 1/3 [00:01<00:02,  1.04s/it][A
+batch 2 metrics:  67%|███████████████████████████████████████████████████████████████████████████████████████████████▎                                               | 2/3 [00:29<00:17, 17.26s/it][A
+batch 2 metrics: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:01<00:00, 23.91s/it][A
+                                                                                                                                                                                                   [Afaithfulness batches:  38%|███████████████████████████████████████████████████▊                                                                                      | 3/8 [03:25<05:35, 67.01s/it]
+batch 3 metrics:   0%|                                                                                                                                                       | 0/3 [00:00<?, ?it/s][A
+batch 3 metrics:  33%|███████████████████████████████████████████████▋                                                                                               | 1/3 [00:01<00:02,  1.02s/it][A
+batch 3 metrics:  67%|███████████████████████████████████████████████████████████████████████████████████████████████▎                                               | 2/3 [00:29<00:17, 17.21s/it][A
+batch 3 metrics: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:01<00:00, 23.81s/it][A
+                                                                                                                                                                                                   [Afaithfulness batches:  50%|█████████████████████████████████████████████████████████████████████                                                                     | 4/8 [04:26<04:18, 64.74s/it]
+batch 4 metrics:   0%|                                                                                                                                                       | 0/3 [00:00<?, ?it/s][A
+batch 4 metrics:  33%|███████████████████████████████████████████████▋                                                                                               | 1/3 [00:01<00:02,  1.01s/it][A
+batch 4 metrics:  67%|███████████████████████████████████████████████████████████████████████████████████████████████▎                                               | 2/3 [00:29<00:17, 17.19s/it][A
+batch 4 metrics: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:01<00:00, 23.85s/it][A
+                                                                                                                                                                                                   [Afaithfulness batches:  62%|██████████████████████████████████████████████████████████████████████████████████████▎                                                   | 5/8 [05:27<03:10, 63.51s/it]
+batch 5 metrics:   0%|                                                                                                                                                       | 0/3 [00:00<?, ?it/s][A
+batch 5 metrics:  33%|███████████████████████████████████████████████▋                                                                                               | 1/3 [00:01<00:02,  1.04s/it][A
+batch 5 metrics:  67%|███████████████████████████████████████████████████████████████████████████████████████████████▎                                               | 2/3 [00:29<00:17, 17.12s/it][A
+batch 5 metrics: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:01<00:00, 23.77s/it][A
+                                                                                                                                                                                                   [Afaithfulness batches:  75%|███████████████████████████████████████████████████████████████████████████████████████████████████████▌                                  | 6/8 [06:29<02:05, 62.71s/it]
+batch 6 metrics:   0%|                                                                                                                                                       | 0/3 [00:00<?, ?it/s][A
+batch 6 metrics:  33%|███████████████████████████████████████████████▋                                                                                               | 1/3 [00:01<00:02,  1.01s/it][A
+batch 6 metrics:  67%|███████████████████████████████████████████████████████████████████████████████████████████████▎                                               | 2/3 [00:29<00:17, 17.15s/it][A
+batch 6 metrics: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:01<00:00, 23.78s/it][A
+                                                                                                                                                                                                   [Afaithfulness batches:  88%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▊                 | 7/8 [07:30<01:02, 62.21s/it]
+batch 7 metrics:   0%|                                                                                                                                                       | 0/3 [00:00<?, ?it/s][A
+batch 7 metrics:  33%|███████████████████████████████████████████████▋                                                                                               | 1/3 [00:01<00:02,  1.01s/it][A
+batch 7 metrics:  67%|███████████████████████████████████████████████████████████████████████████████████████████████▎                                               | 2/3 [00:29<00:17, 17.19s/it][A
+batch 7 metrics: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:01<00:00, 23.85s/it][A
+                                                                                                                                                                                                   [Afaithfulness batches: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 8/8 [08:31<00:00, 61.93s/it]faithfulness batches: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 8/8 [08:34<00:00, 64.25s/it]
+[evaluate] === hirescam ===
+ModelParameterRandomisation metric has been renamed to MPRT and will be removed in future releases. Please call quantus.MPRT() instead.
+This change is effective from Quantus version 0.5.0. Note: MPRT is functionally identical to ModelParameterRandomisation and can be used in the same way.
+faithfulness batches:   0%|                                                                                                                                                  | 0/8 [00:00<?, ?it/s]
+batch 0 metrics:   0%|                                                                                                                                                       | 0/5 [00:00<?, ?it/s][A
+batch 0 metrics:  20%|████████████████████████████▌                                                                                                                  | 1/5 [00:01<00:04,  1.01s/it][A
+batch 0 metrics:  40%|█████████████████████████████████████████████████████████▏                                                                                     | 2/5 [00:29<00:51, 17.06s/it][A
+batch 0 metrics:  60%|█████████████████████████████████████████████████████████████████████████████████████▊                                                         | 3/5 [01:01<00:47, 23.85s/it][A
+batch 0 metrics:  80%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████▍                            | 4/5 [01:07<00:16, 16.94s/it][A
+batch 0 metrics: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 5/5 [01:09<00:00, 11.59s/it][A
+                                                                                                                                                                                                   [Afaithfulness batches:  12%|█████████████████▎                                                                                                                        | 1/8 [01:13<08:31, 73.02s/it]
+batch 1 metrics:   0%|                                                                                                                                                       | 0/5 [00:00<?, ?it/s][A
+batch 1 metrics:  20%|████████████████████████████▌                                                                                                                  | 1/5 [00:00<00:03,  1.10it/s][A
+batch 1 metrics:  40%|█████████████████████████████████████████████████████████▏                                                                                     | 2/5 [00:29<00:51, 17.05s/it][A
+batch 1 metrics:  60%|█████████████████████████████████████████████████████████████████████████████████████▊                                                         | 3/5 [01:00<00:47, 23.74s/it][A
+batch 1 metrics:  80%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████▍                            | 4/5 [01:07<00:16, 16.91s/it][A
+batch 1 metrics: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 5/5 [01:09<00:00, 11.55s/it][A
+                                                                                                                                                                                                   [Afaithfulness batches:  25%|██████████████████████████████████▌                                                                                                       | 2/8 [02:22<07:06, 71.00s/it]
+batch 2 metrics:   0%|                                                                                                                                                       | 0/3 [00:00<?, ?it/s][A
+batch 2 metrics:  33%|███████████████████████████████████████████████▋                                                                                               | 1/3 [00:00<00:01,  1.12it/s][A
+batch 2 metrics:  67%|███████████████████████████████████████████████████████████████████████████████████████████████▎                                               | 2/3 [00:29<00:16, 17.00s/it][A
+batch 2 metrics: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:00<00:00, 23.67s/it][A
+                                                                                                                                                                                                   [Afaithfulness batches:  38%|███████████████████████████████████████████████████▊                                                                                      | 3/8 [03:23<05:32, 66.40s/it]
+batch 3 metrics:   0%|                                                                                                                                                       | 0/3 [00:00<?, ?it/s][A
+batch 3 metrics:  33%|███████████████████████████████████████████████▋                                                                                               | 1/3 [00:00<00:01,  1.10it/s][A
+batch 3 metrics:  67%|███████████████████████████████████████████████████████████████████████████████████████████████▎                                               | 2/3 [00:29<00:17, 17.09s/it][A
+batch 3 metrics: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:01<00:00, 23.82s/it][A
+                                                                                                                                                                                                   [Afaithfulness batches:  50%|█████████████████████████████████████████████████████████████████████                                                                     | 4/8 [04:24<04:17, 64.38s/it]
+batch 4 metrics:   0%|                                                                                                                                                       | 0/3 [00:00<?, ?it/s][A
+batch 4 metrics:  33%|███████████████████████████████████████████████▋                                                                                               | 1/3 [00:00<00:01,  1.08it/s][A
+batch 4 metrics:  67%|███████████████████████████████████████████████████████████████████████████████████████████████▎                                               | 2/3 [00:29<00:17, 17.05s/it][A
+batch 4 metrics: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:01<00:00, 23.76s/it][A
+                                                                                                                                                                                                   [Afaithfulness batches:  62%|██████████████████████████████████████████████████████████████████████████████████████▎                                                   | 5/8 [05:25<03:09, 63.22s/it]
+batch 5 metrics:   0%|                                                                                                                                                       | 0/3 [00:00<?, ?it/s][A
+batch 5 metrics:  33%|███████████████████████████████████████████████▋                                                                                               | 1/3 [00:00<00:01,  1.08it/s][A
+batch 5 metrics:  67%|███████████████████████████████████████████████████████████████████████████████████████████████▎                                               | 2/3 [00:29<00:17, 17.10s/it][A
+batch 5 metrics: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:01<00:00, 23.78s/it][A
+                                                                                                                                                                                                   [Afaithfulness batches:  75%|███████████████████████████████████████████████████████████████████████████████████████████████████████▌                                  | 6/8 [06:27<02:05, 62.55s/it]
+batch 6 metrics:   0%|                                                                                                                                                       | 0/3 [00:00<?, ?it/s][A
+batch 6 metrics:  33%|███████████████████████████████████████████████▋                                                                                               | 1/3 [00:00<00:01,  1.09it/s][A
+batch 6 metrics:  67%|███████████████████████████████████████████████████████████████████████████████████████████████▎                                               | 2/3 [00:29<00:17, 17.07s/it][A
+batch 6 metrics: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:01<00:00, 23.77s/it][A
+                                                                                                                                                                                                   [Afaithfulness batches:  88%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▊                 | 7/8 [07:28<01:02, 62.10s/it]
+batch 7 metrics:   0%|                                                                                                                                                       | 0/3 [00:00<?, ?it/s][A
+batch 7 metrics:  33%|███████████████████████████████████████████████▋                                                                                               | 1/3 [00:00<00:01,  1.07it/s][A
+batch 7 metrics:  67%|███████████████████████████████████████████████████████████████████████████████████████████████▎                                               | 2/3 [00:29<00:17, 17.08s/it][A
+batch 7 metrics: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:01<00:00, 23.78s/it][A
+                                                                                                                                                                                                   [Afaithfulness batches: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 8/8 [08:29<00:00, 61.82s/it]faithfulness batches: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 8/8 [08:31<00:00, 63.98s/it]
+[evaluate] === integrated_gradients ===
+ModelParameterRandomisation metric has been renamed to MPRT and will be removed in future releases. Please call quantus.MPRT() instead.
+This change is effective from Quantus version 0.5.0. Note: MPRT is functionally identical to ModelParameterRandomisation and can be used in the same way.
+faithfulness batches:   0%|                                                                                                                                                  | 0/8 [00:00<?, ?it/s]/usr/local/lib/python3.12/dist-packages/captum/attr/_utils/batching.py:51: UserWarning: Internal batch size cannot be less than the number of input examples. Defaulting to internal batch size of 32 equal to the number of examples.
+  warnings.warn(
+
+batch 0 metrics:   0%|                                                                                                                                                       | 0/5 [00:00<?, ?it/s][A
+batch 0 metrics:  20%|████████████████████████████▌                                                                                                                  | 1/5 [00:01<00:05,  1.29s/it][A
+batch 0 metrics:  40%|█████████████████████████████████████████████████████████▏                                                                                     | 2/5 [00:29<00:52, 17.38s/it][A
+batch 0 metrics:  60%|█████████████████████████████████████████████████████████████████████████████████████▊                                                         | 3/5 [01:02<00:48, 24.18s/it][A
+batch 0 metrics:  80%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████▍                            | 4/5 [01:27<00:24, 24.71s/it][A
+batch 0 metrics: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 5/5 [01:34<00:00, 18.17s/it][A
+                                                                                                                                                                                                   [Afaithfulness batches:  12%|█████████████████▎                                                                                                                        | 1/8 [01:38<11:28, 98.40s/it]
+batch 1 metrics:   0%|                                                                                                                                                       | 0/5 [00:00<?, ?it/s][A
+batch 1 metrics:  20%|████████████████████████████▌                                                                                                                  | 1/5 [00:01<00:04,  1.25s/it][A
+batch 1 metrics:  40%|█████████████████████████████████████████████████████████▏                                                                                     | 2/5 [00:30<00:52, 17.43s/it][A
+batch 1 metrics:  60%|█████████████████████████████████████████████████████████████████████████████████████▊                                                         | 3/5 [01:02<00:48, 24.18s/it][A
+batch 1 metrics:  80%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████▍                            | 4/5 [01:27<00:24, 24.72s/it][A
+batch 1 metrics: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 5/5 [01:34<00:00, 18.17s/it][A
+                                                                                                                                                                                                   [Afaithfulness batches:  25%|██████████████████████████████████▌                                                                                                       | 2/8 [03:14<09:42, 97.00s/it]
+batch 2 metrics:   0%|                                                                                                                                                       | 0/3 [00:00<?, ?it/s][A
+batch 2 metrics:  33%|███████████████████████████████████████████████▋                                                                                               | 1/3 [00:01<00:02,  1.23s/it][A
+batch 2 metrics:  67%|███████████████████████████████████████████████████████████████████████████████████████████████▎                                               | 2/3 [00:29<00:17, 17.39s/it][A
+batch 2 metrics: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:01<00:00, 24.05s/it][A
+                                                                                                                                                                                                   [Afaithfulness batches:  38%|███████████████████████████████████████████████████▊                                                                                      | 3/8 [04:18<06:48, 81.76s/it]
+batch 3 metrics:   0%|                                                                                                                                                       | 0/3 [00:00<?, ?it/s][A
+batch 3 metrics:  33%|███████████████████████████████████████████████▋                                                                                               | 1/3 [00:01<00:02,  1.26s/it][A
+batch 3 metrics:  67%|███████████████████████████████████████████████████████████████████████████████████████████████▎                                               | 2/3 [00:30<00:17, 17.45s/it][A
+batch 3 metrics: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:02<00:00, 24.17s/it][A
+                                                                                                                                                                                                   [Afaithfulness batches:  50%|█████████████████████████████████████████████████████████████████████                                                                     | 4/8 [05:21<04:58, 74.70s/it]
+batch 4 metrics:   0%|                                                                                                                                                       | 0/3 [00:00<?, ?it/s][A
+batch 4 metrics:  33%|███████████████████████████████████████████████▋                                                                                               | 1/3 [00:01<00:02,  1.26s/it][A
+batch 4 metrics:  67%|███████████████████████████████████████████████████████████████████████████████████████████████▎                                               | 2/3 [00:29<00:17, 17.41s/it][A
+batch 4 metrics: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:02<00:00, 24.15s/it][A
+                                                                                                                                                                                                   [Afaithfulness batches:  62%|██████████████████████████████████████████████████████████████████████████████████████▎                                                   | 5/8 [06:25<03:32, 70.79s/it]
+batch 5 metrics:   0%|                                                                                                                                                       | 0/3 [00:00<?, ?it/s][A
+batch 5 metrics:  33%|███████████████████████████████████████████████▋                                                                                               | 1/3 [00:01<00:02,  1.26s/it][A
+batch 5 metrics:  67%|███████████████████████████████████████████████████████████████████████████████████████████████▎                                               | 2/3 [00:29<00:17, 17.39s/it][A
+batch 5 metrics: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:01<00:00, 24.05s/it][A
+                                                                                                                                                                                                   [Afaithfulness batches:  75%|███████████████████████████████████████████████████████████████████████████████████████████████████████▌                                  | 6/8 [07:29<02:16, 68.36s/it]
+batch 6 metrics:   0%|                                                                                                                                                       | 0/3 [00:00<?, ?it/s][A
+batch 6 metrics:  33%|███████████████████████████████████████████████▋                                                                                               | 1/3 [00:01<00:02,  1.24s/it][A
+batch 6 metrics:  67%|███████████████████████████████████████████████████████████████████████████████████████████████▎                                               | 2/3 [00:29<00:17, 17.41s/it][A
+batch 6 metrics: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:02<00:00, 24.13s/it][A
+                                                                                                                                                                                                   [Afaithfulness batches:  88%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▊                 | 7/8 [08:33<01:06, 66.86s/it]
+batch 7 metrics:   0%|                                                                                                                                                       | 0/3 [00:00<?, ?it/s][A
+batch 7 metrics:  33%|███████████████████████████████████████████████▋                                                                                               | 1/3 [00:01<00:02,  1.25s/it][A
+batch 7 metrics:  67%|███████████████████████████████████████████████████████████████████████████████████████████████▎                                               | 2/3 [00:29<00:17, 17.42s/it][A
+batch 7 metrics: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:02<00:00, 24.10s/it][A
+                                                                                                                                                                                                   [Afaithfulness batches: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 8/8 [09:36<00:00, 65.87s/it]faithfulness batches: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 8/8 [09:39<00:00, 72.39s/it]
+[evaluate] === lime ===
+ModelParameterRandomisation metric has been renamed to MPRT and will be removed in future releases. Please call quantus.MPRT() instead.
+This change is effective from Quantus version 0.5.0. Note: MPRT is functionally identical to ModelParameterRandomisation and can be used in the same way.
+faithfulness batches:   0%|                                                                                                                                                  | 0/8 [00:00<?, ?it/s]/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+
+batch 0 metrics:   0%|                                                                                                                                                       | 0/5 [00:00<?, ?it/s][A
+batch 0 metrics:  20%|████████████████████████████▌                                                                                                                  | 1/5 [00:00<00:03,  1.27it/s][A
+batch 0 metrics:  40%|█████████████████████████████████████████████████████████▏                                                                                     | 2/5 [00:28<00:50, 16.78s/it][A
+batch 0 metrics:  60%|█████████████████████████████████████████████████████████████████████████████████████▊                                                         | 3/5 [01:00<00:47, 23.64s/it][A/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+
+batch 0 metrics:  80%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████▌                            | 4/5 [10:18<03:54, 234.76s/it][A/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/numpy/lib/_function_base_impl.py:2999: RuntimeWarning: invalid value encountered in divide
+  c /= stddev[:, None]
+/usr/local/lib/python3.12/dist-packages/numpy/lib/_function_base_impl.py:3000: RuntimeWarning: invalid value encountered in divide
+  c /= stddev[None, :]
+
+batch 0 metrics: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 5/5 [12:11<00:00, 190.54s/it][A
+                                                                                                                                                                                                   [Afaithfulness batches:  12%|████████████████▉                                                                                                                      | 1/8 [13:10<1:32:11, 790.21s/it]/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+
+batch 1 metrics:   0%|                                                                                                                                                       | 0/5 [00:00<?, ?it/s][A
+batch 1 metrics:  20%|████████████████████████████▌                                                                                                                  | 1/5 [00:00<00:03,  1.28it/s][A
+batch 1 metrics:  40%|█████████████████████████████████████████████████████████▏                                                                                     | 2/5 [00:28<00:50, 16.85s/it][A
+batch 1 metrics:  60%|█████████████████████████████████████████████████████████████████████████████████████▊                                                         | 3/5 [01:00<00:47, 23.61s/it][A/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+
+batch 1 metrics:  80%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████▌                            | 4/5 [10:23<03:56, 236.58s/it][A/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/numpy/lib/_function_base_impl.py:2999: RuntimeWarning: invalid value encountered in divide
+  c /= stddev[:, None]
+/usr/local/lib/python3.12/dist-packages/numpy/lib/_function_base_impl.py:3000: RuntimeWarning: invalid value encountered in divide
+  c /= stddev[None, :]
+
+batch 1 metrics: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 5/5 [12:16<00:00, 192.01s/it][A
+                                                                                                                                                                                                   [Afaithfulness batches:  25%|█████████████████████████████████▊                                                                                                     | 2/8 [26:22<1:19:06, 791.16s/it]/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+
+batch 2 metrics:   0%|                                                                                                                                                       | 0/3 [00:00<?, ?it/s][A
+batch 2 metrics:  33%|███████████████████████████████████████████████▋                                                                                               | 1/3 [00:00<00:01,  1.28it/s][A
+batch 2 metrics:  67%|███████████████████████████████████████████████████████████████████████████████████████████████▎                                               | 2/3 [00:28<00:16, 16.91s/it][A
+batch 2 metrics: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:00<00:00, 23.71s/it][A
+                                                                                                                                                                                                   [Afaithfulness batches:  38%|███████████████████████████████████████████████████▍                                                                                     | 3/8 [28:19<40:17, 483.46s/it]/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+
+batch 3 metrics:   0%|                                                                                                                                                       | 0/3 [00:00<?, ?it/s][A
+batch 3 metrics:  33%|███████████████████████████████████████████████▋                                                                                               | 1/3 [00:00<00:01,  1.26it/s][A
+batch 3 metrics:  67%|███████████████████████████████████████████████████████████████████████████████████████████████▎                                               | 2/3 [00:29<00:16, 16.95s/it][A
+batch 3 metrics: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:00<00:00, 23.70s/it][A
+                                                                                                                                                                                                   [Afaithfulness batches:  50%|████████████████████████████████████████████████████████████████████▌                                                                    | 4/8 [30:16<22:35, 338.96s/it]/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+
+batch 4 metrics:   0%|                                                                                                                                                       | 0/3 [00:00<?, ?it/s][A
+batch 4 metrics:  33%|███████████████████████████████████████████████▋                                                                                               | 1/3 [00:00<00:01,  1.28it/s][A
+batch 4 metrics:  67%|███████████████████████████████████████████████████████████████████████████████████████████████▎                                               | 2/3 [00:28<00:16, 16.88s/it][A
+batch 4 metrics: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:00<00:00, 23.62s/it][A
+                                                                                                                                                                                                   [Afaithfulness batches:  62%|█████████████████████████████████████████████████████████████████████████████████████▋                                                   | 5/8 [32:13<12:56, 258.98s/it]/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+
+batch 5 metrics:   0%|                                                                                                                                                       | 0/3 [00:00<?, ?it/s][A
+batch 5 metrics:  33%|███████████████████████████████████████████████▋                                                                                               | 1/3 [00:00<00:01,  1.27it/s][A
+batch 5 metrics:  67%|███████████████████████████████████████████████████████████████████████████████████████████████▎                                               | 2/3 [00:28<00:16, 16.91s/it][A
+batch 5 metrics: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:00<00:00, 23.72s/it][A
+                                                                                                                                                                                                   [Afaithfulness batches:  75%|██████████████████████████████████████████████████████████████████████████████████████████████████████▊                                  | 6/8 [34:11<07:01, 210.77s/it]/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+
+batch 6 metrics:   0%|                                                                                                                                                       | 0/3 [00:00<?, ?it/s][A
+batch 6 metrics:  33%|███████████████████████████████████████████████▋                                                                                               | 1/3 [00:00<00:01,  1.28it/s][A
+batch 6 metrics:  67%|███████████████████████████████████████████████████████████████████████████████████████████████▎                                               | 2/3 [00:28<00:16, 16.91s/it][A
+batch 6 metrics: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:00<00:00, 23.67s/it][A
+                                                                                                                                                                                                   [Afaithfulness batches:  88%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▉                 | 7/8 [36:07<03:00, 180.05s/it]/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+
+batch 7 metrics:   0%|                                                                                                                                                       | 0/3 [00:00<?, ?it/s][A
+batch 7 metrics:  33%|███████████████████████████████████████████████▋                                                                                               | 1/3 [00:00<00:01,  1.28it/s][A
+batch 7 metrics:  67%|███████████████████████████████████████████████████████████████████████████████████████████████▎                                               | 2/3 [00:28<00:16, 16.81s/it][A
+batch 7 metrics: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:00<00:00, 23.57s/it][A
+                                                                                                                                                                                                   [Afaithfulness batches: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 8/8 [38:04<00:00, 159.93s/it]faithfulness batches: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 8/8 [38:06<00:00, 285.87s/it]
+[evaluate] === kernelshap ===
+ModelParameterRandomisation metric has been renamed to MPRT and will be removed in future releases. Please call quantus.MPRT() instead.
+This change is effective from Quantus version 0.5.0. Note: MPRT is functionally identical to ModelParameterRandomisation and can be used in the same way.
+faithfulness batches:   0%|                                                                                                                                                  | 0/8 [00:00<?, ?it/s]/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+
+batch 0 metrics:   0%|                                                                                                                                                       | 0/5 [00:00<?, ?it/s][A
+batch 0 metrics:  20%|████████████████████████████▌                                                                                                                  | 1/5 [00:00<00:03,  1.07it/s][A
+batch 0 metrics:  40%|█████████████████████████████████████████████████████████▏                                                                                     | 2/5 [00:29<00:50, 16.98s/it][A
+batch 0 metrics:  60%|█████████████████████████████████████████████████████████████████████████████████████▊                                                         | 3/5 [01:01<00:47, 23.80s/it][A/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+
+batch 0 metrics:  80%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████▌                            | 4/5 [09:49<03:43, 223.15s/it][A/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+
+batch 0 metrics: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 5/5 [11:36<00:00, 181.20s/it][A
+                                                                                                                                                                                                   [Afaithfulness batches:  12%|████████████████▉                                                                                                                      | 1/8 [12:32<1:27:44, 752.02s/it]/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+
+batch 1 metrics:   0%|                                                                                                                                                       | 0/5 [00:00<?, ?it/s][A
+batch 1 metrics:  20%|████████████████████████████▌                                                                                                                  | 1/5 [00:00<00:03,  1.21it/s][A
+batch 1 metrics:  40%|█████████████████████████████████████████████████████████▏                                                                                     | 2/5 [00:28<00:50, 16.91s/it][A
+batch 1 metrics:  60%|█████████████████████████████████████████████████████████████████████████████████████▊                                                         | 3/5 [01:00<00:47, 23.67s/it][A/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+
+batch 1 metrics:  80%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████▌                            | 4/5 [09:52<03:44, 224.35s/it][A/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+
+batch 1 metrics: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 5/5 [11:37<00:00, 181.30s/it][A
+                                                                                                                                                                                                   [Afaithfulness batches:  25%|█████████████████████████████████▊                                                                                                     | 2/8 [25:02<1:15:07, 751.27s/it]/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+
+batch 2 metrics:   0%|                                                                                                                                                       | 0/3 [00:00<?, ?it/s][A
+batch 2 metrics:  33%|███████████████████████████████████████████████▋                                                                                               | 1/3 [00:00<00:01,  1.22it/s][A
+batch 2 metrics:  67%|███████████████████████████████████████████████████████████████████████████████████████████████▎                                               | 2/3 [00:29<00:16, 16.96s/it][A
+batch 2 metrics: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:00<00:00, 23.79s/it][A
+                                                                                                                                                                                                   [Afaithfulness batches:  38%|███████████████████████████████████████████████████▍                                                                                     | 3/8 [26:55<38:18, 459.69s/it]/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+
+batch 3 metrics:   0%|                                                                                                                                                       | 0/3 [00:00<?, ?it/s][A
+batch 3 metrics:  33%|███████████████████████████████████████████████▋                                                                                               | 1/3 [00:00<00:01,  1.25it/s][A
+batch 3 metrics:  67%|███████████████████████████████████████████████████████████████████████████████████████████████▎                                               | 2/3 [00:28<00:16, 16.87s/it][A
+batch 3 metrics: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:00<00:00, 23.61s/it][A
+                                                                                                                                                                                                   [Afaithfulness batches:  50%|████████████████████████████████████████████████████████████████████▌                                                                    | 4/8 [28:47<21:29, 322.46s/it]/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+
+batch 4 metrics:   0%|                                                                                                                                                       | 0/3 [00:00<?, ?it/s][A
+batch 4 metrics:  33%|███████████████████████████████████████████████▋                                                                                               | 1/3 [00:00<00:01,  1.24it/s][A
+batch 4 metrics:  67%|███████████████████████████████████████████████████████████████████████████████████████████████▎                                               | 2/3 [00:28<00:16, 16.85s/it][A
+batch 4 metrics: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:00<00:00, 23.70s/it][A
+                                                                                                                                                                                                   [Afaithfulness batches:  62%|█████████████████████████████████████████████████████████████████████████████████████▋                                                   | 5/8 [30:40<12:20, 246.96s/it]/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+
+batch 5 metrics:   0%|                                                                                                                                                       | 0/3 [00:00<?, ?it/s][A
+batch 5 metrics:  33%|███████████████████████████████████████████████▋                                                                                               | 1/3 [00:00<00:01,  1.20it/s][A
+batch 5 metrics:  67%|███████████████████████████████████████████████████████████████████████████████████████████████▎                                               | 2/3 [00:29<00:16, 16.97s/it][A
+batch 5 metrics: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:00<00:00, 23.74s/it][A
+                                                                                                                                                                                                   [Afaithfulness batches:  75%|██████████████████████████████████████████████████████████████████████████████████████████████████████▊                                  | 6/8 [32:33<06:42, 201.40s/it]/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+
+batch 6 metrics:   0%|                                                                                                                                                       | 0/3 [00:00<?, ?it/s][A
+batch 6 metrics:  33%|███████████████████████████████████████████████▋                                                                                               | 1/3 [00:00<00:01,  1.25it/s][A
+batch 6 metrics:  67%|███████████████████████████████████████████████████████████████████████████████████████████████▎                                               | 2/3 [00:28<00:16, 16.90s/it][A
+batch 6 metrics: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:00<00:00, 23.66s/it][A
+                                                                                                                                                                                                   [Afaithfulness batches:  88%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▉                 | 7/8 [34:25<02:52, 172.28s/it]/usr/local/lib/python3.12/dist-packages/captum/attr/_core/lime.py:1169: UserWarning: You are providing multiple inputs for Lime / Kernel SHAP attributions. This trains a separate interpretable model for each example, which can be time consuming. It is recommended to compute attributions for one example at a time.
+  warnings.warn(
+
+batch 7 metrics:   0%|                                                                                                                                                       | 0/3 [00:00<?, ?it/s][A
+batch 7 metrics:  33%|███████████████████████████████████████████████▋                                                                                               | 1/3 [00:00<00:01,  1.25it/s][A
+batch 7 metrics:  67%|███████████████████████████████████████████████████████████████████████████████████████████████▎                                               | 2/3 [00:29<00:16, 16.97s/it][A
+batch 7 metrics: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [01:01<00:00, 23.80s/it][A
+                                                                                                                                                                                                   [Afaithfulness batches: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 8/8 [36:18<00:00, 153.28s/it]faithfulness batches: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 8/8 [36:20<00:00, 272.60s/it]
+{
+  "methods": {
+    "gradcam": {
+      "faithfulness": {
+        "deletion": 0.16719841880451133,
+        "insertion": 258.3662730156793,
+        "infidelity": 67343185.38294983,
+        "sensitivity": 0.23570235015358776,
+        "sanity_check": 0.3334597843731454
+      },
+      "n_samples": {
+        "deletion": 256,
+        "insertion": 256,
+        "infidelity": 256,
+        "sensitivity": 64,
+        "sanity_check": 64
+      },
+      "failures": {
+        "deletion": 0,
+        "insertion": 0,
+        "infidelity": 0,
+        "sensitivity": 0,
+        "sanity_check": 0
+      },
+      "batches_used": {
+        "deletion": 8,
+        "insertion": 8,
+        "infidelity": 8,
+        "sensitivity": 2,
+        "sanity_check": 2
+      },
+      "explainer_determinism": 1.0,
+      "sanity_collapse_batches": 0,
+      "passes": 2,
+      "aggregate": 0.6474447824768644
+    },
+    "hirescam": {
+      "faithfulness": {
+        "deletion": 0.10671901754404603,
+        "insertion": 196.57605374377454,
+        "infidelity": 292.40921914880164,
+        "sensitivity": 0.43848861497826874,
+        "sanity_check": 0.05398350072722255
+      },
+      "n_samples": {
+        "deletion": 256,
+        "insertion": 256,
+        "infidelity": 256,
+        "sensitivity": 64,
+        "sanity_check": 64
+      },
+      "failures": {
+        "deletion": 0,
+        "insertion": 0,
+        "infidelity": 0,
+        "sensitivity": 0,
+        "sanity_check": 0
+      },
+      "batches_used": {
+        "deletion": 8,
+        "insertion": 8,
+        "infidelity": 8,
+        "sensitivity": 2,
+        "sanity_check": 2
+      },
+      "explainer_determinism": 1.0,
+      "sanity_collapse_batches": 0,
+      "passes": 2,
+      "aggregate": 0.8059471469637953
+    },
+    "integrated_gradients": {
+      "faithfulness": {
+        "deletion": 0.4272240499390413,
+        "insertion": 109.52577774084148,
+        "infidelity": 71986098.0991211,
+        "sensitivity": 0.5016613905318081,
+        "sanity_check": 0.5690138369473476
+      },
+      "n_samples": {
+        "deletion": 256,
+        "insertion": 256,
+        "infidelity": 256,
+        "sensitivity": 64,
+        "sanity_check": 64
+      },
+      "failures": {
+        "deletion": 0,
+        "insertion": 0,
+        "infidelity": 0,
+        "sensitivity": 0,
+        "sanity_check": 0
+      },
+      "batches_used": {
+        "deletion": 8,
+        "insertion": 8,
+        "infidelity": 8,
+        "sensitivity": 2,
+        "sanity_check": 2
+      },
+      "explainer_determinism": 1.0,
+      "sanity_collapse_batches": 0,
+      "passes": 64,
+      "aggregate": 0.5168126164924344
+    },
+    "lime": {
+      "faithfulness": {
+        "deletion": 0.41521079382955706,
+        "insertion": 112.6512440721308,
+        "infidelity": 7434083020.5,
+        "sensitivity": 0.6281328122131526,
+        "sanity_check": 0.15601446359230095
+      },
+      "n_samples": {
+        "deletion": 256,
+        "insertion": 256,
+        "infidelity": 256,
+        "sensitivity": 64,
+        "sanity_check": 53
+      },
+      "failures": {
+        "deletion": 0,
+        "insertion": 0,
+        "infidelity": 0,
+        "sensitivity": 0,
+        "sanity_check": 0
+      },
+      "batches_used": {
+        "deletion": 8,
+        "insertion": 8,
+        "infidelity": 8,
+        "sensitivity": 2,
+        "sanity_check": 2
+      },
+      "explainer_determinism": 0.24855322911117989,
+      "sanity_collapse_batches": 0,
+      "passes": 1000,
+      "aggregate": 0.6265948385299174
+    },
+    "kernelshap": {
+      "faithfulness": {
+        "deletion": 0.3568360843012752,
+        "insertion": 118.51701820014523,
+        "infidelity": 435389001548.0,
+        "sensitivity": 0.8753782026469707,
+        "sanity_check": 0.016172447213321124
+      },
+      "n_samples": {
+        "deletion": 256,
+        "insertion": 256,
+        "infidelity": 256,
+        "sensitivity": 64,
+        "sanity_check": 64
+      },
+      "failures": {
+        "deletion": 0,
+        "insertion": 0,
+        "infidelity": 0,
+        "sensitivity": 0,
+        "sanity_check": 0
+      },
+      "batches_used": {
+        "deletion": 8,
+        "insertion": 8,
+        "infidelity": 8,
+        "sensitivity": 2,
+        "sanity_check": 2
+      },
+      "explainer_determinism": 0.015235246731231403,
+      "sanity_collapse_batches": 0,
+      "passes": 1000,
+      "aggregate": 0.43184144521196455
+    }
+  },
+  "accuracy": 0.9709267110841914,
+  "cost_model": {
+    "params_M": 27.827,
+    "size_MB": 111.31,
+    "flops_G": 4.47,
+    "latency_cpu_ms": 55.72
+  },
+  "eval_setup": {
+    "batch_size": 32,
+    "img_size": 224,
+    "faithfulness_batches": 8,
+    "images_scored": 256,
+    "metrics": [
+      "deletion",
+      "insertion",
+      "infidelity",
+      "sensitivity",
+      "sanity_check"
+    ],
+    "params": {
+      "infidelity_patch_size": 28,
+      "sanity_skip_layers": true,
+      "sanity_layer_order": "top_down"
+    }
+  },
+  "trust": {
+    "temperature": 1.8108341693878174,
+    "ece": 0.011341988807544112,
+    "conformal_qhat": 0.0759316086769104,
+    "avg_set_size": 0.9085402488708496,
+    "empirical_coverage": 0.903694748878479
+  }
+}
+
+Figures + results.json written to ./runs/ref_blackbox_convnext/

@@ -1,0 +1,315 @@
+########## roi477_blackbox ##########
+test set: 1485 images, 1485 with boxes (100.0%)
+box mask : egg long axis 37-166 px (5th-95th), area 11.5% of frame -- VARIES BY CLASS, this is the leak
+fixed mask: side 188 px for every image, area 70.4% of frame -- constant
+mask centre spread: y 0.056, x 0.047 (0 = perfectly centred, so no positional leak)
+
+                         BOX mask (v1)   FIXED mask (v2)
+--------------------------------------------------------
+unmodified                      1.0000            1.0000
+egg masked out                  0.3677            0.1387
+egg only kept                   0.8081            1.0000
+--------------------------------------------------------
+drop, egg removed               63.23p            86.13p
+
+  chance level: 0.0909
+
+=== reading ===
+  mask-geometry leak: +22.90 points (0.3677 box vs 0.1387 fixed)
+  The BOX number was inflated by the shape of the hole. Use the FIXED
+  column; the v1 figure overstates background reliance by that much.
+  Removing the egg hurts (0.1387 vs 1.0000) -- the egg matters.
+  The egg alone is sufficient (1.0000) -- morphology carries the signal.
+
+                   class   normal  noegg_box  noegg_fix  eggonly
+    Ascaris lumbricoides    1.000      0.000      0.000    1.000
+Capillaria philippinensi    1.000      0.902      0.203    1.000
+ Enterobius vermicularis    1.000      0.213      0.000    1.000
+      Fasciolopsis buski    1.000      0.984      0.937    1.000
+            Hookworm egg    1.000      1.000      0.479    1.000
+    Hymenolepis diminuta    1.000      0.000      0.000    1.000
+        Hymenolepis nana    1.000      0.074      0.000    1.000
+  Opisthorchis viverrine    1.000      0.664      0.000    1.000
+         Paragonimus spp    1.000      0.106      0.000    1.000
+         Taenia spp. egg    1.000      0.008      0.000    1.000
+     Trichuris trichiura    1.000      0.174      0.000    1.000
+########## roi477_protopnet ##########
+test set: 1485 images, 1485 with boxes (100.0%)
+box mask : egg long axis 37-166 px (5th-95th), area 11.5% of frame -- VARIES BY CLASS, this is the leak
+fixed mask: side 188 px for every image, area 70.4% of frame -- constant
+mask centre spread: y 0.056, x 0.047 (0 = perfectly centred, so no positional leak)
+
+                         BOX mask (v1)   FIXED mask (v2)
+--------------------------------------------------------
+unmodified                      0.9980            0.9980
+egg masked out                  0.2471            0.1354
+egg only kept                   0.7286            0.9946
+--------------------------------------------------------
+drop, egg removed               75.08p            86.26p
+
+  chance level: 0.0909
+
+=== reading ===
+  mask-geometry leak: +11.18 points (0.2471 box vs 0.1354 fixed)
+  The BOX number was inflated by the shape of the hole. Use the FIXED
+  column; the v1 figure overstates background reliance by that much.
+  Removing the egg hurts (0.1354 vs 0.9980) -- the egg matters.
+  The egg alone is sufficient (0.9946) -- morphology carries the signal.
+
+                   class   normal  noegg_box  noegg_fix  eggonly
+    Ascaris lumbricoides    0.992      0.016      0.281    0.992
+Capillaria philippinensi    1.000      0.538      0.000    1.000
+ Enterobius vermicularis    1.000      0.645      0.000    0.986
+      Fasciolopsis buski    1.000      0.173      0.362    1.000
+            Hookworm egg    1.000      1.000      0.975    1.000
+    Hymenolepis diminuta    0.993      0.000      0.000    0.987
+        Hymenolepis nana    0.993      0.195      0.007    0.993
+  Opisthorchis viverrine    1.000      0.129      0.000    1.000
+         Paragonimus spp    1.000      0.007      0.000    0.986
+         Taenia spp. egg    1.000      0.000      0.000    1.000
+     Trichuris trichiura    1.000      0.050      0.000    1.000
+########## roi477_bcos ##########
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+test set: 1485 images, 1485 with boxes (100.0%)
+box mask : egg long axis 37-166 px (5th-95th), area 11.5% of frame -- VARIES BY CLASS, this is the leak
+fixed mask: side 188 px for every image, area 70.4% of frame -- constant
+mask centre spread: y 0.056, x 0.047 (0 = perfectly centred, so no positional leak)
+
+                         BOX mask (v1)   FIXED mask (v2)
+--------------------------------------------------------
+unmodified                      0.9973            0.9973
+egg masked out                  0.4128            0.2141
+egg only kept                   0.7084            0.9973
+--------------------------------------------------------
+drop, egg removed               58.45p            78.32p
+
+  chance level: 0.0909
+
+=== reading ===
+  mask-geometry leak: +19.87 points (0.4128 box vs 0.2141 fixed)
+  The BOX number was inflated by the shape of the hole. Use the FIXED
+  column; the v1 figure overstates background reliance by that much.
+  Removing the egg hurts (0.2141 vs 0.9973) -- the egg matters.
+  The egg alone is sufficient (0.9973) -- morphology carries the signal.
+
+                   class   normal  noegg_box  noegg_fix  eggonly
+    Ascaris lumbricoides    0.984      0.039      0.000    0.984
+Capillaria philippinensi    1.000      0.783      0.881    1.000
+ Enterobius vermicularis    0.993      0.532      0.000    0.993
+      Fasciolopsis buski    1.000      0.614      0.315    1.000
+            Hookworm egg    1.000      1.000      0.967    1.000
+    Hymenolepis diminuta    1.000      0.000      0.000    1.000
+        Hymenolepis nana    1.000      0.060      0.000    1.000
+  Opisthorchis viverrine    1.000      0.536      0.000    1.000
+         Paragonimus spp    1.000      0.660      0.000    0.993
+         Taenia spp. egg    0.992      0.000      0.000    1.000
+     Trichuris trichiura    1.000      0.372      0.289    1.000
+########## roi477_cbm ##########
+test set: 1485 images, 1485 with boxes (100.0%)
+box mask : egg long axis 37-166 px (5th-95th), area 11.5% of frame -- VARIES BY CLASS, this is the leak
+fixed mask: side 188 px for every image, area 70.4% of frame -- constant
+mask centre spread: y 0.056, x 0.047 (0 = perfectly centred, so no positional leak)
+
+                         BOX mask (v1)   FIXED mask (v2)
+--------------------------------------------------------
+unmodified                      0.9980            0.9980
+egg masked out                  0.3084            0.1185
+egg only kept                   0.7717            0.9980
+--------------------------------------------------------
+drop, egg removed               68.96p            87.95p
+
+  chance level: 0.0909
+
+=== reading ===
+  mask-geometry leak: +18.99 points (0.3084 box vs 0.1185 fixed)
+  The BOX number was inflated by the shape of the hole. Use the FIXED
+  column; the v1 figure overstates background reliance by that much.
+  Removing the egg hurts (0.1185 vs 0.9980) -- the egg matters.
+  The egg alone is sufficient (0.9980) -- morphology carries the signal.
+
+                   class   normal  noegg_box  noegg_fix  eggonly
+    Ascaris lumbricoides    0.992      0.000      0.000    0.984
+Capillaria philippinensi    0.993      0.727      1.000    1.000
+ Enterobius vermicularis    1.000      0.319      0.000    1.000
+      Fasciolopsis buski    1.000      0.024      0.000    1.000
+            Hookworm egg    1.000      0.818      0.240    1.000
+    Hymenolepis diminuta    1.000      0.315      0.000    1.000
+        Hymenolepis nana    1.000      0.134      0.007    1.000
+  Opisthorchis viverrine    1.000      0.879      0.021    1.000
+         Paragonimus spp    0.993      0.043      0.000    0.993
+         Taenia spp. egg    1.000      0.000      0.000    1.000
+     Trichuris trichiura    1.000      0.091      0.000    1.000
+########## roi679_blackbox ##########
+test set: 1225 images, 1225 with boxes (100.0%)
+box mask : egg long axis 26-117 px (5th-95th), area 5.8% of frame -- VARIES BY CLASS, this is the leak
+fixed mask: side 134 px for every image, area 35.8% of frame -- constant
+mask centre spread: y 0.052, x 0.039 (0 = perfectly centred, so no positional leak)
+
+                         BOX mask (v1)   FIXED mask (v2)
+--------------------------------------------------------
+unmodified                      0.9959            0.9959
+egg masked out                  0.4343            0.2792
+egg only kept                   0.7739            0.9853
+--------------------------------------------------------
+drop, egg removed               56.16p            71.67p
+
+  chance level: 0.0909
+
+=== reading ===
+  mask-geometry leak: +15.51 points (0.4343 box vs 0.2792 fixed)
+  The BOX number was inflated by the shape of the hole. Use the FIXED
+  column; the v1 figure overstates background reliance by that much.
+  Removing the egg hurts (0.2792 vs 0.9959) -- the egg matters.
+  The egg alone is sufficient (0.9853) -- morphology carries the signal.
+
+                   class   normal  noegg_box  noegg_fix  eggonly
+    Ascaris lumbricoides    1.000      0.283      0.047    0.943
+Capillaria philippinensi    1.000      0.888      0.509    0.983
+ Enterobius vermicularis    0.991      0.535      0.061    0.965
+      Fasciolopsis buski    1.000      0.902      0.973    1.000
+            Hookworm egg    1.000      0.989      0.989    0.978
+    Hymenolepis diminuta    1.000      0.104      0.024    1.000
+        Hymenolepis nana    0.984      0.294      0.389    0.984
+  Opisthorchis viverrine    0.991      0.629      0.129    0.991
+         Paragonimus spp    0.991      0.061      0.009    0.991
+         Taenia spp. egg    1.000      0.029      0.010    1.000
+     Trichuris trichiura    1.000      0.121      0.010    1.000
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+test set: 1656 images, 1656 with boxes (100.0%)
+box mask : egg long axis 186-188 px (5th-95th), area 53.8% of frame -- VARIES BY CLASS, this is the leak
+fixed mask: side 200 px for every image, area 79.7% of frame -- constant
+mask centre spread: y 0.010, x 0.005 (0 = perfectly centred, so no positional leak)
+
+                         BOX mask (v1)   FIXED mask (v2)
+--------------------------------------------------------
+unmodified                      0.9964            0.9964
+egg masked out                  0.2476            0.1389
+egg only kept                   0.9076            0.9909
+--------------------------------------------------------
+drop, egg removed               74.88p            85.75p
+
+  chance level: 0.0909
+
+=== reading ===
+  mask-geometry leak: +10.87 points (0.2476 box vs 0.1389 fixed)
+  The BOX number was inflated by the shape of the hole. Use the FIXED
+  column; the v1 figure overstates background reliance by that much.
+  Removing the egg hurts (0.1389 vs 0.9964) -- the egg matters.
+  The egg alone is sufficient (0.9909) -- morphology carries the signal.
+
+                   class   normal  noegg_box  noegg_fix  eggonly
+    Ascaris lumbricoides    0.993      0.000      0.000    0.987
+Capillaria philippinensi    0.980      0.073      0.013    0.967
+ Enterobius vermicularis    0.993      0.880      0.767    0.980
+      Fasciolopsis buski    1.000      0.253      0.000    0.980
+            Hookworm egg    1.000      0.842      0.730    1.000
+    Hymenolepis diminuta    1.000      0.453      0.000    0.993
+        Hymenolepis nana    1.000      0.007      0.000    1.000
+  Opisthorchis viverrine    0.993      0.114      0.013    0.993
+         Paragonimus spp    1.000      0.027      0.000    1.000
+         Taenia spp. egg    1.000      0.000      0.000    1.000
+     Trichuris trichiura    1.000      0.073      0.000    1.000
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+test set: 1656 images, 1656 with boxes (100.0%)
+box mask : egg long axis 186-188 px (5th-95th), area 53.8% of frame -- VARIES BY CLASS, this is the leak
+fixed mask: side 200 px for every image, area 79.7% of frame -- constant
+mask centre spread: y 0.010, x 0.005 (0 = perfectly centred, so no positional leak)
+
+                         BOX mask (v1)   FIXED mask (v2)
+--------------------------------------------------------
+unmodified                      0.9897            0.9897
+egg masked out                  0.2150            0.1329
+egg only kept                   0.8418            0.9801
+--------------------------------------------------------
+drop, egg removed               77.48p            85.69p
+
+  chance level: 0.0909
+
+=== reading ===
+  mask-geometry leak: +8.21 points (0.2150 box vs 0.1329 fixed)
+  The BOX number was inflated by the shape of the hole. Use the FIXED
+  column; the v1 figure overstates background reliance by that much.
+  Removing the egg hurts (0.1329 vs 0.9897) -- the egg matters.
+  The egg alone is sufficient (0.9801) -- morphology carries the signal.
+
+                   class   normal  noegg_box  noegg_fix  eggonly
+    Ascaris lumbricoides    0.974      0.007      0.000    0.961
+Capillaria philippinensi    0.980      0.053      0.000    0.967
+ Enterobius vermicularis    1.000      0.613      0.373    0.967
+      Fasciolopsis buski    0.980      0.173      0.000    0.980
+            Hookworm egg    0.993      0.441      0.211    0.987
+    Hymenolepis diminuta    1.000      0.973      0.593    0.987
+        Hymenolepis nana    1.000      0.000      0.093    1.000
+  Opisthorchis viverrine    0.980      0.081      0.000    0.993
+         Paragonimus spp    0.987      0.013      0.000    0.960
+         Taenia spp. egg    1.000      0.013      0.191    0.993
+     Trichuris trichiura    0.993      0.000      0.000    0.987
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+test set: 1656 images, 1656 with boxes (100.0%)
+box mask : egg long axis 186-188 px (5th-95th), area 53.8% of frame -- VARIES BY CLASS, this is the leak
+fixed mask: side 200 px for every image, area 79.7% of frame -- constant
+mask centre spread: y 0.010, x 0.005 (0 = perfectly centred, so no positional leak)
+
+                         BOX mask (v1)   FIXED mask (v2)
+--------------------------------------------------------
+unmodified                      0.9964            0.9964
+egg masked out                  0.2729            0.1739
+egg only kept                   0.9565            0.9946
+--------------------------------------------------------
+drop, egg removed               72.34p            82.25p
+
+  chance level: 0.0909
+
+=== reading ===
+  mask-geometry leak: +9.90 points (0.2729 box vs 0.1739 fixed)
+  The BOX number was inflated by the shape of the hole. Use the FIXED
+  column; the v1 figure overstates background reliance by that much.
+  Removing the egg hurts (0.1739 vs 0.9964) -- the egg matters.
+  The egg alone is sufficient (0.9946) -- morphology carries the signal.
+
+                   class   normal  noegg_box  noegg_fix  eggonly
+    Ascaris lumbricoides    0.987      0.000      0.000    0.980
+Capillaria philippinensi    0.980      0.180      0.000    0.987
+ Enterobius vermicularis    1.000      0.387      0.000    0.993
+      Fasciolopsis buski    1.000      0.733      0.027    0.987
+            Hookworm egg    1.000      0.763      0.704    1.000
+    Hymenolepis diminuta    1.000      0.527      0.253    1.000
+        Hymenolepis nana    1.000      0.333      0.927    1.000
+  Opisthorchis viverrine    0.993      0.081      0.000    0.993
+         Paragonimus spp    1.000      0.000      0.000    1.000
+         Taenia spp. egg    1.000      0.000      0.000    1.000
+     Trichuris trichiura    1.000      0.000      0.000    1.000
+test set: 1653 images, 1650 with boxes (99.8%)
+box mask : egg long axis 13-76 px (5th-95th), area 2.0% of frame -- VARIES BY CLASS, this is the leak
+fixed mask: side 118 px for every image, area 27.8% of frame -- constant
+mask centre spread: y 0.122, x 0.115 (0 = perfectly centred, so no positional leak)
+
+                         BOX mask (v1)   FIXED mask (v2)
+--------------------------------------------------------
+unmodified                      0.9964            0.9964
+egg masked out                  0.6812            0.3412
+egg only kept                   0.1186            0.8506
+--------------------------------------------------------
+drop, egg removed               31.52p            65.52p
+
+  chance level: 0.0909
+
+=== reading ===
+  mask-geometry leak: +34.00 points (0.6812 box vs 0.3412 fixed)
+  The BOX number was inflated by the shape of the hole. Use the FIXED
+  column; the v1 figure overstates background reliance by that much.
+  Removing the egg hurts (0.3412 vs 0.9964) -- the egg matters.
+  The egg alone is NOT sufficient (0.8506); context does part of the work.
+
+                   class   normal  noegg_box  noegg_fix  eggonly
+    Ascaris lumbricoides    0.987      0.493      0.000    0.653
+Capillaria philippinensi    0.987      0.993      0.349    0.638
+ Enterobius vermicularis    0.993      0.967      0.413    0.907
+      Fasciolopsis buski    0.993      0.753      0.420    0.933
+            Hookworm egg    1.000      1.000      0.987    0.974
+    Hymenolepis diminuta    1.000      0.067      0.000    0.940
+        Hymenolepis nana    1.000      0.833      0.853    0.993
+  Opisthorchis viverrine    1.000      0.853      0.040    0.620
+         Paragonimus spp    1.000      0.747      0.473    0.727
+         Taenia spp. egg    1.000      0.280      0.007    0.973
+     Trichuris trichiura    1.000      0.500      0.207    1.000

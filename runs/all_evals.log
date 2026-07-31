@@ -1,0 +1,6 @@
+nohup: ignoring input
+=== ref_blackbox_convnext started at Sat Jul 25 12:09:59 UTC 2026 ===
+=== ref_blackbox_convnext finished at Sat Jul 25 13:52:48 UTC 2026, exit code 0 ===
+=== A2_protopnet_mobilevit started at Sat Jul 25 13:52:48 UTC 2026 ===
+=== A2_protopnet_mobilevit finished at Sat Jul 25 16:04:37 UTC 2026, exit code 0 ===
+ALL DONE at Sat Jul 25 16:04:37 UTC 2026

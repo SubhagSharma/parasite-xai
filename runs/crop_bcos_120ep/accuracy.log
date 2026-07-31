@@ -1,0 +1,6 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+
+                         run         backbone       head      val     test  params M  size MB
+             crop_bcos_120ep     mobilevit_xs       bcos   0.9964   0.9946     1.937     7.78
+
+appended to runs/accuracy_2x2.tsv

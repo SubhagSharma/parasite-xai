@@ -1,0 +1,22 @@
+
+  chance level: 0.0909
+  drop when the egg is REMOVED     : +32.49 points
+  drop when only the egg is KEPT   : +79.92 points
+
+=== reading ===
+  Removing the egg hurts (0.6715 vs 0.9964) -- the egg matters.
+  The egg alone is NOT sufficient (0.1972 vs 0.9964); context is
+  doing part of the work.
+
+                   class   normal   no egg  egg only
+    Ascaris lumbricoides    1.000    0.447     0.127
+Capillaria philippinensi    1.000    0.987     0.013
+ Enterobius vermicularis    1.000    0.953     0.007
+      Fasciolopsis buski    0.980    0.873     0.260
+            Hookworm egg    1.000    1.000     0.000
+    Hymenolepis diminuta    1.000    0.407     0.013
+        Hymenolepis nana    1.000    0.673     0.500
+  Opisthorchis viverrine    1.000    0.953     0.000
+         Paragonimus spp    0.980    0.353     0.000
+         Taenia spp. egg    1.000    0.147     0.253
+     Trichuris trichiura    1.000    0.587     1.000

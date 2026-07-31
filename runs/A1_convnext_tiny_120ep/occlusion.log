@@ -1,0 +1,22 @@
+  chance level: 0.0909
+  drop when the egg is REMOVED     : +0.00 points
+  drop when only the egg is KEPT   : +0.00 points
+
+=== reading ===
+  Removing the egg costs almost nothing (0.0920 vs 0.0920).
+  The parasite is NOT needed for the prediction -- the model is reading
+  context/acquisition, not morphology. This is a confound.
+  The egg alone is sufficient (0.0920) -- morphology carries the signal.
+
+                   class   normal   no egg  egg only
+    Ascaris lumbricoides    0.000    0.000     0.000
+Capillaria philippinensi    1.000    1.000     1.000
+ Enterobius vermicularis    0.000    0.000     0.000
+      Fasciolopsis buski    0.000    0.000     0.000
+            Hookworm egg    0.000    0.000     0.000
+    Hymenolepis diminuta    0.000    0.000     0.000
+        Hymenolepis nana    0.000    0.000     0.000
+  Opisthorchis viverrine    0.000    0.000     0.000
+         Paragonimus spp    0.000    0.000     0.000
+         Taenia spp. egg    0.000    0.000     0.000
+     Trichuris trichiura    0.000    0.000     0.000

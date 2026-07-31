@@ -1,0 +1,110 @@
+nohup: ignoring input
+########## NIGHT 3 (cropped data, serial) STARTED Wed Jul 29 17:23:20 UTC 2026 ##########
+
+===== SNAPSHOT :: Wed Jul 29 17:23:20 UTC 2026 =====
+copying runs/ and configs/ -> stable/pre_night3_20260729_1723
+
+279M	stable/pre_night3_20260729_1723
+SNAPSHOT COMPLETE: stable/pre_night3_20260729_1723
+
+===== TRAIN crop_protopnet_120ep started :: Wed Jul 29 17:23:20 UTC 2026 =====
+===== TRAIN crop_protopnet_120ep finished :: Wed Jul 29 17:59:27 UTC 2026 :: exit 0 =====
+
+===== TRAIN crop_blackbox_120ep started :: Wed Jul 29 17:59:27 UTC 2026 =====
+===== TRAIN crop_blackbox_120ep finished :: Wed Jul 29 18:31:49 UTC 2026 :: exit 0 =====
+
+===== TRAIN crop_bcos_120ep started :: Wed Jul 29 18:31:49 UTC 2026 =====
+===== TRAIN crop_bcos_120ep finished :: Wed Jul 29 19:04:09 UTC 2026 :: exit 0 =====
+
+===== ACCURACY :: Wed Jul 29 19:04:09 UTC 2026 =====
+
+                         run         backbone       head      val     test  params M  size MB
+        crop_protopnet_120ep     mobilevit_xs  protopnet   0.9927   0.9867     2.006     8.06
+
+appended to runs/accuracy_2x2.tsv
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+
+                         run         backbone       head      val     test  params M  size MB
+         crop_blackbox_120ep     mobilevit_xs   blackbox   0.9976   0.9964     1.937     7.78
+
+appended to runs/accuracy_2x2.tsv
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+
+                         run         backbone       head      val     test  params M  size MB
+             crop_bcos_120ep     mobilevit_xs       bcos   0.9964   0.9946     1.937     7.78
+
+appended to runs/accuracy_2x2.tsv
+
+===== LOCALISATION PROBES (the decisive test) :: Wed Jul 29 19:04:41 UTC 2026 =====
+--- prototype placement: are the prototypes on the egg now? ---
+searching the training set for each prototype's source patch...
+  batch 0, 32 images scanned
+  batch 20, 672 images scanned
+  batch 40, 1312 images scanned
+  batch 60, 1952 images scanned
+  batch 80, 2592 images scanned
+  batch 100, 3232 images scanned
+  batch 120, 3872 images scanned
+  batch 140, 4512 images scanned
+  batch 160, 5152 images scanned
+  batch 180, 5792 images scanned
+  batch 200, 6432 images scanned
+  batch 220, 7072 images scanned
+  batch 240, 7712 images scanned
+
+=== prototype source patches vs ground-truth egg boxes ===
+proto                class    cell  box overlap  coverage
+
+  prototypes whose source patch touches an egg: 0/0 (0.0%)
+  chance baseline (mean box coverage)          : nan%
+
+                 class     on egg
+
+  VERDICT: prototypes do sit on eggs; the flat evidence map is a
+  separate problem in how sim_maps is aggregated for display.
+
+--- pointing game ---
+loaded boxes for 11000 images from labels.json
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+test set: 1656 images, 0 matched to annotations (0.0%)
+no filename matches -- check --labels points at the right file
+
+===== OOD FLAGGING (IPI-CVx step 1) on crop ProtoPNet :: Wed Jul 29 19:08:30 UTC 2026 =====
+  train accuracy            : 0.9999
+  mean MSP                  : 0.9983
+  high-confidence FP (over) :     0  (0.00%)
+  low-confidence TP (under) :     4  (0.05%)
+  TOTAL flagged             :     4  (0.05%)
+  paper's budget k=0.02     :   154 samples
+
+                     class   over   under   total
+      Ascaris lumbricoides      0       0       0
+ Capillaria philippinensis      0       0       0
+   Enterobius vermicularis      0       0       0
+        Fasciolopsis buski      0       0       0
+              Hookworm egg      0       0       0
+      Hymenolepis diminuta      0       4       4
+          Hymenolepis nana      0       0       0
+    Opisthorchis viverrine      0       0       0
+           Paragonimus spp      0       0       0
+           Taenia spp. egg      0       0       0
+       Trichuris trichiura      0       0       0
+
+  wrote ./runs/crop_protopnet_120ep/ood_flags.json  (4 samples at k=0.02)
+
+  NEXT: decide ADD BACK (ASTL, the paper's protocol) or REMOVE
+  (your variant). They test opposite hypotheses.
+
+
+===== FULL FAITHFULNESS EVAL: crop ProtoPNet :: Wed Jul 29 19:08:58 UTC 2026 =====
+eval exit 0
+
+
+===== ACCURACY TABLE :: Wed Jul 29 22:05:40 UTC 2026 =====
+run	backbone	head	val_acc	test_acc	params_M	size_MB
+blackbox_mobilevit_120ep	mobilevit_xs	blackbox	0.9988	0.9927	1.937	7.78
+crop_protopnet_120ep	mobilevit_xs	protopnet	0.9927	0.9867	2.006	8.06
+crop_blackbox_120ep	mobilevit_xs	blackbox	0.9976	0.9964	1.937	7.78
+crop_bcos_120ep	mobilevit_xs	bcos	0.9964	0.9946	1.937	7.78
+
+########## ALL DONE Wed Jul 29 22:05:40 UTC 2026 ##########
