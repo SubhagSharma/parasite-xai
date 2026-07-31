@@ -7,3 +7,11 @@ crop_protopnet_aug0_current	mobilevit_xs	protopnet	0.9915	0.9903	2.006	8.06
 crop_protopnet_aug1_hue	mobilevit_xs	protopnet	0.9952	0.9946	2.006	8.06
 crop_protopnet_aug2_strong	mobilevit_xs	protopnet	0.9958	0.9891	2.006	8.06
 crop_protopnet_aug3_gray	mobilevit_xs	protopnet	0.9885	0.9855	2.006	8.06
+roi477_blackbox_120ep	mobilevit_xs	blackbox	1.0000	1.0000	1.937	7.78
+roi679_blackbox_120ep	mobilevit_xs	blackbox	1.0000	0.9959	1.937	7.78
+roi477_protopnet_120ep	mobilevit_xs	protopnet	0.9987	0.9980	2.006	8.06
+roi477_bcos_120ep	mobilevit_xs	bcos	0.9993	0.9973	1.937	7.78
+roi477_cbm_120ep	mobilevit_xs	cbm	0.9987	0.9980	1.939	7.79
+crop_cbm_120ep	mobilevit_xs	cbm	0.9976	0.9964	1.939	7.79
+A1_convnext_tiny_120ep	convnext_tiny	protopnet	0.0914	0.0920	27.941	111.77
+whole_cbm_120ep	mobilevit_xs	cbm	0.9970	0.9964	1.939	7.79
