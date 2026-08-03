@@ -2,7 +2,7 @@ seed: 1337
 device: cuda
 data:
   name: chula_parasite_egg_11
-  root: ../Data/Chula-ParasiteEgg-11/data
+  root: ../Data/chula_roi2_w477
   img_size: 224
   batch_size: 32
   num_workers: 4
@@ -23,14 +23,16 @@ model:
     num_concepts: 23
     concepts_csv: ../Data/Chula-ParasiteEgg-11/concepts_v3.csv
     bottleneck: true
-    concept_source: labelfree
+    concept_source: labels
 train:
-  epochs: 60
+  epochs: 120
   lr: 0.0003
   weight_decay: 0.0001
   warmup_epochs: 3
   proto_push_every: 10
   amp: true
+  push_max_batches: null
+  early_stop_patience: 20
 explain:
   posthoc:
   - gradcam
@@ -46,7 +48,9 @@ eval:
   faithfulness:
   - deletion
   - insertion
+  - infidelity_raw
   - infidelity
+  - infidelity_scaled
   - sensitivity
   - sanity_check
   faithfulness_batches: 8
@@ -57,6 +61,8 @@ eval:
     infidelity_patch_size: 28
     sanity_skip_layers: true
     sanity_layer_order: top_down
+    infidelity_n_perturb_samples: 10
+    infidelity_normalise: true
   localisation:
   - pointing_game
   - energy_pointing_game
@@ -71,4 +77,4 @@ trust:
   calibration: temperature
   conformal: true
   alpha: 0.1
-output_dir: ./runs/A2_cbm_mobilevit
+output_dir: ./runs/roi477_cbm_sup_120ep

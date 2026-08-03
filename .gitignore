@@ -56,3 +56,8 @@ core.*
 
 runs/*/train.log
 runs/*/train.log
+figs/**/*.jpg
+figs/**/*.jpg
+figs_masked/
+figs/**/*.jpg
+figs_masked/

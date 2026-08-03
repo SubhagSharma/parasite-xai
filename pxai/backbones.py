@@ -32,7 +32,7 @@ class Backbone(nn.Module):
             raise ValueError(f"backbone {name!r} not in {list(_SUPPORTED)}")
         self.net = timm.create_model(
             _SUPPORTED[name], pretrained=pretrained,
-            features_only=True, out_indices=(-1,))
+            features_only=True)
         self.out_channels = self.net.feature_info.channels()[-1]
         self.name = name
 
