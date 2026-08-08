@@ -50,8 +50,15 @@ class CBMHead(nn.Module):
                 "concept_weight": self.classifier.weight}
 
 
-def concept_loss(c_logit, c_target, lam: float = 0.5):
-    """BCE concept supervision (only when concept labels exist)."""
+def concept_loss(c_logit, c_target, lam: float = 0.5, pos_weight=None):
+    """BCE concept supervision (only when concept labels exist).
+
+    pos_weight is per concept, n_neg/n_pos. Without it, concepts positive for one
+    species out of eleven are learned as "always negative": ~0.91 raw accuracy for a
+    model that has learned nothing about that morphology. See concepts_loader.
+    """
     if c_target is None:
         return c_logit.new_zeros(())
-    return lam * F.binary_cross_entropy_with_logits(c_logit, c_target.float())
+    return lam * F.binary_cross_entropy_with_logits(
+        c_logit, c_target.float(),
+        pos_weight=None if pos_weight is None else pos_weight.to(c_logit.dtype))

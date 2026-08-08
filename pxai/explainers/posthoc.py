@@ -26,7 +26,7 @@ SUPERPIXEL_GRID = 16
 
 # Captum evaluates this many perturbations per forward pass. Higher = faster and
 # more VRAM (effective batch = input batch x this). Drop to 1 on CUDA OOM.
-PERTURBATIONS_PER_EVAL = 4
+PERTURBATIONS_PER_EVAL = 64
 
 
 def _to_input_space(attr, size):
@@ -73,7 +73,7 @@ def hires_cam(model, x, target, layer):
 def integrated_gradients(model, x, target, steps: int = 32):
     ig = IntegratedGradients(lambda t: model(t))
     attr = ig.attribute(x, target=target, n_steps=steps,
-                        internal_batch_size=max(1, x.shape[0] // 4))
+                        internal_batch_size=max(32, x.shape[0]))
     return _to_input_space(attr.abs(), x.shape[-2:]), {"fwd": steps, "bwd": steps}
 
 

@@ -38,6 +38,11 @@ except Exception:                                   # keep import-light for CI
 
 # Every metric here is lower-is-better. Kept explicit rather than implicit so the
 # sign of the Pareto axis is auditable — this table is the thing reviewers check.
+# Randomisation seeds averaged for sanity_check. MPRT uses one; measured seed
+# spread on B-cos is 0.253, larger than the spread between models, so a point
+# estimate is dominated by seed noise. Set to (0,) to restore single-seed behaviour.
+SANITY_SEEDS = (0, 1, 2)
+
 METRIC_DIRECTION: Dict[str, str] = {
     "deletion": "lower",
     "insertion": "lower",
@@ -45,6 +50,8 @@ METRIC_DIRECTION: Dict[str, str] = {
     "infidelity_scaled": "lower",
     "infidelity_raw": "lower",
     "sensitivity": "lower",
+    # Values are |rho| (abs is taken per sample at the call site), so "lower"
+    # means "less weight dependence". Never feed signed correlations through this.
     "sanity_check": "lower",
 }
 
@@ -58,7 +65,26 @@ METRIC_DIRECTION: Dict[str, str] = {
 # optimal-scaled variant -- chance is 3/6. It carries no spatial information, so it
 # must not steer the Pareto ranking. The columns stay in results.json because the
 # negative result is itself a finding (see INFIDELITY_FINDINGS_REPORT.md).
-AGGREGATE_EXCLUDE = {"infidelity", "infidelity_raw", "infidelity_scaled"}
+#
+# sanity_check is excluded for a different reason: it does not measure the same
+# quantity across architectures, so min-max normalising it across methods compares
+# incomparable things. Three regimes on chula_roi2_w477 (probe_sanity_v2.py, 32
+# samples, 3 seeds):
+#   * ProtoPNet   - the explanation collapses to near-constant on ANY randomised
+#                   model, so the guard scores 0.0 for 100% of samples across all
+#                   three seeds. A structurally guaranteed pass: it cannot fail.
+#   * CBM         - before cbm_attr_patch its attribution never reached the head,
+#                   so head randomisation was invisible to the metric.
+#   * B-cos, blackbox - genuine spatial measurements (|rho| 0.26 and 0.08).
+# Under min-max normalisation ProtoPNet's guaranteed 0.0 takes the best rank on a
+# metric it cannot lose, which propagates into the Pareto ordering. Excluding it is
+# also the safer failure mode: NaN-ing the degenerate methods instead trips the
+# len(vals) < 2 guard below and deletes the metric for EVERY method, including ones
+# whose value was genuinely measured. The column stays in results.json alongside
+# sanity_collapse_rate and sanity_seed_std - per model it is still the right
+# diagnostic, it just must not steer a cross-method ranking.
+AGGREGATE_EXCLUDE = {"infidelity", "infidelity_raw", "infidelity_scaled",
+                     "sanity_check"}
 
 
 # Metrics whose cost is (k x one attribution) rather than (k x one forward pass).
@@ -226,6 +252,8 @@ def evaluate_faithfulness(model, loader, attr_fn, metrics, device,
     fails: Dict[str, int] = {m: 0 for m in metric_objs}
     used: Dict[str, int] = {m: 0 for m in metric_objs}
     collapses: Dict[str, int] = {m: 0 for m in metric_objs}   # sanity_check degeneracy passes
+    scored: Dict[str, int] = {m: 0 for m in metric_objs}      # samples MPRT actually measured
+    sanity_seed_std = None
     determinism: list = []
 
     n_batches = min(max_batches, len(loader))
@@ -255,7 +283,20 @@ def evaluate_faithfulness(model, loader, attr_fn, metrics, device,
                 # Both re-explain internally, so both need the explainer itself.
                 if name in ("sensitivity", "sanity_check"):
                     kw["explain_func"] = _explain_func
-                vals, diag = _postprocess(name, metric(**kw))
+                if name == "sanity_check":
+                    # abs PER SAMPLE before averaging: |rho| is the weight
+                    # dependence; signed values cancel into a spurious pass.
+                    _runs = []
+                    for _s in SANITY_SEEDS:
+                        torch.manual_seed(_s)
+                        np.random.seed(_s)
+                        _r, diag = _postprocess(name, metric(**kw))
+                        _runs.append(np.abs(_r))
+                    vals = np.mean(_runs, axis=0)
+                    if len(_runs) > 1:
+                        sanity_seed_std = float(np.mean(np.std(_runs, axis=0)))
+                else:
+                    vals, diag = _postprocess(name, metric(**kw))
                 # Per-sample near-constant correction (sanity_check only). MPRT
                 # correlates the trained-model explanation with the randomised-model
                 # one; when the latter is near-constant (no spatial ranking) the
@@ -268,10 +309,12 @@ def evaluate_faithfulness(model, loader, attr_fn, metrics, device,
                     flat = _randomised_flat_mask(model, x, y, attr_fn,
                                                  p.get("sanity_layer_order", "top_down"),
                                                  device)
+                    n_flat = int(flat.sum()) if flat is not None else 0
                     if flat is not None and flat.any():
                         vals = vals.copy()
                         vals[flat] = 0.0
-                        collapses[name] += int(flat.sum())
+                        collapses[name] += n_flat
+                    scored[name] += int(vals.shape[0]) - n_flat
                 acc[name].extend(vals.tolist())
                 used[name] += 1
                 if diag is not None:
@@ -288,7 +331,7 @@ def evaluate_faithfulness(model, loader, attr_fn, metrics, device,
                 if name == "sanity_check" and _is_degeneracy_error(e):
                     acc[name].extend([0.0] * x_np.shape[0])
                     used[name] += 1
-                    collapses[name] += 1
+                    collapses[name] += x_np.shape[0]   # was counting BATCHES
                 else:
                     fails[name] += 1
                     print(f"[faithfulness] {name} failed on batch {bi}: "
@@ -302,6 +345,12 @@ def evaluate_faithfulness(model, loader, attr_fn, metrics, device,
     for m, v in acc.items():
         finite = [s for s in v if np.isfinite(s)]
         scores[m] = float(np.mean(finite)) if finite else float("nan")
+        if m == "sanity_check" and collapses.get(m, 0) > 0 and scored.get(m, 0) == 0:
+            print("[faithfulness] sanity_check: explanation collapsed on the "
+                  "randomised model for EVERY sample. The 0.0 is a genuine "
+                  "degeneracy PASS (maximal independence), not a measured "
+                  "correlation -- quote sanity_collapse_rate alongside it.",
+                  flush=True)
         if not finite:
             print(f"[faithfulness] WARNING: {m} produced no finite values "
                   f"({fails[m]} batch failures)", flush=True)
@@ -314,7 +363,14 @@ def evaluate_faithfulness(model, loader, attr_fn, metrics, device,
         # batches where sanity_check's explanation collapsed on the randomised model
         # (scored 0.0 = passed). A high count is itself a finding: the explainer is
         # strongly model-dependent, which is what the sanity check is meant to reward.
-        "sanity_collapse_batches": collapses["sanity_check"] if "sanity_check" in collapses else 0,
+        "sanity_collapse_samples": collapses.get("sanity_check", 0),
+        "sanity_scored_samples": scored.get("sanity_check", 0),
+        # 1.0 means the reported score is entirely the flat-guard correction and
+        # MPRT measured nothing. Report this rate, not the score.
+        "sanity_collapse_rate": (
+            collapses.get("sanity_check", 0)
+            / max(collapses.get("sanity_check", 0) + scored.get("sanity_check", 0), 1)),
+        "sanity_seed_std": sanity_seed_std,
         "explainer_determinism": float(np.mean(determinism)) if determinism else None,
     }
 

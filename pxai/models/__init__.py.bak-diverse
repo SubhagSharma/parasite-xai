@@ -1,0 +1,54 @@
+"""Model factory — assembles backbone + interpretable head (A2 ablation)."""
+from __future__ import annotations
+
+import torch.nn as nn
+
+from ..backbones import build_backbone
+from .protopnet import ProtoHead
+from .cbm import CBMHead
+from .bcos import BcosHead
+from .blackbox import BlackBox
+from .sea import SEANet
+
+
+class InterpretableModel(nn.Module):
+    """backbone -> interpretable head. `.explain(x)` exposes the head's evidence."""
+
+    def __init__(self, cfg):
+        super().__init__()
+        self.kind = cfg["model"]["kind"]
+        nc = cfg["model"]["num_classes"]
+        self.backbone = build_backbone(cfg)
+        ch = self.backbone.out_channels
+
+        if self.kind == "protopnet":
+            p = cfg["model"]["protopnet"]
+            self.head = ProtoHead(ch, nc, p["num_prototypes_per_class"],
+                                  p["proto_dim"], p["pip_sparsity"])
+        elif self.kind == "cbm":
+            c = cfg["model"]["cbm"]
+            self.head = CBMHead(ch, nc, c["num_concepts"], c["bottleneck"])
+        elif self.kind == "bcos":
+            self.head = BcosHead(ch, nc)
+        else:
+            raise ValueError(f"unknown interpretable kind {self.kind!r}")
+
+    def forward(self, x):
+        feat = self.backbone(x)
+        out = self.head(feat)
+        return out[0] if isinstance(out, tuple) else out
+
+    def features(self, x):
+        return self.backbone(x)
+
+    def explain(self, x):
+        return self.head.explain(self.backbone(x))
+
+
+def build_model(cfg):
+    if cfg["model"]["kind"] == "sea":
+        return SEANet(cfg)
+    if cfg["model"]["kind"] == "blackbox":
+        return BlackBox(cfg["model"]["num_classes"],
+                        cfg["backbone"]["name"], cfg["backbone"]["pretrained"])
+    return InterpretableModel(cfg)

@@ -1,43 +1,44 @@
 r"""
-probe_occlusion_v2.py — does the model use the egg, measured without the mask leak?
+probe_occlusion_v2.py — egg-masked accuracy as a CURVE over mask size, not a number.
 
-WHY v2
-------
-v1 blanked the ANNOTATION BOX. probe_bbox_geometry.py then measured that box geometry
-alone classifies at 0.8069 (8.88x chance), and probe_scale_decomposition.py showed
-scale normalisation makes box size a CLEANER species signal (0.5458 raw -> 0.7338
-corrected). So on the ROI datasets the "egg masked" number has a floor set by the
-shape of the hole, and normalising scale RAISED that floor. Every v1 number on
-chula_roi2_* is contaminated by an amount nobody has measured.
+WHY A SWEEP
+-----------
+Two confounds make any single egg-masked figure uninterpretable.
 
-v2 masks a FIXED-SIZE square centred on the egg instead. Side length is identical for
-every image and every class, so the hole carries no size information. What survives is
-mask POSITION, which is reported so you can see whether it is class-correlated.
+  1. BOX-GEOMETRY LEAK. Masking the annotation box leaves a hole whose SIZE encodes
+     the species (box geometry alone classifies at 0.8069). Measured leak on your
+     checkpoints: +8 to +34 points.
 
-DEFAULT MODE IS `both`. It runs the v1 box mask and the v2 fixed mask on the same
-checkpoint in one pass and prints them side by side. The delta between them IS the
-measurement of how much of last night's result was mask leakage.
+  2. MASK-AREA MISMATCH. The v1 box mask covered 2.0% of the frame on whole images,
+     11.5% on roi477 and 53.8% on crops. "0.5700 whole vs 0.2494 crops" therefore
+     compared removing a fiftieth of the picture against removing half of it. The
+     first fixed-mask run inherited this: auto-sizing to the 99th percentile egg
+     gave 27.8% of frame on whole images but 79.7% on crops.
 
-SPEED
------
-v1 decoded the test set three times (once per mode) and ran on CPU. v2 decodes each
-image ONCE, builds all five variants from it, and pushes them through the model as a
-single batch of B*5 under autocast. On an A100 slice that is roughly 15-20x faster
-than `--device cpu`; the whole test set takes well under a minute per checkpoint.
+A constant-size square fixes (1). Only a SWEEP fixes (2): run several sizes, then
+compare models at EQUAL masked fraction. The curve is the measurement.
+
+THE COLUMN THAT MAKES IT READABLE
+---------------------------------
+`egg cov` is the fraction of the annotated egg actually inside the mask. A row is
+only evidence about background reliance where egg coverage is high AND frame area
+is low. On crops that region may not exist — a crop is mostly egg, so you cannot
+remove the egg without removing the image. That is itself the finding, and this
+column is what shows it.
 
     python -u probe_occlusion_v2.py \
         --config configs/generated/roi477_blackbox_120ep.yaml \
         --ckpt   runs/roi477_blackbox_120ep/best.pt \
         --labels ../Data/chula_roi2_w477/labels.json \
-        --device cuda
+        --device cuda --emit-tsv runs/occlusion_sweep.tsv
 
-ALWAYS pass the labels.json that matches the dataset's coordinate system. For
-chula_roi2_* that is the remapped file inside the dataset directory, never the
-original Chula labels.
+ALWAYS pass the labels.json matching that dataset's coordinate system. For
+chula_roi2_* that is the remapped file inside the dataset directory.
 """
 from __future__ import annotations
 
 import argparse
+import os
 from collections import defaultdict
 
 import numpy as np
@@ -54,8 +55,6 @@ from pxai.eval.cropgeom import load_coco, box_in_crop
 MEAN = (0.485, 0.456, 0.406)
 STD = (0.229, 0.224, 0.225)
 
-VARIANTS = ("none", "egg_box", "bg_box", "egg_fixed", "bg_fixed")
-
 
 def centre_of(mask):
     ys, xs = np.nonzero(mask)
@@ -68,7 +67,6 @@ def long_axis(mask):
 
 
 def fixed_square(centre, side, S):
-    """Constant-area square centred as close to `centre` as the frame allows."""
     cy, cx = centre
     y0 = int(np.clip(cy - side // 2, 0, max(0, S - side)))
     x0 = int(np.clip(cx - side // 2, 0, max(0, S - side)))
@@ -77,19 +75,14 @@ def fixed_square(centre, side, S):
     return m
 
 
-class VariantSet(Dataset):
-    """One decode per image; returns all five variants stacked as (5,3,S,S)."""
+class SweepSet(Dataset):
+    """One decode per image; emits every mask variant built from that decode."""
 
-    def __init__(self, samples, box_masks, fixed_masks, img_size, fill):
-        self.samples = samples
-        self.box_masks = box_masks
-        self.fixed_masks = fixed_masks
-        self.size = img_size
-        self.fill = fill
+    def __init__(self, samples, masks, img_size, fill):
+        self.samples, self.masks = samples, masks     # masks: list of list-of-(name,arr)
+        self.size, self.fill = img_size, fill
         self.pre = transforms.Compose([
-            transforms.Resize((img_size, img_size)),
-            transforms.ToTensor(),
-        ])
+            transforms.Resize((img_size, img_size)), transforms.ToTensor()])
         self.norm = transforms.Normalize(MEAN, STD)
 
     def __len__(self):
@@ -112,13 +105,10 @@ class VariantSet(Dataset):
     def __getitem__(self, i):
         path, label = self.samples[i]
         x = self.pre(Image.open(path).convert("RGB"))
-        b, f = self.box_masks[i], self.fixed_masks[i]
-        out = [x,
-               self._blank(x, b),
-               self._blank(x, None if b is None else ~b),
-               self._blank(x, f),
-               self._blank(x, None if f is None else ~f)]
-        return torch.stack([self.norm(v) for v in out]), label
+        out = [self.norm(x)]
+        for _, arr in self.masks[i]:
+            out.append(self.norm(self._blank(x, arr)))
+        return torch.stack(out), label
 
 
 def test_samples(loaders):
@@ -132,27 +122,27 @@ def test_samples(loaders):
 
 
 @torch.no_grad()
-def score_all(model, ds, device, bs, nw):
+def score(model, ds, device, bs, nw, nvar):
     loader = DataLoader(ds, batch_size=bs, shuffle=False, num_workers=nw,
                         pin_memory=(device.type == "cuda"))
-    hits = {v: 0 for v in VARIANTS}
-    per_class = {v: defaultdict(lambda: [0, 0]) for v in VARIANTS}
+    hits = np.zeros(nvar)
+    per_class = [defaultdict(lambda: [0, 0]) for _ in range(nvar)]
     total = 0
     amp = torch.autocast(device_type=device.type,
                          enabled=(device.type == "cuda"), dtype=torch.float16)
     for xb, y in loader:
         B = y.numel()
-        flat = xb.reshape(B * len(VARIANTS), *xb.shape[2:]).to(device, non_blocking=True)
+        flat = xb.reshape(B * nvar, *xb.shape[2:]).to(device, non_blocking=True)
         with amp:
-            pred = model(flat).float().argmax(1).cpu().reshape(B, len(VARIANTS))
-        for k, v in enumerate(VARIANTS):
+            pred = model(flat).float().argmax(1).cpu().reshape(B, nvar)
+        for k in range(nvar):
             p = pred[:, k]
-            hits[v] += (p == y).sum().item()
+            hits[k] += (p == y).sum().item()
             for pi, ti in zip(p.tolist(), y.tolist()):
-                per_class[v][ti][0] += int(pi == ti)
-                per_class[v][ti][1] += 1
+                per_class[k][ti][0] += int(pi == ti)
+                per_class[k][ti][1] += 1
         total += B
-    return {v: hits[v] / max(total, 1) for v in VARIANTS}, per_class, total
+    return hits / max(total, 1), per_class, total
 
 
 def main():
@@ -164,12 +154,13 @@ def main():
     ap.add_argument("--fill", default="mean", choices=["mean", "black", "noise"])
     ap.add_argument("--margin", type=float, default=0.20)
     ap.add_argument("--no-square", action="store_true")
-    ap.add_argument("--fixed-side", type=int, default=0,
-                    help="mask side in model-input px; 0 = auto (99th pct egg long "
-                         "axis, so the fixed mask covers 99%% of eggs whole)")
-    ap.add_argument("--batch-size", type=int, default=0, help="0 = config value")
+    ap.add_argument("--sides", default="32,64,96,128,160",
+                    help="comma list of mask sides in MODEL-INPUT px. Identical "
+                         "across datasets, so area fractions are comparable.")
+    ap.add_argument("--batch-size", type=int, default=0)
     ap.add_argument("--workers", type=int, default=8)
     ap.add_argument("--n", type=int, default=0)
+    ap.add_argument("--emit-tsv", default=None)
     args = ap.parse_args()
 
     cfg = load_config(args.config)
@@ -177,6 +168,7 @@ def main():
     dev = pick_device(cfg["device"])
     S = cfg["data"]["img_size"]
     margin, square = args.margin, not args.no_square
+    sides = [int(s) for s in args.sides.split(",") if int(s) <= S]
 
     ann = load_coco(args.labels)
     loaders = build_loaders(cfg)
@@ -187,83 +179,104 @@ def main():
 
     samples = test_samples(loaders)
     if args.n:
-        rng = np.random.default_rng(1337)          # random, never samples[:n]
+        rng = np.random.default_rng(1337)               # random, never samples[:n]
         samples = [samples[i] for i in
                    rng.choice(len(samples), min(args.n, len(samples)), replace=False)]
 
-    # one box_in_crop call per sample, reused everywhere
-    box_masks = [box_in_crop(p, ann, S, margin, square) for p, _ in samples]
-    ok = [m is not None and m.any() for m in box_masks]
-    box_masks = [m if k else None for m, k in zip(box_masks, ok)]
-    matched = sum(ok)
+    boxes = [box_in_crop(p, ann, S, margin, square) for p, _ in samples]
+    boxes = [b if (b is not None and b.any()) else None for b in boxes]
+    matched = sum(b is not None for b in boxes)
 
-    axes = [long_axis(m) for m in box_masks if m is not None]
-    side = args.fixed_side or int(np.ceil(np.percentile(axes, 99)))
-    side = min(side, S)
-    centres = [centre_of(m) if m is not None else None for m in box_masks]
-    fixed_masks = [fixed_square(c, side, S) if c is not None else None for c in centres]
+    # variant order: [box_egg, box_bg] then per side [egg, bg]
+    names, per_sample = ["box_egg", "box_bg"], []
+    for s in sides:
+        names += [f"egg{s}", f"bg{s}"]
+    cover = {s: [] for s in sides}
+    for b in boxes:
+        v = [("box_egg", b), ("box_bg", None if b is None else ~b)]
+        for s in sides:
+            f = fixed_square(centre_of(b), s, S) if b is not None else None
+            v += [(f"egg{s}", f), (f"bg{s}", None if f is None else ~f)]
+            if b is not None:
+                cover[s].append(float((b & f).sum()) / float(b.sum()))
+        per_sample.append(v)
+    nvar = 1 + len(names)
 
+    axes = [long_axis(b) for b in boxes if b is not None]
+    box_area = float(np.mean([b.mean() for b in boxes if b is not None])) * 100
     print(f"test set: {len(samples)} images, {matched} with boxes "
-          f"({matched / max(len(samples), 1) * 100:.1f}%)")
-    print(f"box mask : egg long axis {np.percentile(axes, 5):.0f}-"
-          f"{np.percentile(axes, 95):.0f} px (5th-95th), "
-          f"area {np.mean([m.mean() for m in box_masks if m is not None]) * 100:.1f}% "
-          f"of frame -- VARIES BY CLASS, this is the leak")
-    print(f"fixed mask: side {side} px for every image, "
-          f"area {side * side / (S * S) * 100:.1f}% of frame -- constant")
-    cys = np.array([c[0] for c in centres if c]) / S
-    cxs = np.array([c[1] for c in centres if c]) / S
-    print(f"mask centre spread: y {cys.std():.3f}, x {cxs.std():.3f} "
-          f"(0 = perfectly centred, so no positional leak)\n")
+          f"({matched / max(len(samples), 1) * 100:.1f}%)   frame {S}x{S}")
+    print(f"egg long axis: {np.percentile(axes, 5):.0f}-{np.percentile(axes, 95):.0f} px "
+          f"(5th-95th), box mask covers {box_area:.1f}% of frame")
 
     bs = args.batch_size or cfg["data"]["batch_size"]
-    ds = VariantSet(samples, box_masks, fixed_masks, S, args.fill)
-    acc, per_class, n = score_all(model, ds, dev, bs, args.workers)
+    acc, per_class, n = score(model, SweepSet(samples, per_sample, S, args.fill),
+                              dev, bs, args.workers, nvar)
     chance = 1.0 / len(loaders.classes)
+    base = acc[0]
+    idx = {nm: i + 1 for i, nm in enumerate(names)}
+    tag = os.path.basename(os.path.dirname(args.ckpt))
 
-    print(f"{'':<22}{'BOX mask (v1)':>16}{'FIXED mask (v2)':>18}")
-    print("-" * 56)
-    print(f"{'unmodified':<22}{acc['none']:>16.4f}{acc['none']:>18.4f}")
-    print(f"{'egg masked out':<22}{acc['egg_box']:>16.4f}{acc['egg_fixed']:>18.4f}")
-    print(f"{'egg only kept':<22}{acc['bg_box']:>16.4f}{acc['bg_fixed']:>18.4f}")
-    print("-" * 56)
-    print(f"{'drop, egg removed':<22}"
-          f"{(acc['none'] - acc['egg_box']) * 100:>15.2f}p"
-          f"{(acc['none'] - acc['egg_fixed']) * 100:>17.2f}p")
-    print(f"\n  chance level: {chance:.4f}")
+    print(f"\nunmodified accuracy {base:.4f}   chance {chance:.4f}\n")
+    print(f"{'mask':>8}{'frame %':>10}{'egg cov %':>11}{'egg masked':>13}"
+          f"{'egg only':>11}{'x chance':>10}")
+    print("-" * 63)
+    ebox = acc[idx["box_egg"]]
+    print(f"{'box':>8}{box_area:>9.1f}{100.0:>11.1f}{ebox:>13.4f}"
+          f"{acc[idx['box_bg']]:>11.4f}{ebox / chance:>10.2f}")
+    rows = []
+    for s in sides:
+        e, g = acc[idx[f"egg{s}"]], acc[idx[f"bg{s}"]]
+        area, cv = s * s / (S * S) * 100, np.mean(cover[s]) * 100
+        print(f"{s:>8}{area:>9.1f}{cv:>11.1f}{e:>13.4f}{g:>11.4f}{e / chance:>10.2f}")
+        rows.append((s, area, cv, e, g))
 
-    leak = acc["egg_box"] - acc["egg_fixed"]
     print("\n=== reading ===")
-    print(f"  mask-geometry leak: {leak * 100:+.2f} points "
-          f"({acc['egg_box']:.4f} box vs {acc['egg_fixed']:.4f} fixed)")
-    if leak > 0.03:
-        print("  The BOX number was inflated by the shape of the hole. Use the FIXED")
-        print("  column; the v1 figure overstates background reliance by that much.")
-    elif leak < -0.03:
-        print("  The FIXED mask scores HIGHER -- it covers more of the frame, so it is")
-        print("  removing context too. Treat it as an upper bound, not a clean read.")
+    good = [r for r in rows if r[2] >= 90.0]
+    if good:
+        s, area, cv, e, g = min(good, key=lambda r: r[1])
+        print(f"  Cleanest row: side {s}, covering {cv:.0f}% of the egg while blanking")
+        print(f"  only {area:.0f}% of the frame -> egg-masked {e:.4f} ({e/chance:.2f}x chance).")
+        print("  Compare models at THIS row, not at the box row.")
     else:
-        print("  Negligible. The v1 numbers stand as measured.")
+        print("  No mask reaches 90% egg coverage below full-frame. The egg fills too")
+        print("  much of this dataset to be removed without destroying the image, so")
+        print("  'background reliance' is not separately measurable here. Report that.")
+    # Compare the box against the fixed side of closest FRAME AREA. The two cannot
+    # also be matched on egg coverage -- the box reaches 100% at low area precisely
+    # because it is egg-shaped, which is the leak. So the delta below is an UPPER
+    # BOUND on the leak, inflated by whatever coverage the fixed mask gives up.
+    m_s, m_area, m_cov, m_e, _ = min(rows, key=lambda r: abs(r[1] - box_area))
+    print(f"\n  matched-area leak estimate (box {box_area:.1f}% vs side {m_s} "
+          f"{m_area:.1f}% of frame):")
+    print(f"    box {ebox:.4f} at 100% egg coverage  vs  "
+          f"side {m_s} {m_e:.4f} at {m_cov:.0f}%")
+    print(f"    delta {(ebox - m_e) * 100:+.2f} points -- UPPER BOUND on the geometry")
+    print(f"    leak; {100 - m_cov:.0f} points of that gap is lost egg coverage, not leak.")
 
-    e, b = acc["egg_fixed"], acc["bg_fixed"]
-    if e > acc["none"] - 0.05:
-        print(f"  Removing the egg costs almost nothing ({e:.4f}). The model is reading")
-        print("  context, not morphology.")
-    else:
-        print(f"  Removing the egg hurts ({e:.4f} vs {acc['none']:.4f}) -- the egg matters.")
-    if b > acc["none"] - 0.05:
-        print(f"  The egg alone is sufficient ({b:.4f}) -- morphology carries the signal.")
-    else:
-        print(f"  The egg alone is NOT sufficient ({b:.4f}); context does part of the work.")
+    if args.emit_tsv:
+        new = not os.path.exists(args.emit_tsv)
+        with open(args.emit_tsv, "a") as f:
+            if new:
+                f.write("run\tside\tframe_pct\tegg_cov_pct\tacc_none\t"
+                        "acc_eggmask\tacc_eggonly\tchance\n")
+            f.write(f"{tag}\tbox\t"
+                    f"{np.mean([b.mean() for b in boxes if b is not None])*100:.2f}\t"
+                    f"100.00\t{base:.4f}\t{ebox:.4f}\t{acc[idx['box_bg']]:.4f}\t"
+                    f"{chance:.4f}\n")
+            for s, area, cv, e, g in rows:
+                f.write(f"{tag}\t{s}\t{area:.2f}\t{cv:.2f}\t{base:.4f}\t"
+                        f"{e:.4f}\t{g:.4f}\t{chance:.4f}\n")
+        print(f"\n  appended {len(rows) + 1} rows -> {args.emit_tsv}")
 
-    print(f"\n{'class':>24} {'normal':>8} {'noegg_box':>10} {'noegg_fix':>10} "
-          f"{'eggonly':>8}")
+    ref = min(good, key=lambda r: r[1])[0] if good else sides[-1]
+    print(f"\n{'class':>24} {'normal':>8} {'noegg_box':>10} {'noegg_' + str(ref):>10}")
     for ci, cname in enumerate(loaders.classes):
         r = []
-        for v in ("none", "egg_box", "egg_fixed", "bg_fixed"):
-            h, t = per_class[v][ci]
+        for k in (0, idx["box_egg"], idx[f"egg{ref}"]):
+            h, t = per_class[k][ci]
             r.append(h / max(t, 1))
-        print(f"{cname[:24]:>24} {r[0]:>8.3f} {r[1]:>10.3f} {r[2]:>10.3f} {r[3]:>8.3f}")
+        print(f"{cname[:24]:>24} {r[0]:>8.3f} {r[1]:>10.3f} {r[2]:>10.3f}")
 
 
 if __name__ == "__main__":

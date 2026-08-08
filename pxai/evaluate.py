@@ -44,17 +44,78 @@ def ante_hoc_attr(kind):
     import torch.nn.functional as F
 
     def fn(m, x, target):
+        # ---- gradient read-out (Part II), opt-in via PXAI_GRADATTR ----------------
+        # |d(interpretable intermediate)/dx| . x at PIXEL resolution, instead of the
+        # head's feature-grid map upsampled. Escapes the 7x7 grid; keeps the
+        # per-component decomposition because the intermediate is per prototype /
+        # per concept, not the class logit.
+        if os.environ.get("PXAI_GRADATTR") == "1":
+            import torch as _t
+            n_noise = 8 if os.environ.get("PXAI_GRADATTR_SMOOTH") == "1" else 1
+            sigma = 0.10 if n_noise > 1 else 0.0
+            total = _t.zeros_like(x[:, :1])
+            for _ in range(n_noise):
+                with _t.enable_grad():          # Quantus may call us under no_grad
+                    xi = x if sigma <= 0 else x + _t.randn_like(x) * sigma
+                    xi = xi.clone().detach().requires_grad_(True)
+                    head = getattr(m, "head", None)
+                    if kind == "protopnet":
+                        sp, _s = head._similarities(m.backbone(xi))     # (B,P)
+                        w = head.last.weight
+                        if getattr(head, "pip_sparsity", False):
+                            w = F.relu(w)
+                        obj = (sp * w[target]).sum()
+                    elif kind == "cbm":
+                        feat = m.backbone(xi)
+                        c_log = head.concept(head.pool(feat).flatten(1))
+                        c = _t.sigmoid(c_log)
+                        # exact chain rule through the sigmoid bottleneck
+                        w = head.classifier.weight[target] * c * (1.0 - c)
+                        obj = (c_log * w.detach()).sum()
+                    else:                        # bcos: the class logit itself
+                        out = m(xi)
+                        out = out[0] if isinstance(out, tuple) else out
+                        obj = out.gather(1, target.view(-1, 1)).sum()
+                    g, = _t.autograd.grad(obj, xi)
+                total = total + (g * xi).abs().sum(1, keepdim=True).detach()
+            return total / n_noise
+        # ---- native feature-grid read-out (default, unchanged) --------------------
         ev = m.explain(x)
         if kind == "protopnet":
+            # Match the forward pass: logits = F.linear(max_pool(sim), W) with
+            # W = relu(last.weight) under pip_sparsity. Only each prototype's ARGMAX
+            # location influences the logit, and the weights are the LEARNED last.weight
+            # -- not the fixed proto_class buffer. The previous implementation summed
+            # the dense field and used the buffer, understating localisation by 2.3-2.5x
+            # (probe_protopnet_attr.py). The sparse term below is an exact additive
+            # decomposition of the class logit.
             maps = ev["sim_maps"]                                   # (B,P,h,w)
-            pc = ev["proto_class"]                                  # (P,C)
-            sel = pc[:, target].t().view(target.size(0), -1, 1, 1)  # (B,P,1,1)
-            a = (maps * sel).sum(1, keepdim=True)
-        elif kind == "bcos":
+            B, P, h, w = maps.shape
+            W = m.head.last.weight                                  # (C,P), learned
+            if getattr(m.head, "pip_sparsity", False):
+                W = F.relu(W)                                       # PIP-Net non-neg
+            wy = W[target].view(B, P, 1, 1)                         # (B,P,1,1)
+            flat = maps.reshape(B, P, h * w)
+            mx, idx = flat.max(-1)                                  # (B,P)
+            sparse = torch.zeros_like(flat)
+            sparse.scatter_(2, idx.unsqueeze(-1), (mx * wy.view(B, P)).unsqueeze(-1))
+            # tie-breaker: a purely sparse map leaves h*w-P cells at exactly 0.0, and
+            # deletion would order those ties by array index (an arbitrary top-left
+            # bias). At 1e-6 the field cannot reorder the sparse term.
+            a = (sparse.view(B, P, h, w).sum(1, keepdim=True)
+                 + 1e-6 * (maps * wy).sum(1, keepdim=True))
+        elif kind in ("bcos", "sea"):
             cm = ev["contrib_map"]                                  # (B,C,h,w)
             a = cm.gather(1, target.view(-1, 1, 1, 1).expand(-1, 1, *cm.shape[-2:]))
-        else:  # cbm has no spatial map -> fall back to gradcam-style on features
-            a = m.features(x).mean(1, keepdim=True)
+        else:  # cbm — exact class-conditional attribution through the bottleneck
+            # a = m.features(x).mean(1, keepdim=True)
+            head = m.head
+            feat = m.backbone(x)
+            B, D = feat.shape[0], feat.shape[1]
+            c = torch.sigmoid(head.concept(head.pool(feat).flatten(1)))
+            wy = head.classifier.weight[target] * c * (1.0 - c)
+            g = wy @ head.concept.weight
+            a = (feat * g.view(B, D, 1, 1)).sum(1, keepdim=True)
         return F.interpolate(a, size=x.shape[-2:], mode="bilinear", align_corners=False)
     return fn
 

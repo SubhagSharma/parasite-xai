@@ -1,0 +1,94 @@
+seed: 1337
+device: cuda
+data:
+  name: chula_parasite_egg_11
+  root: ../Data/chula_crops
+  img_size: 224
+  batch_size: 32
+  num_workers: 4
+  val_split: 0.15
+  test_split: 0.15
+  boxes_dir: null
+backbone:
+  name: mobilevit_xs
+  pretrained: true
+model:
+  kind: sea
+  num_classes: 11
+  protopnet:
+    num_prototypes_per_class: 5
+    proto_dim: 128
+    pip_sparsity: true
+  cbm:
+    num_concepts: 16
+    bottleneck: true
+    concept_source: labelfree
+  sea:
+    stride: 8
+    max_evidence_stride: 16
+    dim: 64
+    depth: 2
+    readout: mlp
+    context: none
+    context_adv: 0.0
+    loss:
+      conc: 0.0
+      tv: 0.0
+      conc_on: abs
+      cross: 0.0
+      probe: 0.0
+      tau: 0.1
+train:
+  epochs: 120
+  lr: 0.0003
+  weight_decay: 0.0001
+  warmup_epochs: 3
+  proto_push_every: 10
+  amp: true
+  push_max_batches: null
+  early_stop_patience: 20
+explain:
+  posthoc:
+  - gradcam
+  - hirescam
+  - integrated_gradients
+  - lime
+  - kernelshap
+  amortized:
+    enabled: true
+    teacher_ckpt: null
+    train_epochs: 30
+eval:
+  faithfulness:
+  - deletion
+  - insertion
+  - infidelity_raw
+  - infidelity
+  - infidelity_scaled
+  - sensitivity
+  - sanity_check
+  faithfulness_batches: 8
+  faithfulness_metric_batches:
+    sensitivity: 2
+    sanity_check: 2
+  faithfulness_params:
+    infidelity_patch_size: 28
+    sanity_skip_layers: true
+    sanity_layer_order: top_down
+    infidelity_n_perturb_samples: 10
+    infidelity_normalise: true
+  localisation:
+  - pointing_game
+  - energy_pointing_game
+  - iou
+  cost:
+  - params
+  - flops
+  - latency_cpu
+  - model_size_mb
+  quantize_int8: false
+trust:
+  calibration: temperature
+  conformal: true
+  alpha: 0.1
+output_dir: ./runs/crop_sea_s8

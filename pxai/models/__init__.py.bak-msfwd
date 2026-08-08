@@ -1,0 +1,97 @@
+"""Model factory — assembles backbone + interpretable head (A2 ablation)."""
+from __future__ import annotations
+
+import torch.nn as nn
+
+from ..backbones import build_backbone
+from .protopnet import ProtoHead
+from .protopnet_multiscale import (MultiScaleProtoHead, pyramid_forward,
+                                   push_multiscale)
+from .protopnet_diverse import DiverseProtoHead
+from .cbm import CBMHead
+from .bcos import BcosHead
+from .blackbox import BlackBox
+from .sea import SEANet
+
+
+class InterpretableModel(nn.Module):
+    """backbone -> interpretable head. `.explain(x)` exposes the head's evidence."""
+
+    def __init__(self, cfg):
+        super().__init__()
+        self.kind = cfg["model"]["kind"]
+        nc = cfg["model"]["num_classes"]
+        if cfg["backbone"]["name"].startswith("bcos_"):
+            # a real B-cos network: every conv is a B-cos transform, so the whole
+            # net collapses to an exact input-dependent linear map. Its native
+            # explanation IS grad x input, which predicts gradattr gain ~ 1.0x.
+            from .bcos_backbone import BcosBackbone
+            self.backbone = BcosBackbone(cfg["backbone"]["name"][5:])
+        else:
+            self.backbone = build_backbone(cfg)
+        ch = self.backbone.out_channels
+
+        if self.kind == "protopnet_ms":
+            p = cfg["model"].get("protopnet_ms", {})
+            try:
+                ch_all = self.backbone.net.feature_info.channels()
+            except AttributeError as e:
+                raise RuntimeError(
+                    "protopnet_ms needs a timm features_only backbone exposing "
+                    "feature_info.channels()") from e
+            stages = list(p.get("stages", [1, 3]))
+            bad = [s for s in stages if s >= len(ch_all)]
+            if bad:
+                raise ValueError(
+                    f"stage index {bad} out of range: the backbone has "
+                    f"{len(ch_all)} stages with channels {ch_all}")
+            self.head = MultiScaleProtoHead(
+                ch_all, nc, stages,
+                p.get("protos_per_class_per_stage", [2, 3]),
+                p.get("proto_dim", 128), p.get("pip_sparsity", True))
+            print(f"[ms] stages {stages} channels "
+                  f"{[ch_all[s] for s in stages]} "
+                  f"protos/class {p.get('protos_per_class_per_stage', [2, 3])}",
+                  flush=True)
+        elif self.kind == "protopnet_diverse":
+            p = cfg["model"].get("protopnet_diverse", cfg["model"]["protopnet"])
+            self.head = DiverseProtoHead(
+                ch, nc,
+                p.get("num_prototypes_per_class", 5),
+                p.get("proto_dim", 128),
+                p.get("pip_sparsity", True),
+                w_orth=p.get("w_orth", 0.0),
+                w_sparse=p.get("w_sparse", 0.0),
+                focal=p.get("focal", False),
+                diverse_push=p.get("diverse_push", False))
+        elif self.kind == "protopnet":
+            p = cfg["model"]["protopnet"]
+            self.head = ProtoHead(ch, nc, p["num_prototypes_per_class"],
+                                  p["proto_dim"], p["pip_sparsity"])
+        elif self.kind == "cbm":
+            c = cfg["model"]["cbm"]
+            self.head = CBMHead(ch, nc, c["num_concepts"], c["bottleneck"])
+        elif self.kind == "bcos":
+            self.head = BcosHead(ch, nc)
+        else:
+            raise ValueError(f"unknown interpretable kind {self.kind!r}")
+
+    def forward(self, x):
+        feat = self.backbone(x)
+        out = self.head(feat)
+        return out[0] if isinstance(out, tuple) else out
+
+    def features(self, x):
+        return self.backbone(x)
+
+    def explain(self, x):
+        return self.head.explain(self.backbone(x))
+
+
+def build_model(cfg):
+    if cfg["model"]["kind"] == "sea":
+        return SEANet(cfg)
+    if cfg["model"]["kind"] == "blackbox":
+        return BlackBox(cfg["model"]["num_classes"],
+                        cfg["backbone"]["name"], cfg["backbone"]["pretrained"])
+    return InterpretableModel(cfg)

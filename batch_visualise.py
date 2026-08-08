@@ -83,19 +83,49 @@ def norm01(a):
     return np.clip((a - lo) / (hi - lo + 1e-12), 0, 1)
 
 
+def signed01(a):
+    """Map a signed map to [0,1] with 0.0 -> 0.5, using symmetric limits.
+
+    With cmap='bwr': blue = negative, white = zero, red = positive. Comparable across
+    methods regardless of whether a given one happens to be non-negative.
+    """
+    a = np.asarray(a, dtype=np.float64)
+    lim = np.percentile(np.abs(a), 99)
+    if not np.isfinite(lim) or lim <= 0:
+        lim = np.abs(a).max() or 1.0
+    return np.clip(a / (2.0 * lim) + 0.5, 0, 1)
+
+
 def metrics(attr, mask):
-    """-> frac, area, conc, peak. See the module docstring for why frac alone lies."""
+    """-> frac, area, conc, peak, pos_share, in_mean, out_mean, conc_pos, conc_neg.
+
+    frac/conc use |a| and so cannot tell "no attribution" from "strong negative
+    attribution". conc_pos restricts to max(a,0) -- evidence FOR the class -- which is
+    what "where is the model looking" normally means. conc_neg is the mirror. If a
+    method is non-negative, pos_share is 1.0 and conc_pos == conc.
+    """
     if mask is None:
-        return (float("nan"),) * 4
-    a = np.abs(np.asarray(attr, dtype=np.float64))
+        return (float("nan"),) * 9
+    s = np.asarray(attr, dtype=np.float64)          # SIGNED
+    a = np.abs(s)
     tot = a.sum()
     if not np.isfinite(tot) or tot <= 0:
-        return (float("nan"),) * 4
-    frac = float(a[mask].sum() / tot)
+        return (float("nan"),) * 9
     area = float(mask.mean())
+    frac = float(a[mask].sum() / tot)
     conc = frac / area if area > 0 else float("nan")
     pk = np.unravel_index(int(np.argmax(a)), a.shape)
-    return frac, area, conc, float(bool(mask[pk]))
+    peak = float(bool(mask[pk]))
+
+    pos, neg = np.clip(s, 0, None), np.clip(-s, 0, None)
+    pos_share = float(pos.sum() / tot)
+    in_mean = float(s[mask].mean())
+    out_mean = float(s[~mask].mean())
+    cp = float(pos[mask].sum() / pos.sum() / area) if pos.sum() > 0 and area > 0 \
+        else float("nan")
+    cn = float(neg[mask].sum() / neg.sum() / area) if neg.sum() > 0 and area > 0 \
+        else float("nan")
+    return frac, area, conc, peak, pos_share, in_mean, out_mean, cp, cn
 
 
 def labels_for(root):
@@ -142,6 +172,10 @@ def main():
                     help="blank the box before explaining: renders the shortcut itself")
     a = ap.parse_args()
 
+    if a.device.startswith("cuda"):
+        torch.backends.cudnn.benchmark = True
+        torch.backends.cuda.matmul.allow_tf32 = True
+        torch.backends.cudnn.allow_tf32 = True
     methods = FAST_METHODS if a.fast else ALL_METHODS
     runs = discover(a.runs)
     if not runs:
@@ -154,7 +188,8 @@ def main():
     tsv = open(a.tsv, "a")
     if new:
         tsv.write("run\thead\tdataset\tclass\timage\tmethod\tcorrect\t"
-                  "frac\tarea\tconc\tpeak\n")
+                  "frac\tarea\tconc\tpeak\t"
+                  "pos_share\tin_mean\tout_mean\tconc_pos\tconc_neg\n")
 
     t0 = time.time()
     for ri, (run, cfgp, ckpt) in enumerate(runs, 1):
@@ -239,19 +274,22 @@ def main():
                                   else explain_posthoc(name, model, x, t)[0])
                         m = at.detach().float().cpu().numpy()
                         m = m[0, 0] if m.ndim == 4 else m.squeeze()
-                        fr, ar, co, pk = metrics(m, box)
+                        fr, ar, co, pk, ps, im_, om, cp, cn = metrics(m, box)
                         tsv.write(f"{run}\t{kind}\t{os.path.basename(root)}\t{cname}\t"
                                   f"{fn}\t{name}\t{int(pred == label)}\t{fr:.4f}\t"
-                                  f"{ar:.4f}\t{co:.4f}\t{pk:.0f}\n")
+                                  f"{ar:.4f}\t{co:.4f}\t{pk:.0f}\t{ps:.4f}\t"
+                                  f"{im_:.6g}\t{om:.6g}\t{cp:.4f}\t{cn:.4f}\n")
                         if axes is not None:
                             ax = axes[r][c + 1]
                             ax.imshow(img)
-                            ax.imshow(norm01(m), cmap="jet", alpha=0.45)
-                            ax.set_title(f"f{fr:.2f} c{co:.1f} "
-                                         f"{'*' if pk else ''}", fontsize=6)
+                            ax.imshow(signed01(m), cmap="bwr", alpha=0.45,
+                                      vmin=0, vmax=1)
+                            ax.set_title(f"c+{cp:.1f} c-{cn:.1f} p{ps:.2f}"
+                                         f"{'*' if pk else ''}", fontsize=5.5)
                     except Exception as e:
                         tsv.write(f"{run}\t{kind}\t{os.path.basename(root)}\t{cname}\t"
-                                  f"{fn}\t{name}\t{int(pred == label)}\tnan\tnan\tnan\tnan\n")
+                                  f"{fn}\t{name}\t{int(pred == label)}\t"
+                                  + "\t".join(["nan"] * 9) + "\n")
                         if axes is not None:
                             ax = axes[r][c + 1]
                             ax.imshow(img)

@@ -48,7 +48,7 @@ _DEFAULT_AUG = {
 }
 
 
-def build_transforms(img_size: int, train: bool, augment: dict | None = None):
+def build_transforms(img_size: int, train: bool, augment: dict | None = None, letterbox: bool = False):
     """Eval transform is fixed; train transform is driven by the `augment` dict.
 
     to_grayscale applies to BOTH splits -- if colour is removed at training time it
@@ -57,15 +57,27 @@ def build_transforms(img_size: int, train: bool, augment: dict | None = None):
     a = {**_DEFAULT_AUG, **(augment or {})}
     gray = [transforms.Grayscale(num_output_channels=3)] if a["to_grayscale"] else []
 
+    # Resize((S,S)) with a TWO-TUPLE stretches to square, distorting object shape by an
+    # amount set by the source aspect ratio -- a 4.84x spread across this dataset's 13
+    # native sizes (report SEC 3.3). With letterbox=True the image is padded to square
+    # first, so the resize is isotropic. Default False: every existing config is
+    # unchanged, byte for byte.
+    if letterbox:
+        from .letterbox import LetterboxSquare
+        pre = [LetterboxSquare(fill=tuple(int(255 * m) for m in _MEAN))]
+    else:
+        pre = []
+
     if not train:
         return transforms.Compose([
+            *pre,
             transforms.Resize((img_size, img_size)),
             *gray,
             transforms.ToTensor(),
             transforms.Normalize(_MEAN, _STD),
         ])
 
-    ops = [transforms.Resize((img_size, img_size))]
+    ops = [*pre, transforms.Resize((img_size, img_size))]
     if a["hflip"]:
         ops.append(transforms.RandomHorizontalFlip())
     if a["vflip"]:
@@ -103,8 +115,8 @@ def build_loaders(cfg) -> Loaders:
     d = cfg["data"]
     root, img = d["root"], d["img_size"]
     aug = d.get("augment")            # None -> original hard-coded behaviour
-    tf_tr = build_transforms(img, train=True, augment=aug)
-    tf_ev = build_transforms(img, train=False, augment=aug)
+    tf_tr = build_transforms(img, train=True, augment=aug, letterbox=cfg['data'].get('letterbox', False))
+    tf_ev = build_transforms(img, train=False, augment=aug, letterbox=cfg['data'].get('letterbox', False))
 
     if _has_split_dirs(root):
         train_ds = datasets.ImageFolder(os.path.join(root, "train"), tf_tr)

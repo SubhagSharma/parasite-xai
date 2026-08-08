@@ -77,5 +77,5 @@ def cost_report(model, img_size: int = 224) -> dict:
 EXPLAINER_PASSES = {
     "gradcam": 2, "hirescam": 2, "integrated_gradients": 64,
     "lime": 1000, "kernelshap": 1000,
-    "protopnet": 1, "cbm": 1, "bcos": 1, "amortized": 1,
+    "protopnet": 1, "cbm": 1, "bcos": 1, "sea": 1, "amortized": 1,
 }
